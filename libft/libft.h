@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 21:47:05 by marvin            #+#    #+#             */
-/*   Updated: 2024/09/01 20:53:13 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 22:19:17 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
-size_t				ft_strlen(const char *str);
+int					ft_strlen(const char *str);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 
 t_list				*ft_lstnew(void *content);
