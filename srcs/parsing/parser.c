@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 14:44:48 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 17:43:46 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_type(char *line)
 		return (F);
 	else if (line[i] == 'C')
 		return (C);
-	return (0);
+	return (1);
 }
 
 void	assign_path(char *path, t_map_data *map_data, int type)
@@ -60,7 +60,7 @@ int	get_path(char *line, t_map_data *map_data, int type)
 	char	*path;
 
 	i = 0;
-	if (type == 0)
+	if (type == 0 || type == 1)
 		return (0);
 	while (line[i])
 	{
@@ -80,10 +80,10 @@ int	get_path(char *line, t_map_data *map_data, int type)
 
 int	parse_line(char *line, int fd, t_map_data *map_data)
 {
-	(void)fd;
 	if (!get_path(line, map_data, check_type(line)))
 	{
-		printf("nothing on this line\n");
+		if (check_type(line) == 1)
+			get_map(map_data, line, fd);
 		return (0);
 	}
 	return (1);
@@ -93,19 +93,21 @@ t_map_data	*get_map_data(char *filename)
 {
 	int			fd;
 	char		*line;
+	int			i;
 	t_map_data	*map_data;
 
+	i = 0;
 	map_data = malloc(sizeof(t_map_data));
 	if (!map_data)
 		return (NULL);
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (NULL);
+	map_data->map_path = filename;
 	line = get_next_line(fd);
 	while (line)
 	{
 		parse_line(line, fd, map_data);
-		free(line);
 		line = get_next_line(fd);
 	}
 	return (map_data);

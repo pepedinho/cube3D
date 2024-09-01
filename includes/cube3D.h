@@ -20,4 +20,6 @@
 # include <stdio.h>
 # include <unistd.h>
 
+void	print_2d_array(char **tab);
+
 #endif
