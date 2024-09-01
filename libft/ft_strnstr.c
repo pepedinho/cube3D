@@ -18,9 +18,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	size_t	j;
 	char	*true_big;
 	char	*true_little;
-	int		cast;
 
-	cast = (int)len;
 	if (!*little)
 		return ((char *)big);
 	true_big = (char *)big;

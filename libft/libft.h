@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 21:47:05 by marvin            #+#    #+#             */
-/*   Updated: 2024/09/01 18:38:15 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:53:13 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_printf(const char *str, ...);
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strlen_2d(char **str);
+int					ft_is_in_charset(char c, char *set);
+int					ft_fprintf(int fd, const char *str, ...);
 
 char				*ft_itoa(int n);
 char				*ft_strcpy(char *dest, char *src);
@@ -62,7 +64,8 @@ char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				*ft_realloc(char *ptr, int len_realloc);
 char				*ft_strcat(char *dest, char *src);
 char				*get_next_line(int fd);
-char				**ft_split(char const *s, char c);
+
+char				**ft_split(char *s, char *c);
 
 void				*ft_memset(void *s, int c, size_t n);
 void				*ft_memcpy(void *dest, const void *src, size_t n);

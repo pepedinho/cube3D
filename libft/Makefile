@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/23 16:07:55 by madamou           #+#    #+#              #
-#    Updated: 2024/09/01 18:39:01 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/01 21:13:10 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ SRCS = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
        ft_strcmp.c ft_strcat.c ft_realloc.c get_next_line_bonus.c get_next_line_utils_bonus.c \
        ft_printf.c ft_itoa_printf.c functions.c functions2.c functions3.c \
 			 functions4.c printf_utils.c check_functions.c add_str_char2d.c \
-			 ft_strlen_2d.c
+			 ft_strlen_2d.c ft_split_utils.c
 
 SRCS := $(SRCS:%=./%)
 

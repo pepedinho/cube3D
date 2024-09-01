@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 15:06:29 by marvin            #+#    #+#             */
-/*   Updated: 2024/06/06 11:18:41 by madamou          ###   ########.fr       */
+/*   Updated: 2024/06/09 13:43:31 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,23 @@ char	*ft_strcpy(char *dest, char *src)
 	size_t	len_int;
 	size_t	i;
 
-	intdest = (size_t *)dest;
-	intsrc = (size_t *)src;
-	len_int = ft_strlen(src) / sizeof(size_t);
 	i = 0;
-	while (i < len_int)
+	if (src)
 	{
-		intdest[i] = intsrc[i];
-		i++;
-	}
-	i *= sizeof(size_t);
-	while (src[i])
-	{
-		dest[i] = src[i];
-		i++;
+		intdest = (size_t *)dest;
+		intsrc = (size_t *)src;
+		len_int = ft_strlen(src) / sizeof(size_t);
+		while (i < len_int)
+		{
+			intdest[i] = intsrc[i];
+			i++;
+		}
+		i *= sizeof(size_t);
+		while (src[i])
+		{
+			dest[i] = src[i];
+			i++;
+		}
 	}
 	return (dest[i] = '\0', dest);
 }

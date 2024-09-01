@@ -1,7 +1,0 @@
-libtest/
-*.out
-*.o
-*.a
-.vscode/
-output/
-libftTester/

@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 15:06:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/05/20 13:38:25 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:52:20 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_count_word(char const *s, char c)
+int			ft_is_in_charset(char c, char *set);
+
+static int	ft_count_word(char const *s, char *c)
 {
 	int	i;
 	int	cpt;
 
 	cpt = 0;
 	i = 0;
-	if (!s)
-		return (0);
 	while (s[i])
 	{
-		while (s[i] && s[i] == c)
+		while (ft_is_in_charset(s[i], c) && s[i])
 			i++;
-		while (s[i] && s[i] != c)
+		while (!ft_is_in_charset(s[i], c) && s[i])
 			i++;
 		cpt++;
 	}
-	if (i - 1 < 0)
+	if (i == 0)
 		return (0);
-	if (s[i - 1] == c)
+	if (ft_is_in_charset(s[i - 1], c))
 		cpt--;
 	return (cpt);
 }
@@ -54,19 +54,18 @@ static char	*ft_norminette(char const *s, int i, int j)
 	return (str);
 }
 
-static int	ft_free_split(char **split, int index)
+int	ft_free_split1(char **split, int index)
 {
 	if (split[index] == NULL)
 	{
 		while (index >= 0)
 			free(split[index--]);
-		free(split);
 		return (0);
 	}
 	return (1);
 }
 
-static int	ft_split_words(char **split, char const *s, char c)
+static int	ft_split_words(char **split, char const *s, char *c)
 {
 	int	i;
 	int	j;
@@ -74,20 +73,20 @@ static int	ft_split_words(char **split, char const *s, char c)
 
 	i = 0;
 	index = 0;
-	while (s && s[i])
+	while (s[i])
 	{
-		while (s[i] && s[i] == c)
+		while (ft_is_in_charset(s[i], c) && s[i])
 			i++;
 		j = 0;
-		while (s[i] && s[i] != c)
+		while (!ft_is_in_charset(s[i], c) && s[i])
 		{
 			i++;
 			j++;
 		}
-		if (s[i - 1] != c)
+		if (!ft_is_in_charset(s[i - 1], c))
 		{
 			split[index] = ft_norminette(s, i, j);
-			if (ft_free_split(split, index++) == 0)
+			if (ft_free_split1(split, index++) == 0)
 				return (0);
 		}
 	}
@@ -95,30 +94,45 @@ static int	ft_split_words(char **split, char const *s, char c)
 	return (1);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char *s, char *c)
 {
 	char	**split;
 
 	if (!s)
-		return (NULL);
-	split = malloc(sizeof(char *) * (ft_count_word(s, c) + 1));
-	if (split == NULL)
-		return (NULL);
-	if (ft_count_word(s, c) == 0)
 	{
+		split = malloc(sizeof(char *));
+		if (!split)
+			return (NULL);
 		split[0] = NULL;
 		return (split);
 	}
+	split = malloc(sizeof(char *) * (ft_count_word(s, c) + 1));
+	if (split == NULL)
+		return (NULL);
 	if (ft_split_words(split, s, c) == 0)
 		return (NULL);
 	return (split);
 }
 
-/*int	main(void)
-{
- 	char **tab;
- 	// char * invalidReadCheck = 0;
- 	tab = ft_split("hello!", ' ');
- 	printf("%s\n", tab[0]);
- 	printf("%s\n", tab[1]);
-}*/
+// int	main(void)
+// {
+// 	char **test;
+// 	int i;
+
+// 	i = 0;
+// 	test = ft_split("KEY=VALUE", "=");
+// 	if (test == NULL)
+// 	{
+// 		printf("tout est null\n");
+// 		return (0);
+// 	}
+// 	char *oui = test[0];
+// 	char *non = test[1];
+// 	if (test[i] == NULL)
+// 		printf("%u", 42);
+// 	free(test);
+// 	printf("oui == %s\n", oui);
+// 	printf("non == %s\n", non);
+// 	free(oui);
+// 	free(non);
+// }

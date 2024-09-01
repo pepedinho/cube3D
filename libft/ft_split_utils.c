@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen_2d.c                                     :+:      :+:    :+:   */
+/*   ft_split_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 18:34:54 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/01 20:55:56 by madamou          ###   ########.fr       */
+/*   Created: 2024/06/01 20:12:07 by madamou           #+#    #+#             */
+/*   Updated: 2024/06/01 20:15:35 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strlen_2d(char **str)
+int	ft_is_in_charset(char c, char *set)
 {
-	int	i;
+	int	index;
 
-	i = 0;
-	while (str && str[i])
-		i++;
-	return (i);
+	index = 0;
+	while (set[index])
+	{
+		if (c == set[index])
+			return (1);
+		index++;
+	}
+	return (0);
 }
-

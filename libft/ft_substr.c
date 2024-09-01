@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/23 12:47:30 by madamou           #+#    #+#             */
-/*   Updated: 2024/05/19 13:28:43 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:48:43 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 /*int main(void)
 {
- 	char * s = ft_substr("hola", 2, 3);
- 	if (!strcmp(s, ""))
- 		printf("yes\n");
- 	else
- 		printf("no\n");
+	char * s = ft_substr("hola", 2, 3);
+	if (!strcmp(s, ""))
+		printf("yes\n");
+	else
+		printf("no\n");
 }*/

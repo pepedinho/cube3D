@@ -6,7 +6,7 @@
 /*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 19:03:03 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:30:04 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,6 @@ int			get_map(t_map_data *map_data, char *line, int fd);
 // utils
 int			ft_isspace(char c);
 
+// checking
+int			check_map(t_map_data *data);
 #endif

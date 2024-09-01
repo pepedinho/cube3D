@@ -6,7 +6,7 @@
 /*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:46:00 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 19:04:32 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:26:27 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ int	main(int argc, char *argv[])
 	printf("C = %s\n", data.tx_ceiling);
 	printf("F = %s\n", data.tx_floor);
 	print_2d_array(data.map);
+	check_map(&data);
 	return (0);
 }
