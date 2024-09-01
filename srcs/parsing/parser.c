@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 18:59:36 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:09:09 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ int	get_path(char *line, t_map_data *map_data, int type)
 		return (0);
 	while (line[i] && ft_isspace(line[i]))
 		i++;
-	i += 2;
+	if (type == F || type == C)
+		i++;
+	else
+		i += 2;
 	while (line[i] && ft_isspace(line[i]))
 		i++;
 	path = ft_substr(line, i, ft_strlen(line + i) - 1);
@@ -85,17 +88,13 @@ int	parse_line(char *line, int fd, t_map_data *map_data)
 	return (1);
 }
 
-t_map_data	*get_map_data(char *filename)
+t_map_data	*get_map_data(char *filename, t_map_data *map_data)
 {
-	int			fd;
-	char		*line;
-	int			i;
-	t_map_data	*map_data;
+	int		fd;
+	char	*line;
+	int		i;
 
 	i = 0;
-	map_data = malloc(sizeof(t_map_data));
-	if (!map_data)
-		return (NULL);
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 14:04:17 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/01 19:03:03 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_map_data
 }			t_map_data;
 
 // parsing
-t_map_data	*get_map_data(char *filename);
+t_map_data	*get_map_data(char *filename, t_map_data *data);
 
 // map_parsing
 int			get_map(t_map_data *map_data, char *line, int fd);
