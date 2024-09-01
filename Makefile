@@ -25,7 +25,7 @@ C_FLAGS = -Wall -Wextra -Werror -g3
 
 SRCS_DIR = srcs/
 
-CHECKING = $(addprefix checking/, checking_map.c)
+CHECKING = $(addprefix checking/, checking_map.c flood_fill.c)
 
 PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 

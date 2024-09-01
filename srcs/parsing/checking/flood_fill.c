@@ -1,42 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checking_map.c                                     :+:      :+:    :+:   */
+/*   flood_fill.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 19:27:22 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/01 19:31:49 by madamou          ###   ########.fr       */
+/*   Created: 2024/09/01 21:18:28 by madamou           #+#    #+#             */
+/*   Updated: 2024/09/01 21:19:29 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cube3D.h"
 
-int	check_map_char_line(char *line)
+void	crate_map_copy(t_map_data *data, char ***map_cpy)
 {
-	int	i;
+	char	**tmp;
+	int		i;
 
 	i = 0;
-	while (line[i])
-	{
-		if (!ft_is_in_charset(line[i++], " 01NSEW"))
-			return (0);
-	}
-	return (1);
-}
-
-int	check_map(t_map_data *data)
-{
-	int	i;
-
-	i = 0;
+	tmp = malloc(sizeof(char *) * (ft_strlen_2d(data->map + 1)));
+	if (!tmp)
+		return ;
 	while (data->map[i])
 	{
-		if (!check_map_char_line(data->map[i++]))
-		{
-			ft_fprintf(2, "Error\nChar not good at line %d\n", i);
-			return (0);
-		}
+		tmp[i] = ft_strdup(data->map[i]);
+		if (!tmp[i])
+			ft_free_2d(tmp);
+		i++;
 	}
-	return (flood_fill(data));
+	tmp[i] = NULL;
+	*map_cpy = tmp;
+}
+
+int	flood_fill(t_map_data *data)
+{
+	char	**map_cpy;
+
+	crate_map_copy(data, &map_cpy);
+	if (!map_cpy)
+		return (0);
+	print_2d_array(map_cpy);
+	ft_free_2d(map_cpy);
+	return (1);
 }

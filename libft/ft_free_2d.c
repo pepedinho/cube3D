@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int	ft_free_split(char **split)
+void	ft_free_2d(char **split)
 {
 	int	index;
 
@@ -23,5 +23,4 @@ int	ft_free_split(char **split)
 		index++;
 	}
 	free(split);
-	return (1);
 }

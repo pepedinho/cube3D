@@ -55,4 +55,6 @@ int			ft_isspace(char c);
 
 // checking
 int			check_map(t_map_data *data);
+int			flood_fill(t_map_data *data);
+
 #endif

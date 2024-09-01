@@ -46,6 +46,7 @@ int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strlen_2d(char **str);
 int					ft_is_in_charset(char c, char *set);
 int					ft_fprintf(int fd, const char *str, ...);
+void				ft_free_2d(char **split);
 
 char				*ft_itoa(int n);
 char				*ft_strcpy(char *dest, char *src);
