@@ -92,43 +92,6 @@ char	*correct_line(char *line)
 	return (line);
 }
 
-int	ft_strlen_2d(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-		i++;
-	return (i);
-}
-
-void	*add_string_char_2d(char ***tab, char *str)
-{
-	char	**new;
-	int		i;
-	char	**buff;
-
-	buff = *tab;
-	new = malloc(sizeof(char *) * (ft_strlen_2d(buff) + 1 + 1));
-	if (!new)
-		return (NULL);
-	i = 0;
-	while (buff && buff[i])
-	{
-		new[i] = buff[i];
-		if (!new[i])
-			return (NULL);
-		i++;
-	}
-	new[i] = str;
-	if (!new[i])
-		return (NULL);
-	new[++i] = NULL;
-	free(buff);
-	*tab = new;
-	return (tab);
-}
-
 int	get_map(t_map_data *map_data, char *line, int fd)
 {
 	char	**map;
