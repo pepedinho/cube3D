@@ -72,7 +72,7 @@ int	get_path(char *line, t_map_data *map_data, int type)
 		}
 		i++;
 	}
-	path = ft_substr(line, i, ft_strlen(line));
+	path = ft_substr(line, i, ft_strlen(line + i) - 1);
 	if (!path)
 		return (0);
 	return (assign_path(path, map_data, type), 1);
