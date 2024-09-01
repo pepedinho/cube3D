@@ -6,12 +6,13 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 17:43:46 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 18:59:36 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
+// TODO check if no space between type and path
 int	check_type(char *line)
 {
 	int	i;
@@ -62,16 +63,11 @@ int	get_path(char *line, t_map_data *map_data, int type)
 	i = 0;
 	if (type == 0 || type == 1)
 		return (0);
-	while (line[i])
-	{
-		if (ft_isspace(line[i]))
-		{
-			while (line[i] && ft_isspace(line[i]))
-				i++;
-			break ;
-		}
+	while (line[i] && ft_isspace(line[i]))
 		i++;
-	}
+	i += 2;
+	while (line[i] && ft_isspace(line[i]))
+		i++;
 	path = ft_substr(line, i, ft_strlen(line + i) - 1);
 	if (!path)
 		return (0);
