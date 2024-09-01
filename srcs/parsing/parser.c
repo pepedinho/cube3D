@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 14:12:54 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/01 14:44:48 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	get_path(char *line, t_map_data *map_data, int type)
 		}
 		i++;
 	}
-	path = ft_substr(line, i, ft_strlen(line));
+	path = ft_substr(line, i, ft_strlen(line + i) - 1);
 	if (!path)
 		return (0);
 	return (assign_path(path, map_data, type), 1);

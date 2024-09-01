@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/01 14:01:54 by itahri           ###   ########.fr        #
+#    Updated: 2024/09/01 14:36:14 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -126,6 +126,9 @@ fclean : clean
 	@make fclean -sC ./libft
 	@echo "🧼🧼$(PURPLE)executable cleaned$(END)🧼🧼"
 
-re : fclean all
+re_mlx :
+	@make re -C $(MINI_LIBX_DIR)
+	
+re : re_mlx fclean all
 
 .PHONY : all clean fclean re debug push leak docker 
