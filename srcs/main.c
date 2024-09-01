@@ -12,6 +12,15 @@
 
 #include "../includes/cube3D.h"
 
+void	print_2d_array(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		printf("%s\n", tab[i++]);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_map_data	*data;
@@ -27,6 +36,7 @@ int	main(int argc, char *argv[])
 		printf("W = %s\n", data->tx_west);
 		printf("C = %s\n", data->tx_ceiling);
 		printf("F = %s\n", data->tx_floor);
+		print_2d_array(data->map);
 	};
 	return (0);
 }

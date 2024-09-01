@@ -25,7 +25,7 @@ C_FLAGS = -Wall -Wextra -Werror -g3
 
 SRCS_DIR = srcs/
 
-PARSING = $(addprefix parsing/, parser.c utils.c)
+PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c)
 
 OBJS_DIR = .objets/
 

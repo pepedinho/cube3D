@@ -40,11 +40,15 @@ typedef struct s_map_data
 	char	*tx_west;
 	char	*tx_floor;
 	char	*tx_ceiling;
+	char	*map_path;
 	char	**map;
 }			t_map_data;
 
 // parsing
 t_map_data	*get_map_data(char *filename);
+
+// map_parsing
+int			get_map(t_map_data *map_data, char *line, int fd);
 
 // utils
 int			ft_isspace(char c);
