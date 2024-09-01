@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:27:22 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/01 22:21:10 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 22:43:28 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,5 @@ int	check_map(t_map_data *data)
 		ft_fprintf(2, "Error\nToo many players (%d players)\n", player);
 	if (player != 1)
 		return (0);
-	return (flood_fill(data));
+	return (check_map_playable(data));
 }

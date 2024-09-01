@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   flood_fill.c                                       :+:      :+:    :+:   */
+/*   check_map_playable.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 21:18:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/01 22:41:20 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 22:46:13 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void change_if_find_player(char **line)
 	check = ft_strchr(buff, 'W');
 	if (check)
 		check[0] = '0';
-}				
+}		
 					
 void	crate_map_copy(t_map_data *data, char ***map_cpy)
 {
@@ -53,7 +53,7 @@ void	crate_map_copy(t_map_data *data, char ***map_cpy)
 	*map_cpy = tmp;
 }
 
-int	check_if_good_move(char **map_cpy, int y, int x)
+int	check_next_cases(char **map_cpy, int y, int x)
 {
 	int	cpt;
 
@@ -86,7 +86,7 @@ int	blob_the_map(char **map_cpy)
 		{
 			if (map_cpy[y][x] == '0')
 			{
-				if (!check_if_good_move(map_cpy, y, x))
+				if (!check_next_cases(map_cpy, y, x))
 					return (0);
 			}
 			x++;
@@ -96,7 +96,7 @@ int	blob_the_map(char **map_cpy)
 	return (1);
 }
 
-int	flood_fill(t_map_data *data)
+int	check_map_playable(t_map_data *data)
 {
 	char	**map_cpy;
 
