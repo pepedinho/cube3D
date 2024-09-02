@@ -6,12 +6,13 @@
 /*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 16:30:53 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/02 11:50:12 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
+// TODO check if no space between type and path
 int	check_type(char *line)
 {
 	int	i;
@@ -62,14 +63,7 @@ int	get_path(char *line, t_map_data *map_data, int type)
 	i = 0;
 	if (type == 0 || type == 1)
 		return (0);
-	while (line[i])
-	{
-		if (ft_isspace(line[i]))
-		{
-			while (line[i] && ft_isspace(line[i]))
-				i++;
-			break ;
-		}
+	while (line[i] && ft_isspace(line[i]))
 		i++;
 	}
 	path = ft_substr(line, i, ft_strlen(line + i) - 1);
@@ -89,17 +83,13 @@ int	parse_line(char *line, int fd, t_map_data *map_data)
 	return (1);
 }
 
-t_map_data	*get_map_data(char *filename)
+t_map_data	*get_map_data(char *filename, t_map_data *map_data)
 {
-	int			fd;
-	char		*line;
-	int			i;
-	t_map_data	*map_data;
+	int		fd;
+	char	*line;
+	int		i;
 
 	i = 0;
-	map_data = malloc(sizeof(t_map_data));
-	if (!map_data)
-		return (NULL);
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (NULL);

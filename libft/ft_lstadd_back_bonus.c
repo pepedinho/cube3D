@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 14:30:23 by madamou           #+#    #+#             */
-/*   Updated: 2024/05/19 00:13:26 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:48:43 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,5 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		printf("yes\n");
 	else
 		printf("no\n");
- 	return (0);
+	return (0);
 }*/

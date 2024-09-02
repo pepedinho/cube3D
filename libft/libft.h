@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 21:47:05 by marvin            #+#    #+#             */
-/*   Updated: 2024/05/18 15:22:01 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 22:19:17 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ int					ft_lstsize(t_list *lst);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_printf(const char *str, ...);
 int					ft_strcmp(const char *s1, const char *s2);
+int					ft_strlen_2d(char **str);
+int					ft_is_in_charset(char c, char *set);
+int					ft_fprintf(int fd, const char *str, ...);
+void				ft_free_2d(char **split);
 
 char				*ft_itoa(int n);
 char				*ft_strcpy(char *dest, char *src);
@@ -61,13 +65,15 @@ char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				*ft_realloc(char *ptr, int len_realloc);
 char				*ft_strcat(char *dest, char *src);
 char				*get_next_line(int fd);
-char				**ft_split(char const *s, char c);
+
+char				**ft_split(char *s, char *c);
 
 void				*ft_memset(void *s, int c, size_t n);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
 void				*ft_memmove(void *dest, const void *src, size_t n);
 void				*ft_memchr(const void *s, int c, size_t n);
 void				*ft_calloc(size_t nmemb, size_t size);
+void				*add_string_char_2d(char ***tab, char *str);
 
 void				ft_putchar_fd(char c, int fd);
 void				ft_putchar(char c);
@@ -87,7 +93,7 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
-size_t				ft_strlen(const char *str);
+int					ft_strlen(const char *str);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 
 t_list				*ft_lstnew(void *content);

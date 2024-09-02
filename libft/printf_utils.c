@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printf_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:59:58 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/06 11:25:43 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:49:12 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_strcatt(char *print, char *src)
 	return (print);
 }
 
-void	ft_putstr(char *s)
+void	ft_putstrr(char *s)
 {
 	if (s)
 	{
@@ -69,7 +69,7 @@ char	*ft_reallocc(char *print, int len_realloc)
 	i = ft_len_print(2);
 	tmp = malloc(sizeof(char) * (i + len_realloc + 1));
 	if (!tmp)
-		return (NULL);
+		return (free(print), NULL);
 	tmp[0] = '\0';
 	tmp = ft_strcpyy(tmp, print);
 	free(print);

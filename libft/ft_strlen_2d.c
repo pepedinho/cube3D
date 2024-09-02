@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_strlen_2d.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 09:11:50 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/01 20:53:47 by madamou          ###   ########.fr       */
+/*   Created: 2024/09/01 18:34:54 by madamou           #+#    #+#             */
+/*   Updated: 2024/09/01 20:55:56 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_realloc(char *ptr, int len_realloc)
+int	ft_strlen_2d(char **str)
 {
-	char	*tmp;
-	int		i;
+	int	i;
 
-	i = ft_strlen(ptr);
-	tmp = malloc(sizeof(char) * (i + len_realloc + 1));
-	if (!tmp)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	tmp[0] = '\0';
-	tmp = ft_strcpy(tmp, ptr);
-	free(ptr);
-	return (tmp);
+	i = 0;
+	while (str && str[i])
+		i++;
+	return (i);
 }
+

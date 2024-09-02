@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/01 14:01:54 by itahri           ###   ########.fr        #
+#    Updated: 2024/09/01 22:47:20 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,9 @@ C_FLAGS = -Wall -Wextra -Werror -g3
 
 SRCS_DIR = srcs/
 
-PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c)
+CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
+
+PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 
 OBJS_DIR = .objets/
 
@@ -49,7 +51,7 @@ LIBFT = libft.a
 MINI_LIBX_DIR = ./minilibx-linux
 MINI_LIBX = libmlx.a
 
-NAME = ./cube3D
+NAME = ./cub3D
 
 all : $(MINI_LIBX) $(LIBFT) $(NAME)
 
@@ -126,6 +128,9 @@ fclean : clean
 	@make fclean -sC ./libft
 	@echo "🧼🧼$(PURPLE)executable cleaned$(END)🧼🧼"
 
-re : fclean all
+re_mlx :
+	@make re -C $(MINI_LIBX_DIR)
+	
+re : re_mlx fclean all
 
 .PHONY : all clean fclean re debug push leak docker 

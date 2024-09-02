@@ -1,31 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   add_str_char2d.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 09:11:50 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/01 20:53:47 by madamou          ###   ########.fr       */
+/*   Created: 2024/09/01 18:34:54 by madamou           #+#    #+#             */
+/*   Updated: 2024/09/01 18:35:43 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_realloc(char *ptr, int len_realloc)
+void	*add_string_char_2d(char ***tab, char *str)
 {
-	char	*tmp;
+	char	**new;
 	int		i;
+	char	**buff;
 
-	i = ft_strlen(ptr);
-	tmp = malloc(sizeof(char) * (i + len_realloc + 1));
-	if (!tmp)
-	{
-		free(ptr);
+	buff = *tab;
+	new = malloc(sizeof(char *) * (ft_strlen_2d(buff) + 1 + 1));
+	if (!new)
 		return (NULL);
+	i = 0;
+	while (buff && buff[i])
+	{
+		new[i] = buff[i];
+		if (!new[i])
+			return (NULL);
+		i++;
 	}
-	tmp[0] = '\0';
-	tmp = ft_strcpy(tmp, ptr);
-	free(ptr);
-	return (tmp);
+	new[i] = str;
+	if (!new[i])
+		return (NULL);
+	new[++i] = NULL;
+	free(buff);
+	*tab = new;
+	return (tab);
 }

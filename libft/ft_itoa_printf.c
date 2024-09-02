@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   ft_itoa_printf.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:33:03 by madamou           #+#    #+#             */
-/*   Updated: 2024/05/09 00:46:55 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:48:43 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	ft_norminette(char *result, long nb, int size, char *base)
 	}
 }
 
-char	*ft_itoa(int nb)
+char	*ft_itoa_printf(int nb)
 {
 	int		size;
 	char	*result;

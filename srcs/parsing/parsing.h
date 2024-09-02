@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 14:04:17 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/01 22:43:12 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,17 @@ typedef struct s_map_data
 }			t_map_data;
 
 // parsing
-t_map_data	*get_map_data(char *filename);
+t_map_data	*get_map_data(char *filename, t_map_data *data);
 
 // map_parsing
 int			get_map(t_map_data *map_data, char *line, int fd);
 
 // utils
 int			ft_isspace(char c);
+
+// checking
+int			check_map(t_map_data *data);
+int			check_map_playable(t_map_data *data);
+int			flood_fill(t_map_data *data);
 
 #endif

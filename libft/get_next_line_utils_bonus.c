@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 16:39:33 by itahri            #+#    #+#             */
-/*   Updated: 2024/06/06 11:17:59 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:49:12 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,31 @@ int	ft_strlen_gnl(char *str, int cas)
 	return (i);
 }
 
+char	*ft_strcpy_gnl(char *dest, char *src)
+{
+	size_t	*intdest;
+	size_t	*intsrc;
+	size_t	len_int;
+	size_t	i;
+
+	intdest = (size_t *)dest;
+	intsrc = (size_t *)src;
+	len_int = ft_strlen_gnl(src, 1) / sizeof(size_t);
+	i = 0;
+	while (i < len_int)
+	{
+		intdest[i] = intsrc[i];
+		i++;
+	}
+	i *= sizeof(size_t);
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	return (dest[i] = '\0', dest);
+}
+
 int	ft_check_if_newline(char *sortie)
 {
 	int	i;
@@ -48,12 +73,23 @@ int	ft_check_if_newline(char *sortie)
 	return (0);
 }
 
-void	ft_format_sortie(char *sortie)
+char	*ft_format_sortie(char *sortie)
 {
-	int	i;
+	int		i;
+	char	*str;
+	int		j;
 
-	i = 0;
-	while (sortie[i] != '\n')
-		i++;
-	sortie[++i] = '\0';
+	j = 0;
+	i = ft_strlen_gnl(sortie, 2);
+	str = malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (free(sortie), NULL);
+	while (j < i)
+	{
+		str[j] = sortie[j];
+		++j;
+	}
+	str[j] = '\0';
+	free(sortie);
+	return (str);
 }

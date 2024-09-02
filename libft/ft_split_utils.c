@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_split_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 09:11:50 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/01 20:53:47 by madamou          ###   ########.fr       */
+/*   Created: 2024/06/01 20:12:07 by madamou           #+#    #+#             */
+/*   Updated: 2024/06/01 20:15:35 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_realloc(char *ptr, int len_realloc)
+int	ft_is_in_charset(char c, char *set)
 {
-	char	*tmp;
-	int		i;
+	int	index;
 
-	i = ft_strlen(ptr);
-	tmp = malloc(sizeof(char) * (i + len_realloc + 1));
-	if (!tmp)
+	index = 0;
+	while (set[index])
 	{
-		free(ptr);
-		return (NULL);
+		if (c == set[index])
+			return (1);
+		index++;
 	}
-	tmp[0] = '\0';
-	tmp = ft_strcpy(tmp, ptr);
-	free(ptr);
-	return (tmp);
+	return (0);
 }

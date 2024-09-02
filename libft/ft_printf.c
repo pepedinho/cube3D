@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 19:12:36 by madamou           #+#    #+#             */
-/*   Updated: 2024/05/24 18:26:30 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:54:30 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ char	*ft_printf_bis(char *print, const char *str, va_list args)
 			i += 2;
 		}
 		else if (str[i])
-			print = ft_str_to_print(print, str[i++]);
+			print = ft_char(print, str[i++]);
 		if (!print)
 			return (NULL);
 	}
+	print[ft_len_print(2)] = '\0';
 	return (print);
 }
 
@@ -55,18 +56,51 @@ int	ft_printf(const char *str, ...)
 		return (-1);
 	print = malloc(sizeof(char));
 	if (!print)
-		return (0);
+		return (-1);
 	print[0] = '\0';
 	ft_len_print(0);
 	va_start(args, str);
 	print = ft_printf_bis(print, str, args);
 	if (!print)
 		return (-1);
-	return (va_end(args), ft_putstr(print), ft_len_print(2));
+	return (va_end(args), ft_putstrr(print), ft_len_print(2));
 }
 
-/*int	main(void)
+char	*ft_sprintf(const char *str, ...)
 {
-	//ft_printf(" %d\n", ft_printf("je suis en train de test %"));
-	//ft_printf(" %d\n", printf("je suis en train de test %et imad est gentil"));
-}*/
+	va_list	args;
+	char	*print;
+
+	if (!str)
+		return (NULL);
+	print = malloc(sizeof(char));
+	if (!print)
+		return (NULL);
+	print[0] = '\0';
+	ft_len_print(0);
+	va_start(args, str);
+	print = ft_printf_bis(print, str, args);
+	if (!print)
+		return (NULL);
+	return (va_end(args), print);
+}
+
+int	ft_fprintf(int fd, const char *str, ...)
+{
+	va_list	args;
+	char	*print;
+
+	if (!str)
+		return (-1);
+	print = malloc(sizeof(char));
+	if (!print)
+		return (-1);
+	print[0] = '\0';
+	ft_len_print(0);
+	va_start(args, str);
+	print = ft_printf_bis(print, str, args);
+	if (!print)
+		return (-1);
+	ft_putstr_fd(print, fd);
+	return (va_end(args), ft_len_print(2));
+}
