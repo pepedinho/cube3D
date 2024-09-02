@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/02 13:15:05 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/02 17:18:16 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,13 +27,15 @@ SRCS_DIR = srcs/
 
 CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
 
+RAYCASTING = $(addprefix raycasting/, raycast.c)
+
 PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 
 MLX = $(addprefix mlx/, init_mlx.c)
 
 OBJS_DIR = .objets/
 
-SRCS = main.c $(PARSING) $(MLX)
+SRCS = main.c $(PARSING) $(RAYCASTING)
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 
@@ -68,7 +70,7 @@ $(MINI_LIBX) :
 	@make -sC $(MINI_LIBX_DIR)
 
 $(NAME) : message $(OBJS)
-	@$(CC) $(C_FLAGS) $(OBJS) -o $@ -L./libft -lft -L$(MINI_LIBX_DIR) -lmlx -lX11 -lXext 
+	@$(CC) $(C_FLAGS) $(OBJS) -o $@ -L./libft -lft -lm -L$(MINI_LIBX_DIR) -lmlx -lX11 -lXext 
 	@echo
 	@echo "🧊$(BLUE)executable created >_$(END)✅"
 
