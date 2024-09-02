@@ -21,4 +21,3 @@ int	ft_strlen_2d(char **str)
 		i++;
 	return (i);
 }
-
