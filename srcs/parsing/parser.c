@@ -65,7 +65,6 @@ int	get_path(char *line, t_map_data *map_data, int type)
 		return (0);
 	while (line[i] && ft_isspace(line[i]))
 		i++;
-	}
 	path = ft_substr(line, i, ft_strlen(line + i) - 1);
 	if (!path)
 		return (0);
