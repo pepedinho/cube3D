@@ -36,6 +36,7 @@ typedef struct s_coord
 {
 	int		x;
 	int		y;
+	int		direction;
 }			t_coord;
 
 typedef struct s_map_data
