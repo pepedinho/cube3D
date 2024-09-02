@@ -6,12 +6,11 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/02 13:32:18 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/02 17:29:01 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cube3D.h"
-#include <cstdio>
 #include <stdio.h>
 
 int	click_cross(t_map_data *data)
@@ -25,7 +24,6 @@ void	destroy_mlx(t_map_data *data)
 	t_mlx	*mlx;
 
 	mlx = data->mlx;
-	printf("init == %p\n", mlx->init);
 	if (mlx->window)
 		mlx_destroy_window(mlx->init, mlx->window);
 	mlx_destroy_display(mlx->init);
@@ -50,6 +48,7 @@ int	init_mlx(t_map_data *data)
 	mlx->window = mlx_new_window(mlx->init, mlx->width, mlx->height, "cube3D");
 	if (!mlx->window)
 		return (destroy_mlx(data), 0);
+	trace_perimeter(data, 2);
 	mlx_hook(mlx->window, 17, 0L, click_cross, data);
 	mlx_loop(mlx->init);
 	return (1);
