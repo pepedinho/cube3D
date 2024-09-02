@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/cube3D.h"
 
 // TODO check if no space between type and path
 int	check_type(char *line)
@@ -42,17 +42,17 @@ int	check_type(char *line)
 void	assign_path(char *path, t_map_data *map_data, int type)
 {
 	if (type == NO)
-		map_data->tx_north = path;
+		map_data->input.tx_north = path;
 	else if (type == SO)
-		map_data->tx_south = path;
+		map_data->input.tx_south = path;
 	else if (type == WE)
-		map_data->tx_west = path;
+		map_data->input.tx_west = path;
 	else if (type == EA)
-		map_data->tx_east = path;
+		map_data->input.tx_east = path;
 	else if (type == F)
-		map_data->tx_floor = path;
+		map_data->input.tx_floor = path;
 	else if (type == C)
-		map_data->tx_ceiling = path;
+		map_data->input.tx_ceiling = path;
 }
 
 int	get_path(char *line, t_map_data *map_data, int type)

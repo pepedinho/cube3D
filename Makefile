@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/01 22:47:20 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/02 13:15:05 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,9 +29,11 @@ CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
 
 PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 
+MLX = $(addprefix mlx/, init_mlx.c)
+
 OBJS_DIR = .objets/
 
-SRCS = main.c $(PARSING) 
+SRCS = main.c $(PARSING) $(MLX)
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 
@@ -66,13 +68,13 @@ $(MINI_LIBX) :
 	@make -sC $(MINI_LIBX_DIR)
 
 $(NAME) : message $(OBJS)
-	@$(CC) $(C_FLAGS) $(OBJS) -o $@ -L./libft -lft -lreadline -L$(MINI_LIBX_DIR) -lmlx -lX11 -lXext 
+	@$(CC) $(C_FLAGS) $(OBJS) -o $@ -L./libft -lft -L$(MINI_LIBX_DIR) -lmlx -lX11 -lXext 
 	@echo
 	@echo "🧊$(BLUE)executable created >_$(END)✅"
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 	@$(DIR_DUP)
-	@$(CC) $(C_FLAGS) -c $< -o $@
+	@$(CC) $(C_FLAGS) -c -I includes $< -o $@
 	@$(eval COMPILED_FILES := $(shell echo $$(($(COMPILED_FILES)+1))))
 	@echo -n ""
 	@for i in `seq 1 $(shell echo "$$(($(COMPILED_FILES)*$(BAR_SIZE)/$(TOTAL_FILES)))")`; do \
