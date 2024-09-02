@@ -60,7 +60,10 @@ int	check_the_map(char **map_cpy)
 int	check_map_playable(t_map_data *data)
 {
 	if (check_the_map(data->map) == 0)
+	{
+		ft_fprintf(2, "Error\nIncorrect map\n");
 		return (0);
+	}
 	print_2d_array(data->map);
 	return (1);
 }
