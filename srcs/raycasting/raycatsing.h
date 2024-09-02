@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cube3D.h                                           :+:      :+:    :+:   */
+/*   raycatsing.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 12:34:01 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/02 16:55:23 by itahri           ###   ########.fr       */
+/*   Created: 2024/09/02 12:56:24 by itahri            #+#    #+#             */
+/*   Updated: 2024/09/02 16:58:57 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUBE3D_H
-# define CUBE3D_H
+#ifndef RAYCASTING_H
+# define RAYCASTING_H
 
-# include "../libft/libft.h"
-# include "../minilibx-linux/mlx.h"
-# include "../srcs/parsing/parsing.h"
-# include "../srcs/raycasting/raycatsing.h"
-# include <fcntl.h>
-# include <math.h>
-# include <stdio.h>
-# include <unistd.h>
+# ifdef CUBE3D_H
+#  undef CUBE3D_H
+# endif
 
-void	print_2d_array(char **tab);
+# include "../../includes/cube3D.h"
+
+typedef struct s_map_data	t_map_data;
+
+int							trace_perimeter(t_map_data *map_data, int r);
 
 #endif

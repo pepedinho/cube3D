@@ -6,12 +6,11 @@
 /*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:46:00 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 19:26:27 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:58:28 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3D.h"
-#include "parsing/parsing.h"
 
 void	print_2d_array(char **tab)
 {
@@ -21,7 +20,6 @@ void	print_2d_array(char **tab)
 	while (tab[i])
 		printf("%s\n", tab[i++]);
 }
-
 int	main(int argc, char *argv[])
 {
 	t_map_data	data;
@@ -37,5 +35,6 @@ int	main(int argc, char *argv[])
 	print_2d_array(data.map);
 	check_map(&data);
 	printf("spawn position : (x : %d , y : %d)\n", data.p_pos.x, data.p_pos.y);
+	trace_perimeter(&data, 2);
 	return (0);
 }
