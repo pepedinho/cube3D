@@ -6,11 +6,28 @@
 /*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/02 16:58:17 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/02 17:53:57 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "raycatsing.h"
+
+void	define_fov(t_map_data *map_data, int r)
+{
+	double	radiant;
+	double	alpha;
+	double	x1;
+	double	x2;
+	double	y1;
+	double	y2;
+
+	alpha = 0;
+	radiant = 80 * M_PI / 180;
+	x1 = map_data->p_pos.x + r * cos(alpha);
+	y1 = map_data->p_pos.y + r * sin(alpha);
+	x2 = map_data->p_pos.x + r * cos(alpha + radiant);
+	y2 = map_data->p_pos.y + r * sin(alpha + radiant);
+}
 
 int	trace_perimeter(t_map_data *map_data, int r)
 {
