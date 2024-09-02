@@ -34,6 +34,6 @@ int	main(int argc, char *argv[])
 	printf("C = %s\n", data.tx_ceiling);
 	printf("F = %s\n", data.tx_floor);
 	print_2d_array(data.map);
-	check_map(&data);
+	printf("spawn position : (x : %d , y : %d)\n", data.p_pos.x, data.p_pos.y);
 	return (0);
 }

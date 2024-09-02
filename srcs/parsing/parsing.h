@@ -32,6 +32,12 @@
  * (N-S-E-W) = player spawn point and cardinal direction
  */
 
+typedef struct s_coord
+{
+	int		x;
+	int		y;
+}			t_coord;
+
 typedef struct s_map_data
 {
 	char	*tx_north;
@@ -41,6 +47,7 @@ typedef struct s_map_data
 	char	*tx_floor;
 	char	*tx_ceiling;
 	char	*map_path;
+	t_coord	p_pos;
 	char	**map;
 }			t_map_data;
 

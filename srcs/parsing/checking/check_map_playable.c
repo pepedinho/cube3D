@@ -32,38 +32,40 @@ int	check_next_cases(char **map_cpy, int y, int x)
 	return (1);
 }
 
-int	check_the_map(char **map_cpy)
+int	check_the_map(t_map_data *map_data)
 {
 	int	x;
 	int	y;
 
-	y = 0;
-	while (map_cpy[y])
+	y = -1;
+	while (map_data->map[++y])
 	{
-		x = 0;
-		while (map_cpy[y][x])
+		x = -1;
+		while (map_data->map[y][++x])
 		{
-			if (map_cpy[y][x] == '0' || map_cpy[y][x] == 'N'
-				|| map_cpy[y][x] == 'S' || map_cpy[y][x] == 'E'
-				|| map_cpy[y][x] == 'W')
+			if (map_data->map[y][x] == '0' || map_data->map[y][x] == 'N'
+				|| map_data->map[y][x] == 'S' || map_data->map[y][x] == 'E'
+				|| map_data->map[y][x] == 'W')
 			{
-				if (!check_next_cases(map_cpy, y, x))
+				if (map_data->map[y][x] != '0')
+				{
+					map_data->p_pos.x = x;
+					map_data->p_pos.y = y;
+				}
+				if (!check_next_cases(map_data->map, y, x))
 					return (0);
 			}
-			x++;
 		}
-		y++;
 	}
 	return (1);
 }
 
 int	check_map_playable(t_map_data *data)
 {
-	if (check_the_map(data->map) == 0)
+	if (check_the_map(data) == 0)
 	{
 		ft_fprintf(2, "Error\nIncorrect map\n");
 		return (0);
 	}
-	print_2d_array(data->map);
 	return (1);
 }
