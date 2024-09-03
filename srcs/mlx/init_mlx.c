@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/02 17:29:01 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/03 20:06:24 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,35 @@ int	handle_input(int keysym, t_map_data *data)
 	return (1);
 }
 
+int	init_img(t_map_data *map_data)
+{
+	int	img_width;
+	int	img_height;
+
+	img_width = WIDTH;
+	img_height = HEIGHT;
+	map_data->mlx->white_i = NULL;
+	map_data->mlx->black_i = NULL;
+	map_data->mlx->white_i = mlx_xpm_file_to_image(map_data->mlx->init, WHITE_I,
+			&img_width, &img_height);
+	if (!map_data->mlx->white_i)
+		return (printf("Error with image loading\n"), 0);
+	map_data->mlx->white_i = mlx_xpm_file_to_image(map_data->mlx->init, BLACK_I,
+			&img_width, &img_height);
+	if (!map_data->mlx->black_i)
+		return (printf("Error with image loading\n"), 0);
+	return (1);
+}
+
 int	init_mlx(t_map_data *data)
 {
 	t_mlx	*mlx;
 
-	data->mlx = malloc(sizeof(data->mlx));
+	data->mlx = malloc(sizeof(t_mlx));
 	if (!data->mlx)
 		return (0);
 	mlx = data->mlx;
-	ft_memset(mlx, 0, sizeof(mlx));
+	// ft_memset(mlx, 0, sizeof(mlx));
 	mlx->init = mlx_init();
 	if (!mlx->init)
 		return (destroy_mlx(data), 0);
@@ -64,6 +84,8 @@ int	init_mlx(t_map_data *data)
 	mlx->window = mlx_new_window(mlx->init, mlx->width, mlx->height, "cube3D");
 	if (!mlx->window)
 		return (destroy_mlx(data), 0);
+	init_img(data);
+	render_map(data);
 	mlx_hook(mlx->window, 17, 0L, click_cross, data);
 	mlx_key_hook(mlx->window, handle_input, data);
 	mlx_loop(mlx->init);

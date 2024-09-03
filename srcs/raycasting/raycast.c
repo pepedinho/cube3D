@@ -6,7 +6,7 @@
 /*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/03 11:26:10 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/03 20:12:31 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 
 	x_start = map_data->p_pos.x;
 	y_start = map_data->p_pos.y;
-	printf("debug : start x : %f, start y : %f | to x : %f, to y : %f\n",
-		x_start, y_start, to_x, to_y);
+	// printf("debug : start x : %f, start y : %f | to x : %f, to y : %f\n",
+	//	x_start, y_start, to_x, to_y);
 	x_step = abs_value((to_x - x_start) / 100);
 	y_step = abs_value((to_y - y_start) / 100);
 	if (x_start < to_x && y_start < to_y)
 	{
-		printf("xstep == %f, ystep == %f\n", x_step, y_step);
+		// printf("xstep == %f, ystep == %f\n", x_step, y_step);
 		while (x_start < to_x && y_start < to_y)
 		{
 			x_start += x_step;
@@ -95,8 +95,8 @@ double	*define_fov(t_map_data *map_data, int r, double alpha)
 		0X008000);
 	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x2 * 64, y2 * 64,
 		0X008000);
-	printf("fov1 ==  : (%f, %f)\n", x1, y1);
-	printf("fov2 ==  : (%f, %f)\n", x2, y2);
+	// printf("fov1 ==  : (%f, %f)\n", x1, y1);
+	// printf("fov2 ==  : (%f, %f)\n", x2, y2);
 	trace_trait(map_data, x1, y1, 0XFFFF00);
 	trace_trait(map_data, x2, y2, 0X008000);
 	angles[0] = alpha;
@@ -151,6 +151,51 @@ int	raycast(t_map_data *map_data, int r, double *start_end)
 	return (1);
 }
 
+int	find_r(t_map_data *map_data)
+{
+	int	x;
+	int	y;
+	int	r;
+	int	iterator;
+
+	x = map_data->p_pos.x + 1;
+	iterator = 1;
+	while (map_data->map[map_data->p_pos.y][x] == '0')
+	{
+		x++;
+		iterator++;
+	}
+	r = iterator;
+	iterator = 0;
+	y = map_data->p_pos.y + 1;
+	while (map_data->map[y][map_data->p_pos.x] == '0')
+	{
+		y++;
+		iterator++;
+	}
+	if (iterator > r)
+		r = iterator;
+	iterator = 0;
+	x = map_data->p_pos.x - 1;
+	while (x >= 0 && map_data->map[map_data->p_pos.y][x] == '0')
+	{
+		x--;
+		iterator++;
+	}
+	if (iterator > r)
+		r = iterator;
+	iterator = 0;
+	y = map_data->p_pos.y - 1;
+	while (y >= 0 && map_data->map[y][map_data->p_pos.x] == '0')
+	{
+		y--;
+		iterator++;
+	}
+	if (iterator > r)
+		r = iterator;
+	return (r);
+}
+
 int	trace_perimeter(t_map_data *map_data, int r, double alpha)
 {
 	double	h;
@@ -170,6 +215,7 @@ int	trace_perimeter(t_map_data *map_data, int r, double alpha)
 			* 64, 0XFFFFFF);
 		i++;
 	}
-	raycast(map_data, r, define_fov(map_data, r, alpha));
+	raycast(map_data, find_r(map_data), define_fov(map_data, find_r(map_data),
+			alpha));
 	return (1);
 }

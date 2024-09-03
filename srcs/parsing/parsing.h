@@ -53,6 +53,8 @@ typedef struct s_mlx
 	int		height;
 	void	*init;
 	void	*window;
+	void	*white_i;
+	void	*black_i;
 }			t_mlx;
 
 typedef struct s_map_data

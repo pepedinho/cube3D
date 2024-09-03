@@ -15,6 +15,11 @@
 
 # include <X11/keysym.h>
 
+# define WIDTH 64
+# define HEIGHT 64
+# define WHITE_I "../../assets/white_tile.xpm"
+# define BLACK_I "../../assets/black_tile.xpm"
+
 # ifdef CUBE3D_H
 #  undef CUBE3D_H
 # endif
