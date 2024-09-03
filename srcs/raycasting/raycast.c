@@ -76,18 +76,16 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 	}
 }
 
-double	*define_fov(t_map_data *map_data, int r)
+double	*define_fov(t_map_data *map_data, int r, double alpha)
 {
 	double	radiant;
-	double	alpha;
 	double	x1;
 	double	x2;
 	double	y1;
 	double	y2;
-	double	*tab;
+	double	*angles;
 
-	tab = malloc(sizeof(double) * 4);
-	alpha = 90;
+	angles = malloc(sizeof(double) * 2);
 	radiant = 80 * M_PI / 180;
 	x1 = map_data->p_pos.x + r * cos(alpha);
 	y1 = map_data->p_pos.y + r * sin(alpha);
@@ -101,12 +99,25 @@ double	*define_fov(t_map_data *map_data, int r)
 	printf("fov2 ==  : (%f, %f)\n", x2, y2);
 	trace_trait(map_data, x1, y1, 0XFFFF00);
 	trace_trait(map_data, x2, y2, 0X008000);
-	tab[0] = x1;
-	tab[1] = y2;
-	tab[2] = x2;
-	tab[3] = y1;
-	return (tab);
+	angles[0] = alpha;
+	angles[1] = alpha + radiant;
+	if (angles[1] > 2 * M_PI)
+		angles[1] -= 2 * M_PI;
+	return (angles);
 }
+
+/*
+ * first condition in loop check if the current angle is in the FOV range
+ * |
+ * --->(radiant >= start_end[0] && radiant <= start_end[1])
+ *
+
+	*  second condition is in the case of beggining angle is bigger than finish angle
+ *  |
+ *  --->(start_end[0] > start_end[1] && (radiant >= start_end[0]
+ *        ||   radiant <= start_end[1])
+ */
+
 int	raycast(t_map_data *map_data, int r, double *start_end)
 {
 	double	h;
@@ -122,20 +133,25 @@ int	raycast(t_map_data *map_data, int r, double *start_end)
 		radiant = 2 * M_PI * i / 150;
 		h = map_data->p_pos.x + r * cos(radiant);
 		k = map_data->p_pos.y + r * sin(radiant);
-		if ((h <= start_end[0] && k <= start_end[3]) && (h >= start_end[2]
-				&& k >= start_end[1]))
+		if (radiant >= start_end[0] && radiant <= start_end[1])
 		{
 			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * 64, k
 				* 64, 0XFF0000);
 			trace_trait(map_data, h, k, 0XFF0000);
-			printf("DBUEFVIBGKDKJB\n");
+		}
+		else if (start_end[0] > start_end[1] && (radiant >= start_end[0]
+				|| radiant <= start_end[1]))
+		{
+			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * 64, k
+				* 64, 0XFF0000);
+			trace_trait(map_data, h, k, 0XFF0000);
 		}
 		i++;
 	}
 	return (1);
 }
 
-int	trace_perimeter(t_map_data *map_data, int r)
+int	trace_perimeter(t_map_data *map_data, int r, double alpha)
 {
 	double	h;
 	double	k;
@@ -152,9 +168,8 @@ int	trace_perimeter(t_map_data *map_data, int r)
 		k = map_data->p_pos.y + r * sin(radiant);
 		mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * 64, k
 			* 64, 0XFFFFFF);
-		printf("point in : (%f, %f)\n", h, k);
 		i++;
 	}
-	raycast(map_data, r, define_fov(map_data, r));
+	raycast(map_data, r, define_fov(map_data, r, alpha));
 	return (1);
 }

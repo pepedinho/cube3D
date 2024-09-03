@@ -32,6 +32,22 @@ void	destroy_mlx(t_map_data *data)
 	exit(EXIT_SUCCESS);
 }
 
+int	handle_input(int keysym, t_map_data *data)
+{
+	static double	alpha = 0;
+
+	if (keysym == XK_Escape)
+		destroy_mlx(data);
+	if (keysym == XK_d)
+	{
+		printf("-----------------------------%f------------------------------\n",
+			alpha);
+		trace_perimeter(data, 2, alpha);
+		alpha += 0.1;
+	}
+	return (1);
+}
+
 int	init_mlx(t_map_data *data)
 {
 	t_mlx	*mlx;
@@ -48,8 +64,8 @@ int	init_mlx(t_map_data *data)
 	mlx->window = mlx_new_window(mlx->init, mlx->width, mlx->height, "cube3D");
 	if (!mlx->window)
 		return (destroy_mlx(data), 0);
-	trace_perimeter(data, 2);
 	mlx_hook(mlx->window, 17, 0L, click_cross, data);
+	mlx_key_hook(mlx->window, handle_input, data);
 	mlx_loop(mlx->init);
 	return (1);
 }

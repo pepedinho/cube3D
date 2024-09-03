@@ -13,6 +13,8 @@
 #ifndef MINILIBX_H
 # define MINILIBX_H
 
+# include <X11/keysym.h>
+
 # ifdef CUBE3D_H
 #  undef CUBE3D_H
 # endif

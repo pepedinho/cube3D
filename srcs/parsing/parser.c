@@ -92,9 +92,7 @@ t_map_data	*get_map_data(char *filename, t_map_data *map_data)
 {
 	int		fd;
 	char	*line;
-	int		i;
 
-	i = 0;
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (NULL);

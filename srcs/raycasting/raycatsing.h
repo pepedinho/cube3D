@@ -21,6 +21,7 @@
 
 typedef struct s_map_data	t_map_data;
 
-int							trace_perimeter(t_map_data *map_data, int r);
+int							trace_perimeter(t_map_data *map_data, int r,
+								double alpha);
 
 #endif

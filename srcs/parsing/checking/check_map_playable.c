@@ -14,9 +14,6 @@
 
 int	check_next_cases(char **map_cpy, int y, int x)
 {
-	int	cpt;
-
-	cpt = 0;
 	if (y == 0 || x == 0)
 		return (0);
 	if (x == ft_strlen(map_cpy[y]) || y == ft_strlen_2d(map_cpy))
