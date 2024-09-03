@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../../includes/cube3D.h"
 
 int	ft_isspace(char c)
 {

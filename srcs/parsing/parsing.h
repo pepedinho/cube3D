@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/01 22:43:12 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/02 13:28:33 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 #  undef CUBE3D_H
 # endif
 
-# include "../../includes/cube3D.h"
-
 /*
  * 0 = floor
  * 1 = wall
@@ -39,7 +37,7 @@ typedef struct s_coord
 	int		direction;
 }			t_coord;
 
-typedef struct s_map_data
+typedef struct s_input
 {
 	char	*tx_north;
 	char	*tx_south;
@@ -47,6 +45,20 @@ typedef struct s_map_data
 	char	*tx_west;
 	char	*tx_floor;
 	char	*tx_ceiling;
+}			t_input;
+
+typedef struct s_mlx
+{
+	int		width;
+	int		height;
+	void	*init;
+	void	*window;
+}			t_mlx;
+
+typedef struct s_map_data
+{
+	t_input	input;
+	t_mlx	*mlx;
 	char	*map_path;
 	t_coord	p_pos;
 	char	**map;

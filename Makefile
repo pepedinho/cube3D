@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/02 17:02:17 by itahri           ###   ########.fr        #
+#    Updated: 2024/09/02 17:20:42 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,9 +31,11 @@ RAYCASTING = $(addprefix raycasting/, raycast.c)
 
 PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 
+MLX = $(addprefix mlx/, init_mlx.c)
+
 OBJS_DIR = .objets/
 
-SRCS = main.c $(PARSING) $(RAYCASTING)
+SRCS = main.c $(PARSING) $(RAYCASTING) $(MLX)
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 
@@ -74,7 +76,7 @@ $(NAME) : message $(OBJS)
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 	@$(DIR_DUP)
-	@$(CC) $(C_FLAGS) -c $< -o $@
+	@$(CC) $(C_FLAGS) -c -I includes $< -o $@
 	@$(eval COMPILED_FILES := $(shell echo $$(($(COMPILED_FILES)+1))))
 	@echo -n ""
 	@for i in `seq 1 $(shell echo "$$(($(COMPILED_FILES)*$(BAR_SIZE)/$(TOTAL_FILES)))")`; do \
