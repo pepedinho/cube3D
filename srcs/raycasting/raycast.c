@@ -6,74 +6,37 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/04 13:05:18 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/05 00:21:39 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "raycatsing.h"
 
-double	abs_value(double nb)
-{
-	if (nb < 0)
-		return (-nb);
-	else
-		return (nb);
-}
+# define PRECISION 50
 
-void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
+void trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 {
-	double	x_start;
-	double	y_start;
-	double	x_step;
-	double	y_step;
+    double x_start;
+    double y_start;
+    double x_step;
+    double y_step;
+    int steps;
+    int i;
 
-	x_start = map_data->p_pos.r_x;
-	y_start = map_data->p_pos.r_y;
-	// printf("debug : start x : %f, start y : %f | to x : %f, to y : %f\n",
-	//	x_start, y_start, to_x, to_y);
-	x_step = abs_value((to_x - x_start) / 500);
-	y_step = abs_value((to_y - y_start) / 500);
-	if (x_start < to_x && y_start < to_y)
-	{
-		// printf("xstep == %f, ystep == %f\n", x_step, y_step);
-		while (x_start < to_x && y_start < to_y)
-		{
-			x_start += x_step;
-			y_start += y_step;
-			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-				* WIDTH, y_start * HEIGHT, color);
-		}
-	}
-	else if (x_start > to_x && y_start > to_y)
-	{
-		while (x_start > to_x && y_start > to_y)
-		{
-			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-				* WIDTH, y_start * HEIGHT, color);
-			x_start -= x_step;
-			y_start -= y_step;
-		}
-	}
-	else if (x_start > to_x && y_start < to_y)
-	{
-		while (x_start > to_x && y_start < to_y)
-		{
-			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-				* WIDTH, y_start * HEIGHT, color);
-			x_start -= x_step;
-			y_start += y_step;
-		}
-	}
-	else if (x_start < to_x && y_start > to_y)
-	{
-		while (x_start < to_x && y_start > to_y)
-		{
-			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-				* WIDTH, y_start * HEIGHT, color);
-			x_start += x_step;
-			y_start -= y_step;
-		}
-	}
+    x_start = map_data->p_pos.r_x;
+    y_start = map_data->p_pos.r_y;
+    steps = fmax(fabs(to_x - x_start), fabs(to_y - y_start)) * PRECISION;
+    x_step = (to_x - x_start) / steps;
+    y_step = (to_y - y_start) / steps;
+
+    i = 0;
+    while (i <= steps)
+    {
+        mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start * WIDTH, y_start * HEIGHT, color);
+        x_start += x_step;
+        y_start += y_step;
+        i++;
+    }
 }
 
 double	*define_fov(t_map_data *map_data, int r, double alpha)
@@ -102,6 +65,20 @@ double	*define_fov(t_map_data *map_data, int r, double alpha)
 	return (angles);
 }
 
+inline int sign(double nb)
+{
+	if (nb < 0)
+		return (-1);
+	return (1);
+}
+
+inline double set_side_dist(double ray_dir, double pos, int map, double delta)
+{
+	if (ray_dir < 0)
+		return ((pos - map) * delta);
+	return ((map + 1.0 - pos) * delta);
+}
+
 int	dda(t_map_data *map_data, double angle)
 {
 	double	ray_dir_x;
@@ -123,26 +100,10 @@ int	dda(t_map_data *map_data, double angle)
 	delta_dist_x = fabs(1 / ray_dir_x);
 	delta_dist_y = fabs(1 / ray_dir_y);
 	hit = 0;
-	if (ray_dir_x < 0)
-	{
-		step_x = -1;
-		side_dist_x = (map_data->p_pos.r_x - map_x) * delta_dist_x;
-	}
-	else
-	{
-		step_x = 1;
-		side_dist_x = (map_x + 1.0 - map_data->p_pos.r_x) * delta_dist_x;
-	}
-	if (ray_dir_y < 0)
-	{
-		step_y = -1;
-		side_dist_y = (map_data->p_pos.r_y - map_y) * delta_dist_y;
-	}
-	else
-	{
-		step_y = 1;
-		side_dist_y = (map_y + 1.0 - map_data->p_pos.r_y) * delta_dist_y;
-	}
+	step_x = sign(ray_dir_x);
+	step_y = sign(ray_dir_y);
+	side_dist_x = set_side_dist(ray_dir_x, map_data->p_pos.r_x, map_x, delta_dist_x);
+	side_dist_y = set_side_dist(ray_dir_y, map_data->p_pos.r_y, map_y, delta_dist_y);
 	while (hit == 0)
 	{
 		if (side_dist_x < side_dist_y)
@@ -169,6 +130,7 @@ int	raycast(t_map_data *map_data, int r, double *start_end, int num_rays)
 	int		i;
 
 	(void)r;
+	increment = (start_end[1] - start_end[0]) / num_rays;
 	if (start_end[0] > start_end[1])
 		increment = (2 * M_PI - start_end[0] + start_end[1]) / num_rays;
 	i = 0;
