@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/04 13:06:26 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/04 13:29:41 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ int	init_img(t_map_data *map_data)
 
 	img_width = WIDTH;
 	img_height = HEIGHT;
-	map_data->mlx->white_i = NULL;
-	map_data->mlx->black_i = NULL;
 	map_data->mlx->white_i = mlx_xpm_file_to_image(map_data->mlx->init, WHITE_I,
 			&img_width, &img_height);
 	if (!map_data->mlx->white_i)
@@ -76,7 +74,7 @@ int	init_mlx(t_map_data *data)
 	if (!data->mlx)
 		return (0);
 	mlx = data->mlx;
-	// ft_memset(mlx, 0, sizeof(mlx));
+	ft_memset(mlx, 0, sizeof(mlx));
 	mlx->init = mlx_init();
 	if (!mlx->init)
 		return (destroy_mlx(data), 0);
