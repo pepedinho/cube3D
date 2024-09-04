@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/04 13:29:41 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/05 00:47:32 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	moov(t_map_data *data, double alpha, int key)
 		data->p_pos.r_x, data->p_pos.r_y);
 	printf("//////| a : %f | p_x(b) : %d | p_y(b) : %d |\\\\\\\\\\\\\n", alpha,
 		data->p_pos.b_x, data->p_pos.b_y);
-	if (key == XK_q)
+	if (key == XK_a)
 	{
 		n_pos = data->p_pos.r_x - 0.1;
 		if (n_pos < 0.0)
@@ -83,7 +83,7 @@ void	moov(t_map_data *data, double alpha, int key)
 			data->p_pos.b_x += 1;
 		data->p_pos.r_x = n_pos;
 	}
-	else if (key == XK_z)
+	else if (key == XK_w)
 	{
 		n_pos = data->p_pos.r_y - 0.1;
 		if (n_pos < 0.0)
@@ -142,12 +142,12 @@ int	handle_input(int keysym, t_map_data *data)
 		moove_fov(data, alpha);
 		alpha -= 0.1;
 	}
-	else if (keysym == XK_q)
-		moov(data, alpha, XK_q);
+	else if (keysym == XK_a)
+		moov(data, alpha, XK_a);
 	else if (keysym == XK_d)
 		moov(data, alpha, XK_d);
-	else if (keysym == XK_z)
-		moov(data, alpha, XK_z);
+	else if (keysym == XK_w)
+		moov(data, alpha, XK_w);
 	else if (keysym == XK_s)
 		moov(data, alpha, XK_s);
 	return (1);

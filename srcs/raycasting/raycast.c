@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/05 00:21:39 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/05 01:56:30 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
     steps = fmax(fabs(to_x - x_start), fabs(to_y - y_start)) * PRECISION;
     x_step = (to_x - x_start) / steps;
     y_step = (to_y - y_start) / steps;
-
     i = 0;
     while (i <= steps)
     {
@@ -65,14 +64,14 @@ double	*define_fov(t_map_data *map_data, int r, double alpha)
 	return (angles);
 }
 
-inline int sign(double nb)
+int sign(double nb)
 {
 	if (nb < 0)
 		return (-1);
 	return (1);
 }
 
-inline double set_side_dist(double ray_dir, double pos, int map, double delta)
+double set_side_dist(double ray_dir, double pos, int map, double delta)
 {
 	if (ray_dir < 0)
 		return ((pos - map) * delta);
@@ -95,17 +94,20 @@ int	dda(t_map_data *map_data, double angle)
 
 	ray_dir_x = cos(angle);
 	ray_dir_y = sin(angle);
+	// printf("ray_dix_x == %f || ray_dir_y == %f\n", ray_dir_x, ray_dir_y);
 	map_x = (int)map_data->p_pos.r_x;
 	map_y = (int)map_data->p_pos.r_y;
+	hit = 0;
 	delta_dist_x = fabs(1 / ray_dir_x);
 	delta_dist_y = fabs(1 / ray_dir_y);
-	hit = 0;
 	step_x = sign(ray_dir_x);
 	step_y = sign(ray_dir_y);
-	side_dist_x = set_side_dist(ray_dir_x, map_data->p_pos.r_x, map_x, delta_dist_x);
-	side_dist_y = set_side_dist(ray_dir_y, map_data->p_pos.r_y, map_y, delta_dist_y);
+	side_dist_x = set_side_dist(ray_dir_x, map_data->p_pos.b_x, map_x, delta_dist_x);
+	side_dist_y = set_side_dist(ray_dir_y, map_data->p_pos.b_y, map_y, delta_dist_y);
 	while (hit == 0)
 	{
+        // printf("\n\nmap_x: %d, map_y: %d, side_dist_x: %f, side_dist_y: %f\n", map_x, map_y, side_dist_x, side_dist_y);
+		// printf("actuel case == %c\n\n", map_data->map[map_y][map_x]);
 		if (side_dist_x < side_dist_y)
 		{
 			side_dist_x += delta_dist_x;
