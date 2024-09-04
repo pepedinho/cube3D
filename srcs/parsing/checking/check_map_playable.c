@@ -46,8 +46,10 @@ int	check_the_map(t_map_data *map_data)
 			{
 				if (map_data->map[y][x] != '0')
 				{
-					map_data->p_pos.x = x;
-					map_data->p_pos.y = y;
+					map_data->p_pos.b_x = x;
+					map_data->p_pos.b_y = y;
+					map_data->p_pos.r_x = x;
+					map_data->p_pos.r_y = y;
 				}
 				if (!check_next_cases(map_data->map, y, x))
 					return (0);

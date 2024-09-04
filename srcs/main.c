@@ -40,8 +40,6 @@ int	main(int argc, char *argv[])
 	get_map_data(argv[argc - 1], &data);
 	printf_input(&data);
 	check_map(&data);
-	printf("spawn position : (x : %d , y : %d)\n", data.p_pos.x, data.p_pos.y);
-	printf("rayon : %d\n", find_r(&data));
 	init_mlx(&data);
 	return (0);
 }

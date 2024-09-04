@@ -27,8 +27,8 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 	double	x_step;
 	double	y_step;
 
-	x_start = map_data->p_pos.x;
-	y_start = map_data->p_pos.y;
+	x_start = map_data->p_pos.r_x;
+	y_start = map_data->p_pos.r_y;
 	// printf("debug : start x : %f, start y : %f | to x : %f, to y : %f\n",
 	//	x_start, y_start, to_x, to_y);
 	x_step = abs_value((to_x - x_start) / 100);
@@ -87,14 +87,14 @@ double	*define_fov(t_map_data *map_data, int r, double alpha)
 
 	angles = malloc(sizeof(double) * 2);
 	radiant = 80 * M_PI / 180;
-	x1 = map_data->p_pos.x + r * cos(alpha);
-	y1 = map_data->p_pos.y + r * sin(alpha);
-	x2 = map_data->p_pos.x + r * cos(alpha + radiant);
-	y2 = map_data->p_pos.y + r * sin(alpha + radiant);
-	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x1 * WIDTH, y1 * HEIGHT,
-		0X008000);
-	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x2 * WIDTH, y2 * HEIGHT,
-		0X008000);
+	x1 = map_data->p_pos.r_x + r * cos(alpha);
+	y1 = map_data->p_pos.r_y + r * sin(alpha);
+	x2 = map_data->p_pos.r_x + r * cos(alpha + radiant);
+	y2 = map_data->p_pos.r_y + r * sin(alpha + radiant);
+	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x1 * WIDTH, y1
+		* HEIGHT, 0X008000);
+	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x2 * WIDTH, y2
+		* HEIGHT, 0X008000);
 	// printf("fov1 ==  : (%f, %f)\n", x1, y1);
 	// printf("fov2 ==  : (%f, %f)\n", x2, y2);
 	trace_trait(map_data, x1, y1, 0XFFFF00);
@@ -126,24 +126,24 @@ int	raycast(t_map_data *map_data, int r, double *start_end)
 	int		i;
 
 	i = 0;
-	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, map_data->p_pos.x
-		* WIDTH, map_data->p_pos.y * HEIGHT, 0XFF0000);
+	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window,
+		map_data->p_pos.r_x * WIDTH, map_data->p_pos.r_y * HEIGHT, 0XFF0000);
 	while (i < 150)
 	{
 		radiant = 2 * M_PI * i / 150;
-		h = map_data->p_pos.x + r * cos(radiant);
-		k = map_data->p_pos.y + r * sin(radiant);
+		h = map_data->p_pos.r_x + r * cos(radiant);
+		k = map_data->p_pos.r_y + r * sin(radiant);
 		if (radiant >= start_end[0] && radiant <= start_end[1])
 		{
-			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH, k
-				* HEIGHT, 0XFF0000);
+			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH,
+				k * HEIGHT, 0XFF0000);
 			trace_trait(map_data, h, k, 0XFF0000);
 		}
 		else if (start_end[0] > start_end[1] && (radiant >= start_end[0]
 				|| radiant <= start_end[1]))
 		{
-			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH, k
-				* HEIGHT, 0XFF0000);
+			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH,
+				k * HEIGHT, 0XFF0000);
 			trace_trait(map_data, h, k, 0XFF0000);
 		}
 		i++;
@@ -158,17 +158,17 @@ int	find_r(t_map_data *map_data)
 	int	r;
 	int	iterator;
 
-	x = map_data->p_pos.x + 1;
+	x = map_data->p_pos.b_x + 1;
 	iterator = 1;
-	while (map_data->map[map_data->p_pos.y][x] == '0')
+	while (map_data->map[map_data->p_pos.b_y][x] == '0')
 	{
 		x++;
 		iterator++;
 	}
 	r = iterator;
 	iterator = 0;
-	y = map_data->p_pos.y + 1;
-	while (map_data->map[y][map_data->p_pos.x] == '0')
+	y = map_data->p_pos.b_y + 1;
+	while (map_data->map[y][map_data->p_pos.b_x] == '0')
 	{
 		y++;
 		iterator++;
@@ -176,8 +176,8 @@ int	find_r(t_map_data *map_data)
 	if (iterator > r)
 		r = iterator;
 	iterator = 0;
-	x = map_data->p_pos.x - 1;
-	while (x >= 0 && map_data->map[map_data->p_pos.y][x] == '0')
+	x = map_data->p_pos.b_x - 1;
+	while (x >= 0 && map_data->map[map_data->p_pos.b_y][x] == '0')
 	{
 		x--;
 		iterator++;
@@ -185,8 +185,8 @@ int	find_r(t_map_data *map_data)
 	if (iterator > r)
 		r = iterator;
 	iterator = 0;
-	y = map_data->p_pos.y - 1;
-	while (y >= 0 && map_data->map[y][map_data->p_pos.x] == '0')
+	y = map_data->p_pos.b_y - 1;
+	while (y >= 0 && map_data->map[y][map_data->p_pos.b_x] == '0')
 	{
 		y--;
 		iterator++;
@@ -204,13 +204,13 @@ int	trace_perimeter(t_map_data *map_data, int r, double alpha)
 	int		i;
 
 	i = 0;
-	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, map_data->p_pos.x
-		* WIDTH, map_data->p_pos.y * HEIGHT, 0XFF0000);
+	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window,
+		map_data->p_pos.r_x * WIDTH, map_data->p_pos.r_y * HEIGHT, 0XFF0000);
 	while (i < 5000)
 	{
 		radiant = 2 * M_PI * i / 5000;
-		h = map_data->p_pos.x + r * cos(radiant);
-		k = map_data->p_pos.y + r * sin(radiant);
+		h = map_data->p_pos.r_x + r * cos(radiant);
+		k = map_data->p_pos.r_y + r * sin(radiant);
 		mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH, k
 			* HEIGHT, 0XFFFFFF);
 		i++;

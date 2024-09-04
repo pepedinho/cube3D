@@ -30,11 +30,18 @@
  * (N-S-E-W) = player spawn point and cardinal direction
  */
 
+/*
+ * b_x & b_y = x and y pos in orhtogonal buffer
+
+	* r_x & r_y = x and y pos in mlx render when r_x = 2.0 b_x = 2 but when r_x = 1.9 b_x still egal to 1
+ */
 typedef struct s_coord
 {
-	int		x;
-	int		y;
-	int		direction;
+	int		b_x;
+	int		b_y;
+	double	r_x;
+	double	r_y;
+	double	direction;
 }			t_coord;
 
 typedef struct s_input
