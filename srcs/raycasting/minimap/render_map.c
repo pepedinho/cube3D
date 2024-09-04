@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 20:00:33 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/03 20:11:35 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/04 12:59:45 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ void	render_map(t_map_data *map_data)
 		{
 			if (map[y][x] == '1' && x > 0)
 				mlx_put_image_to_window(map_data->mlx->init,
-					map_data->mlx->window, map_data->mlx->white_i, x * 64, y
-					* 64);
+					map_data->mlx->window, map_data->mlx->white_i, x * WIDTH, y
+					* HEIGHT);
 			else if (map[y][x] == '0' && x > 0)
 				mlx_put_image_to_window(map_data->mlx->init,
-					map_data->mlx->window, map_data->mlx->black_i, x * 64, y
-					* 64);
+					map_data->mlx->window, map_data->mlx->black_i, x * WIDTH, y
+					* HEIGHT);
 			x++;
 		}
 		y++;

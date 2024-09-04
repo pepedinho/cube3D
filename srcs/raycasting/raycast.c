@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/03 20:12:31 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/04 13:05:18 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 			x_start += x_step;
 			y_start += y_step;
 			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-				* 64, y_start * 64, color);
+				* WIDTH, y_start * HEIGHT, color);
 		}
 	}
 	else if (x_start > to_x && y_start > to_y)
@@ -49,7 +49,7 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 		while (x_start > to_x || y_start > to_y)
 		{
 			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-				* 64, y_start * 64, color);
+				* WIDTH, y_start * HEIGHT, color);
 			x_start -= x_step;
 			y_start -= y_step;
 		}
@@ -59,7 +59,7 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 		while (x_start > to_x || y_start < to_y)
 		{
 			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-				* 64, y_start * 64, color);
+				* WIDTH, y_start * HEIGHT, color);
 			x_start -= x_step;
 			y_start += y_step;
 		}
@@ -69,7 +69,7 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 		while (x_start < to_x && y_start > to_y)
 		{
 			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-				* 64, y_start * 64, color);
+				* WIDTH, y_start * HEIGHT, color);
 			x_start += x_step;
 			y_start -= y_step;
 		}
@@ -91,9 +91,9 @@ double	*define_fov(t_map_data *map_data, int r, double alpha)
 	y1 = map_data->p_pos.y + r * sin(alpha);
 	x2 = map_data->p_pos.x + r * cos(alpha + radiant);
 	y2 = map_data->p_pos.y + r * sin(alpha + radiant);
-	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x1 * 64, y1 * 64,
+	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x1 * WIDTH, y1 * HEIGHT,
 		0X008000);
-	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x2 * 64, y2 * 64,
+	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x2 * WIDTH, y2 * HEIGHT,
 		0X008000);
 	// printf("fov1 ==  : (%f, %f)\n", x1, y1);
 	// printf("fov2 ==  : (%f, %f)\n", x2, y2);
@@ -127,7 +127,7 @@ int	raycast(t_map_data *map_data, int r, double *start_end)
 
 	i = 0;
 	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, map_data->p_pos.x
-		* 64, map_data->p_pos.y * 64, 0XFF0000);
+		* WIDTH, map_data->p_pos.y * HEIGHT, 0XFF0000);
 	while (i < 150)
 	{
 		radiant = 2 * M_PI * i / 150;
@@ -135,15 +135,15 @@ int	raycast(t_map_data *map_data, int r, double *start_end)
 		k = map_data->p_pos.y + r * sin(radiant);
 		if (radiant >= start_end[0] && radiant <= start_end[1])
 		{
-			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * 64, k
-				* 64, 0XFF0000);
+			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH, k
+				* HEIGHT, 0XFF0000);
 			trace_trait(map_data, h, k, 0XFF0000);
 		}
 		else if (start_end[0] > start_end[1] && (radiant >= start_end[0]
 				|| radiant <= start_end[1]))
 		{
-			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * 64, k
-				* 64, 0XFF0000);
+			mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH, k
+				* HEIGHT, 0XFF0000);
 			trace_trait(map_data, h, k, 0XFF0000);
 		}
 		i++;
@@ -205,14 +205,14 @@ int	trace_perimeter(t_map_data *map_data, int r, double alpha)
 
 	i = 0;
 	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, map_data->p_pos.x
-		* 64, map_data->p_pos.y * 64, 0XFF0000);
+		* WIDTH, map_data->p_pos.y * HEIGHT, 0XFF0000);
 	while (i < 5000)
 	{
 		radiant = 2 * M_PI * i / 5000;
 		h = map_data->p_pos.x + r * cos(radiant);
 		k = map_data->p_pos.y + r * sin(radiant);
-		mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * 64, k
-			* 64, 0XFFFFFF);
+		mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH, k
+			* HEIGHT, 0XFFFFFF);
 		i++;
 	}
 	raycast(map_data, find_r(map_data), define_fov(map_data, find_r(map_data),
