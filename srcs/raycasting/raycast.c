@@ -12,30 +12,31 @@
 
 #include "raycatsing.h"
 
-# define PRECISION 50
+#define PRECISION 50
 
-void trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
+void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 {
-    double x_start;
-    double y_start;
-    double x_step;
-    double y_step;
-    int steps;
-    int i;
+	double	x_start;
+	double	y_start;
+	double	x_step;
+	double	y_step;
+	int		steps;
+	int		i;
 
-    x_start = map_data->p_pos.r_x;
-    y_start = map_data->p_pos.r_y;
-    steps = fmax(fabs(to_x - x_start), fabs(to_y - y_start)) * PRECISION;
-    x_step = (to_x - x_start) / steps;
-    y_step = (to_y - y_start) / steps;
-    i = 0;
-    while (i <= steps)
-    {
-        mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start * WIDTH, y_start * HEIGHT, color);
-        x_start += x_step;
-        y_start += y_step;
-        i++;
-    }
+	x_start = map_data->p_pos.r_x;
+	y_start = map_data->p_pos.r_y;
+	steps = fmax(fabs(to_x - x_start), fabs(to_y - y_start)) * PRECISION;
+	x_step = (to_x - x_start) / steps;
+	y_step = (to_y - y_start) / steps;
+	i = 0;
+	while (i <= steps)
+	{
+		mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
+			* WIDTH, y_start * HEIGHT, color);
+		x_start += x_step;
+		y_start += y_step;
+		i++;
+	}
 }
 
 double	*define_fov(t_map_data *map_data, int r, double alpha)
@@ -61,17 +62,19 @@ double	*define_fov(t_map_data *map_data, int r, double alpha)
 	angles[1] = alpha + radiant;
 	if (angles[1] > 2 * M_PI)
 		angles[1] -= 2 * M_PI;
+	if (angles[0] > 2 * M_PI)
+		angles[0] -= 2 * M_PI;
 	return (angles);
 }
 
-int sign(double nb)
+int	sign(double nb)
 {
 	if (nb < 0)
 		return (-1);
 	return (1);
 }
 
-double set_side_dist(double ray_dir, double pos, int map, double delta)
+double	set_side_dist(double ray_dir, double pos, int map, double delta)
 {
 	if (ray_dir < 0)
 		return ((pos - map) * delta);
@@ -88,6 +91,7 @@ int	dda(t_map_data *map_data, double angle)
 	double	delta_dist_y;
 	double	side_dist_x;
 	double	side_dist_y;
+	double	ray_length;
 	int		step_x;
 	int		step_y;
 	int		hit;
@@ -102,12 +106,15 @@ int	dda(t_map_data *map_data, double angle)
 	delta_dist_y = fabs(1 / ray_dir_y);
 	step_x = sign(ray_dir_x);
 	step_y = sign(ray_dir_y);
-	side_dist_x = set_side_dist(ray_dir_x, map_data->p_pos.b_x, map_x, delta_dist_x);
-	side_dist_y = set_side_dist(ray_dir_y, map_data->p_pos.b_y, map_y, delta_dist_y);
+	side_dist_x = set_side_dist(ray_dir_x, map_data->p_pos.b_x, map_x,
+			delta_dist_x);
+	side_dist_y = set_side_dist(ray_dir_y, map_data->p_pos.b_y, map_y,
+			delta_dist_y);
 	while (hit == 0)
 	{
-        // printf("\n\nmap_x: %d, map_y: %d, side_dist_x: %f, side_dist_y: %f\n", map_x, map_y, side_dist_x, side_dist_y);
-		// printf("actuel case == %c\n\n", map_data->map[map_y][map_x]);
+		printf("\n\nmap_x: %d, map_y: %d, side_dist_x: %f, side_dist_y:%f\n",
+			map_x, map_y, side_dist_x, side_dist_y);
+		printf("actuel case == %c\n\n", map_data->map[map_y][map_x]);
 		if (side_dist_x < side_dist_y)
 		{
 			side_dist_x += delta_dist_x;
@@ -121,6 +128,10 @@ int	dda(t_map_data *map_data, double angle)
 		if (map_data->map[map_y][map_x] == '1')
 			hit = 1;
 	}
+	if (side_dist_x < side_dist_y)
+		ray_length = side_dist_x - delta_dist_x;
+	else
+		ray_length = side_dist_y - delta_dist_y;
 	trace_trait(map_data, map_x, map_y, 0XFF0000);
 	return (1);
 }
@@ -138,7 +149,8 @@ int	raycast(t_map_data *map_data, int r, double *start_end, int num_rays)
 	i = 0;
 	while (i < num_rays)
 	{
-		current_angle = start_end[0] + i * increment;
+		if (i > 0)
+			current_angle = start_end[0] + i * increment;
 		if (current_angle >= 2 * M_PI)
 			current_angle -= 2 * M_PI;
 		dda(map_data, current_angle);
@@ -146,51 +158,6 @@ int	raycast(t_map_data *map_data, int r, double *start_end, int num_rays)
 	}
 	free(start_end);
 	return (1);
-}
-
-int	find_r(t_map_data *map_data)
-{
-	int	x;
-	int	y;
-	int	r;
-	int	iterator;
-
-	x = map_data->p_pos.b_x + 1;
-	iterator = 1;
-	while (map_data->map[map_data->p_pos.b_y][x] == '0')
-	{
-		x++;
-		iterator++;
-	}
-	r = iterator;
-	iterator = 0;
-	y = map_data->p_pos.b_y + 1;
-	while (map_data->map[y][map_data->p_pos.b_x] == '0')
-	{
-		y++;
-		iterator++;
-	}
-	if (iterator > r)
-		r = iterator;
-	iterator = 0;
-	x = map_data->p_pos.b_x - 1;
-	while (x >= 0 && map_data->map[map_data->p_pos.b_y][x] == '0')
-	{
-		x--;
-		iterator++;
-	}
-	if (iterator > r)
-		r = iterator;
-	iterator = 0;
-	y = map_data->p_pos.b_y - 1;
-	while (y >= 0 && map_data->map[y][map_data->p_pos.b_x] == '0')
-	{
-		y--;
-		iterator++;
-	}
-	if (iterator > r)
-		r = iterator;
-	return (r);
 }
 
 int	trace_perimeter(t_map_data *map_data, int r, double alpha)
@@ -212,7 +179,6 @@ int	trace_perimeter(t_map_data *map_data, int r, double alpha)
 			* HEIGHT, 0XFFFFFF);
 		i++;
 	}
-	raycast(map_data, find_r(map_data), define_fov(map_data, find_r(map_data),
-			alpha), 1500);
+	raycast(map_data, 3, define_fov(map_data, 3, alpha), 1500);
 	return (1);
 }

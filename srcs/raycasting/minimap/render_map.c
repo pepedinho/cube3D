@@ -26,9 +26,13 @@ void	render_map(t_map_data *map_data)
 		while (map[y][x])
 		{
 			if (map[y][x] == '1')
+			{
 				mlx_put_image_to_window(map_data->mlx->init,
 					map_data->mlx->window, map_data->mlx->white_i, x * WIDTH, y
 					* HEIGHT);
+				mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x
+					* WIDTH, y * HEIGHT, 0XFF0000);
+			}
 			else if (map[y][x] == '0')
 				mlx_put_image_to_window(map_data->mlx->init,
 					map_data->mlx->window, map_data->mlx->black_i, x * WIDTH, y

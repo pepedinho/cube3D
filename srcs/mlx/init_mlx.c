@@ -55,11 +55,12 @@ void	moov(t_map_data *data, double alpha, int key)
 {
 	double	n_pos;
 
-	printf("------| a : %f | p_x(r) : %f | p_y(r) : %f |------\n", alpha,
-		data->p_pos.r_x, data->p_pos.r_y);
-	printf("//////| a : %f | p_x(b) : %d | p_y(b) : %d |\\\\\\\\\\\\\n", alpha,
-		data->p_pos.b_x, data->p_pos.b_y);
-	if (key == XK_a)
+	// printf("------| a : %f | p_x(r) : %f | p_y(r) : %f |------\n", alpha,
+	//	data->p_pos.r_x, data->p_pos.r_y);
+	// printf("//////| a : %f | p_x(b) : %d | p_y(b) : %d |\\\\\\\\\\\\\n",
+	//	alpha,
+	//	data->p_pos.b_x, data->p_pos.b_y);
+	if (key == XK_q)
 	{
 		n_pos = data->p_pos.r_x - 0.1;
 		if (n_pos < 0.0)
@@ -83,7 +84,7 @@ void	moov(t_map_data *data, double alpha, int key)
 			data->p_pos.b_x += 1;
 		data->p_pos.r_x = n_pos;
 	}
-	else if (key == XK_w)
+	else if (key == XK_z)
 	{
 		n_pos = data->p_pos.r_y - 0.1;
 		if (n_pos < 0.0)
@@ -142,12 +143,12 @@ int	handle_input(int keysym, t_map_data *data)
 		moove_fov(data, alpha);
 		alpha -= 0.1;
 	}
-	else if (keysym == XK_a)
-		moov(data, alpha, XK_a);
+	else if (keysym == XK_q)
+		moov(data, alpha, XK_q);
 	else if (keysym == XK_d)
 		moov(data, alpha, XK_d);
-	else if (keysym == XK_w)
-		moov(data, alpha, XK_w);
+	else if (keysym == XK_z)
+		moov(data, alpha, XK_z);
 	else if (keysym == XK_s)
 		moov(data, alpha, XK_s);
 	return (1);
