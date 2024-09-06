@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/06 22:00:29 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/06 23:12:44 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,16 +308,13 @@ void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color)
 {
 	int	y;
 
-	// Parcourir chaque pixel de la colonne entre drawStart et drawEnd
-	for (int i = 0; i <= drawStart; i++)
-		mlx_pixel_put(map->mlx->init, map->mlx->window, x, i, 0X000000);
-	for (y = drawStart; y <= drawEnd; y++)
-	{
-		// Dessiner le pixel (x, y) avec la couleur spécifiée
-		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y, color);
-	}
-	for (int i = drawEnd; i <= map->mlx->height; i++)
-		mlx_pixel_put(map->mlx->init, map->mlx->window, x, i, 5244559);
+	y = 0;
+	while (y < drawStart)
+		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, 0X000000);
+	while (y <= drawEnd)
+		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, color);
+	while (y <= map->mlx->height)
+		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, 5244559);
 }
 
 void	raycasting(t_map_data *data)
