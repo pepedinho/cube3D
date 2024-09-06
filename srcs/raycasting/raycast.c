@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@contact.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/06 13:32:15 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/06 16:30:40 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,6 +294,7 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 // 	return (1);
 // }
 
+
 #define W 1920
 #define H 1080
 
@@ -310,7 +311,7 @@ void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color)
 		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y, color);
 	}
 	for (int i = drawEnd; i <= map->mlx->height; i++)
-		mlx_pixel_put(map->mlx->init, map->mlx->window, x, i, 0X000000);
+		mlx_pixel_put(map->mlx->init, map->mlx->window, x, i, 5244559);
 }
 
 void	raycasting(t_map_data *data)
