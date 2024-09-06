@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/06 21:49:21 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/06 22:25:44 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,13 +131,11 @@ void	destroy_mlx(t_map_data *data)
 int	handle_input(int keysym, t_map_data *data)
 {
 	double	rotSpeed;
-	double	margin;
 	double	oldDirX;
 	double	oldPlaneX;
 
 	double moveSpeed = 0.1; // the constant value is in squares/second
-	rotSpeed = 0.02;
-	margin = 0.1;
+	rotSpeed = 0.05;
 	if (keysym == XK_Escape)
 		destroy_mlx(data);
 	if (keysym == XK_Left)
@@ -171,37 +169,33 @@ int	handle_input(int keysym, t_map_data *data)
 	else if (keysym == XK_w)
 	{
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
-				+ data->p_pos.dir_x + moveSpeed + margin)] != '1')
+				+ data->p_pos.dir_x + moveSpeed)] != '1')
 			data->p_pos.r_x += data->p_pos.dir_x * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_y + moveSpeed
-				+ margin)][(int)(data->p_pos.r_x)] != '1')
+		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_y + moveSpeed)][(int)(data->p_pos.r_x)] != '1')
 			data->p_pos.r_y += data->p_pos.dir_y * moveSpeed;
 	}
 	else if (keysym == XK_s)
 	{
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
-				- data->p_pos.dir_x + moveSpeed - margin)] != '1')
+				- data->p_pos.dir_x + moveSpeed)] != '1')
 			data->p_pos.r_x -= data->p_pos.dir_x * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_y + moveSpeed
-				- margin)][(int)(data->p_pos.r_x)] != '1')
+		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_y + moveSpeed)][(int)(data->p_pos.r_x)] != '1')
 			data->p_pos.r_y -= data->p_pos.dir_y * moveSpeed;
 	}
 	else if (keysym == XK_a)
 	{
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
-				- data->p_pos.dir_y * moveSpeed - margin)] != '1')
+				- data->p_pos.dir_y * moveSpeed)] != '1')
 			data->p_pos.r_x -= data->p_pos.dir_y * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_x * moveSpeed
-				- margin)][(int)(data->p_pos.r_x)] != '1')
+		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_x * moveSpeed)][(int)(data->p_pos.r_x)] != '1')
 			data->p_pos.r_y -= data->p_pos.dir_x * moveSpeed;
 	}
 	else if (keysym == XK_d)
 	{
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
-				+ data->p_pos.dir_y * moveSpeed + margin)] != '1')
+				+ data->p_pos.dir_y * moveSpeed)] != '1')
 			data->p_pos.r_x += data->p_pos.dir_y * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_x * moveSpeed
-				+ margin)][(int)(data->p_pos.r_x)] != '1')
+		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_x * moveSpeed)][(int)(data->p_pos.r_x)] != '1')
 			data->p_pos.r_y += data->p_pos.dir_x * moveSpeed;
 	}
 	// raycasting(data);
