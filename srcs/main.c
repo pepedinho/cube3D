@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:46:00 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/06 01:10:47 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/06 21:31:01 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	main(int argc, char *argv[])
 	data.p_pos.plane_y = 0.66;  // change to player direction in map
 	get_map_data(argv[argc - 1], &data);
 	printf_input(&data);
-	check_map(&data);
+	if (check_map(&data) == 0)
+		return (1);
 	init_mlx(&data);
 	return (0);
 }

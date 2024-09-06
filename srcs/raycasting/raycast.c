@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/06 16:30:40 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/06 21:41:06 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,6 +294,12 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 // 	return (1);
 // }
 
+// POUR PLUS TARD
+int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
+{
+    return (red << 16 | green << 8 | blue);
+}
+
 
 #define W 1920
 #define H 1080
@@ -394,7 +400,7 @@ void	raycasting(t_map_data *data)
 		drawEnd = lineHeight / 2 + H / 2;
 		if (drawEnd >= H)
 			drawEnd = H - 1;
-		verLine(data, x, drawStart, drawEnd, 0XFFFFFF);
+		verLine(data, x, drawStart, drawEnd, 0XFF0000);
 		x++;
 	}
 }

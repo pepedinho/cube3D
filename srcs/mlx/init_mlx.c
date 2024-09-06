@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/06 18:59:34 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/06 21:49:21 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,10 +204,16 @@ int	handle_input(int keysym, t_map_data *data)
 				+ margin)][(int)(data->p_pos.r_x)] != '1')
 			data->p_pos.r_y += data->p_pos.dir_x * moveSpeed;
 	}
-	raycasting(data);
+	// raycasting(data);
 	return (1);
 }
 
+int	render(t_map_data *data)
+{
+    if (data->mlx->window != NULL)
+        raycasting(data);
+    return (0);
+}
 
 int	init_img(t_map_data *map_data)
 {
@@ -247,7 +253,8 @@ int	init_mlx(t_map_data *data)
 		return (destroy_mlx(data), 0);
 	init_img(data);
 	// render_map(data);
-	raycasting(data);
+	// raycasting(data);
+	mlx_loop_hook(mlx->init, &render, data);
 	mlx_hook(mlx->window, 17, 0L, click_cross, data);
 	mlx_hook(mlx->window, 2, 1L << 0, handle_input, data);
 	mlx_loop(mlx->init);
