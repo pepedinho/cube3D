@@ -39,7 +39,8 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 	}
 }
 
-// void draw_line(void *mlx_ptr, void *win_ptr, int x0, int y0, int x1, int y1, int color)
+// void draw_line(void *mlx_ptr, void *win_ptr, int x0, int y0, int x1, int y1,
+//	int color)
 // {
 // 	int dx = abs(x1 - x0);
 // 	int dy = abs(y1 - y0);
@@ -52,7 +53,7 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 // 	{
 // 		mlx_pixel_put(mlx_ptr, win_ptr, x0, y0, color);
 // 		if (x0 == x1 && y0 == y1)
-// 			break;
+// 			break ;
 // 		e2 = 2 * err;
 // 		if (e2 > -dy)
 // 		{
@@ -66,7 +67,6 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 // 		}
 // 	}
 // }
-
 
 // void trace_trait_v2(t_map_data *map_data, double angle, double len)
 // {
@@ -82,15 +82,18 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 // 	ray_dir_y = sin(angle);
 
 // 	// Position de départ (position du joueur)
-// 	start_x = (int)(map_data->p_pos.r_x * WIDTH);  // Conversion en coordonnées écran
+// 	start_x = (int)(map_data->p_pos.r_x * WIDTH);
+// Conversion en coordonnées écran
 // 	start_y = (int)(map_data->p_pos.r_y * HEIGHT);
 
 // 	// Calculer la position finale du trait (rayon)
 // 	end_x = start_x + len * ray_dir_x;
 // 	end_y = start_y + len * ray_dir_y;
 
-// 	// Dessiner le trait depuis la position du joueur (start_x, start_y) jusqu'à (end_x, end_y)
-// 	draw_line(map_data->mlx->init, map_data->mlx->window, start_x, start_y, (int)end_x, (int)end_y, 0xFF0000);
+// 	// Dessiner le trait depuis la position du joueur (start_x,
+//		start_y) jusqu'à (end_x, end_y)
+// 	draw_line(map_data->mlx->init, map_data->mlx->window, start_x, start_y,
+//		(int)end_x, (int)end_y, 0xFF0000);
 // }
 
 // double	*define_fov(t_map_data *map_data, int r, double alpha)
@@ -165,11 +168,14 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 // 	delta_dist_y = fabs(1 / ray_dir_y);
 // 	step_x = sign(ray_dir_x);
 // 	step_y = sign(ray_dir_y);
-// 	side_dist_x = set_side_dist(ray_dir_x, map_data->p_pos.b_x, map_x, delta_dist_x);
-// 	side_dist_y = set_side_dist(ray_dir_y, map_data->p_pos.b_y, map_y, delta_dist_y);
+// 	side_dist_x = set_side_dist(ray_dir_x, map_data->p_pos.b_x, map_x,
+//			delta_dist_x);
+// 	side_dist_y = set_side_dist(ray_dir_y, map_data->p_pos.b_y, map_y,
+//			delta_dist_y);
 // 	while (hit == 0)
 // 	{
-//         // printf("\n\nmap_x: %d, map_y: %d, side_dist_x: %f, side_dist_y: %f\n", map_x, map_y, side_dist_x, side_dist_y);
+//         // printf("\n\nmap_x: %d, map_y: %d, side_dist_x: %f, side_dist_y:
+//	%f\n", map_x, map_y, side_dist_x, side_dist_y);
 // 		// printf("actuel case == %c\n\n", map_data->map[map_y][map_x]);
 // 		if (side_dist_x < side_dist_y)
 // 		{
@@ -291,39 +297,43 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 #define W 1920
 #define H 1080
 
-void verLine(void *mlx_ptr, void *win_ptr, int x, int drawStart, int drawEnd, int color)
+void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color)
 {
-	int y;
+	int	y;
 
 	// Parcourir chaque pixel de la colonne entre drawStart et drawEnd
+	for (int i = 0; i <= drawStart; i++)
+		mlx_pixel_put(map->mlx->init, map->mlx->window, x, i, 0X000000);
 	for (y = drawStart; y <= drawEnd; y++)
 	{
 		// Dessiner le pixel (x, y) avec la couleur spécifiée
-		mlx_pixel_put(mlx_ptr, win_ptr, x, y, color);
+		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y, color);
 	}
+	for (int i = drawEnd; i <= map->mlx->height; i++)
+		mlx_pixel_put(map->mlx->init, map->mlx->window, x, i, 0X000000);
 }
 
-void raycasting(t_map_data *data)
+void	raycasting(t_map_data *data)
 {
-	int x;
-	double cameraX;
-	double rayDirX;
-    double rayDirY;
-	int mapX;
-    int mapY;
-	double sideDistX;
-	double sideDistY;
-	double deltaDistX;
-	double deltaDistY;
-	double perpWallDist;
-	int stepX;
-    int stepY;
-	int hit;
-	int side;
-	int lineHeight;
-	int drawStart;
-	int drawEnd;
-	
+	int		x;
+	double	cameraX;
+	double	rayDirX;
+	double	rayDirY;
+	int		mapX;
+	int		mapY;
+	double	sideDistX;
+	double	sideDistY;
+	double	deltaDistX;
+	double	deltaDistY;
+	double	perpWallDist;
+	int		stepX;
+	int		stepY;
+	int		hit;
+	int		side;
+	int		lineHeight;
+	int		drawStart;
+	int		drawEnd;
+
 	x = 0;
 	while (x < W)
 	{
@@ -332,7 +342,7 @@ void raycasting(t_map_data *data)
 		rayDirX = data->p_pos.dir_x + data->p_pos.plane_x * cameraX;
 		rayDirY = data->p_pos.dir_y + data->p_pos.plane_y * cameraX;
 		mapX = (int)data->p_pos.r_x;
-    	mapY = (int)data->p_pos.r_y;
+		mapY = (int)data->p_pos.r_y;
 		deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
 		deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
 		if (rayDirX < 0)
@@ -374,16 +384,16 @@ void raycasting(t_map_data *data)
 		}
 		if (side == 0)
 			perpWallDist = (sideDistX - deltaDistX);
-      	else
+		else
 			perpWallDist = (sideDistY - deltaDistY);
 		lineHeight = (int)(H / perpWallDist);
 		drawStart = -lineHeight / 2 + H / 2;
-		if(drawStart < 0)
+		if (drawStart < 0)
 			drawStart = 0;
 		drawEnd = lineHeight / 2 + H / 2;
-		if(drawEnd >= H)
+		if (drawEnd >= H)
 			drawEnd = H - 1;
-		verLine(data->mlx->init, data->mlx->window, x, drawStart, drawEnd, 0XFFFFFF);
+		verLine(data, x, drawStart, drawEnd, 0XFFFFFF);
 		x++;
 	}
 }

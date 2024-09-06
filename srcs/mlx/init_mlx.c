@@ -38,7 +38,8 @@ int	is_same(double prev, double curr)
 	curr_int = (int)floor(curr);
 	if (prev_int != curr_int)
 		return (1);
-	// printf("/!\\debug/!\\ prev_int : %d | curr_int : %d\n", prev_int, curr_int);
+	// printf("/!\\debug/!\\ prev_int : %d | curr_int : %d\n", prev_int,
+	//	curr_int);
 	return (0);
 }
 
@@ -58,8 +59,9 @@ void	moov(t_map_data *data, double alpha, int key)
 	double	n_pos;
 
 	// printf("------| a : %f | p_x(r) : %f | p_y(r) : %f |------\n", alpha,
-		// data->p_pos.r_x, data->p_pos.r_y);
-	// printf("//////| a : %f | p_x(b) : %d | p_y(b) : %d |\\\\\\\\\\\\\n", alpha,
+	// data->p_pos.r_x, data->p_pos.r_y);
+	// printf("//////| a : %f | p_x(b) : %d | p_y(b) : %d |\\\\\\\\\\\\\n",
+	//	alpha,
 	// 	data->p_pos.b_x, data->p_pos.b_y);
 	(void)alpha;
 	if (key == XK_a)
@@ -125,57 +127,77 @@ void	destroy_mlx(t_map_data *data)
 	exit(EXIT_SUCCESS);
 }
 
+
 int	handle_input(int keysym, t_map_data *data)
 {
-	double moveSpeed = 0.1; //the constant value is in squares/second
-    double rotSpeed = 1.1;
-	double margin = 0.1;
+	double	rotSpeed;
+	double	margin;
+	double	oldDirX;
+	double	oldPlaneX;
 
+	double moveSpeed = 0.1; // the constant value is in squares/second
+	rotSpeed = 1.1;
+	margin = 0.1;
 	if (keysym == XK_Escape)
 		destroy_mlx(data);
 	if (keysym == XK_Left)
-    {
-      //both camera direction and camera plane must be rotated
-      double oldDirX = data->p_pos.dir_x;
-      data->p_pos.dir_x = data->p_pos.dir_x * cos(rotSpeed) - data->p_pos.dir_y * sin(rotSpeed);
-      data->p_pos.dir_y = oldDirX * sin(rotSpeed) + data->p_pos.dir_y * cos(rotSpeed);
-      double oldPlaneX = data->p_pos.plane_x;
-      data->p_pos.plane_x = data->p_pos.plane_x * cos(rotSpeed) - data->p_pos.plane_y * sin(rotSpeed);
-      data->p_pos.plane_y = oldPlaneX * sin(rotSpeed) + data->p_pos.plane_y * cos(rotSpeed);
-    }
+	{
+		// both camera direction and camera plane must be rotated
+		oldDirX = data->p_pos.dir_x;
+		data->p_pos.dir_x = data->p_pos.dir_x * cos(rotSpeed)
+			- data->p_pos.dir_y * sin(rotSpeed);
+		data->p_pos.dir_y = oldDirX * sin(rotSpeed) + data->p_pos.dir_y
+			* cos(rotSpeed);
+		oldPlaneX = data->p_pos.plane_x;
+		data->p_pos.plane_x = data->p_pos.plane_x * cos(rotSpeed)
+			- data->p_pos.plane_y * sin(rotSpeed);
+		data->p_pos.plane_y = oldPlaneX * sin(rotSpeed) + data->p_pos.plane_y
+			* cos(rotSpeed);
+	}
 	else if (keysym == XK_Right)
-    {
-      //both camera direction and camera plane must be rotated
-      double oldDirX = data->p_pos.dir_x;
-      data->p_pos.dir_x = data->p_pos.dir_x * cos(-rotSpeed) - data->p_pos.dir_y * sin(-rotSpeed);
-      data->p_pos.dir_y = oldDirX * sin(-rotSpeed) + data->p_pos.dir_y * cos(-rotSpeed);
-      double oldPlaneX = data->p_pos.plane_x;
-      data->p_pos.plane_x = data->p_pos.plane_x * cos(-rotSpeed) - data->p_pos.plane_y * sin(-rotSpeed);
-      data->p_pos.plane_y = oldPlaneX * sin(-rotSpeed) + data->p_pos.plane_y * cos(-rotSpeed);
-    }
+	{
+		// both camera direction and camera plane must be rotated
+		oldDirX = data->p_pos.dir_x;
+		data->p_pos.dir_x = data->p_pos.dir_x * cos(-rotSpeed)
+			- data->p_pos.dir_y * sin(-rotSpeed);
+		data->p_pos.dir_y = oldDirX * sin(-rotSpeed) + data->p_pos.dir_y
+			* cos(-rotSpeed);
+		oldPlaneX = data->p_pos.plane_x;
+		data->p_pos.plane_x = data->p_pos.plane_x * cos(-rotSpeed)
+			- data->p_pos.plane_y * sin(-rotSpeed);
+		data->p_pos.plane_y = oldPlaneX * sin(-rotSpeed) + data->p_pos.plane_y
+			* cos(-rotSpeed);
+	}
 	// else if (keysym == XK_a)
 	// {
-    //   if(data->map[(int)(data->p_pos.r_x + data->p_pos.dir_x * moveSpeed)][(int)(data->p_pos.r_y)] == 0)
+	//   if(data->map[(int)(data->p_pos.r_x + data->p_pos.dir_x
+	//		* moveSpeed)][(int)(data->p_pos.r_y)] == 0)
 	//   	data->p_pos.r_x += data->p_pos.dir_x * moveSpeed;
-    //   if(data->map[(int)(data->p_pos.r_x)][(int)(data->p_pos.r_y + data->p_pos.dir_y * moveSpeed)] == 0)
+	//   if(data->map[(int)(data->p_pos.r_x)][(int)(data->p_pos.r_y
+	//		+ data->p_pos.dir_y * moveSpeed)] == 0)
 	//   	data->p_pos.r_y += data->p_pos.dir_y * moveSpeed;
 	// }
 	// else if (keysym == XK_d)
 	// 	moov(data, alpha, XK_d);
-	else if (keysym == XK_w)
+	else if (keysym == XK_z)
 	{
-      if(data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x + data->p_pos.dir_x + moveSpeed  + margin)] == '0')
-	  	data->p_pos.r_x += data->p_pos.dir_x + moveSpeed;
-      if(data->map[(int)(data->p_pos.r_y + data->p_pos.dir_y + moveSpeed + margin)][(int)(data->p_pos.r_x)] == '0')
-	  	data->p_pos.r_y += data->p_pos.dir_y + moveSpeed;
+		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
+				+ data->p_pos.dir_x + moveSpeed + margin)] == '0')
+			data->p_pos.r_x += data->p_pos.dir_x + moveSpeed;
+		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_y + moveSpeed
+				+ margin)][(int)(data->p_pos.r_x)] == '0')
+			data->p_pos.r_y += data->p_pos.dir_y + moveSpeed;
 	}
 	else if (keysym == XK_s)
-    {
-      if(data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x - data->p_pos.dir_x + moveSpeed  - margin)] == '0')
-	  	data->p_pos.r_x -= data->p_pos.dir_x + moveSpeed;
-      if(data->map[(int)(data->p_pos.r_y - data->p_pos.dir_y + moveSpeed  - margin)][(int)(data->p_pos.r_x)] == '0')
-	  	data->p_pos.r_y -= data->p_pos.dir_y + moveSpeed;
-    }
+	{
+		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
+				- data->p_pos.dir_x + moveSpeed - margin)] == '0')
+			data->p_pos.r_x -= data->p_pos.dir_x + moveSpeed;
+		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_y + moveSpeed
+				- margin)][(int)(data->p_pos.r_x)] == '0')
+			data->p_pos.r_y -= data->p_pos.dir_y + moveSpeed;
+	}
+
 	raycasting(data);
 	return (1);
 }
