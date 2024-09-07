@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 20:46:23 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 21:14:55 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,13 +144,12 @@ int	handle_input(int keysym, t_map_data *data)
 	double	oldDirX;
 	double	oldPlaneX;
 
-	double moveSpeed = 0.1; // the constant value is in squares/second
+	double moveSpeed = 0.1;
 	rotSpeed = 0.05;
 	if (keysym == XK_Escape)
 		destroy_mlx(data);
 	if (keysym == XK_Left)
 	{
-		// both camera direction and camera plane must be rotated
 		oldDirX = data->p_pos.dir_x;
 		data->p_pos.dir_x = data->p_pos.dir_x * cos(rotSpeed)
 			- data->p_pos.dir_y * sin(rotSpeed);
@@ -164,7 +163,6 @@ int	handle_input(int keysym, t_map_data *data)
 	}
 	else if (keysym == XK_Right)
 	{
-		// both camera direction and camera plane must be rotated
 		oldDirX = data->p_pos.dir_x;
 		data->p_pos.dir_x = data->p_pos.dir_x * cos(-rotSpeed)
 			- data->p_pos.dir_y * sin(-rotSpeed);

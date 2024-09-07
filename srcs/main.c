@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:46:00 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 18:04:27 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 21:23:43 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,58 @@ void	printf_input(t_map_data *data)
 	print_2d_array(data->map);
 }
 
+void set_player_angle(t_map_data *data)
+{
+	int y;
+	int x;
+
+	x = data->p_pos.r_x;
+	y = data->p_pos.r_y;
+	if (data->map[y][x] == 'N')
+	{
+		data->p_pos.dir_x = 0;
+		data->p_pos.dir_y = -1;
+		data->p_pos.plane_x = 0.66;
+		data->p_pos.plane_y = 0;
+	}
+	else if (data->map[y][x] == 'S')
+	{
+		data->p_pos.dir_x = 0;
+		data->p_pos.dir_y = 1;
+		data->p_pos.plane_x = -0.66;
+		data->p_pos.plane_y = 0;
+	}
+	else if (data->map[y][x] == 'E')
+	{
+		data->p_pos.dir_x = 1;
+		data->p_pos.dir_y = 0;
+		data->p_pos.plane_x = 0;
+		data->p_pos.plane_y = 0.66;
+	}
+	else if (data->map[y][x] == 'W')
+	{
+		data->p_pos.dir_x = -1;
+		data->p_pos.dir_y = 0;
+		data->p_pos.plane_x = 0;
+		data->p_pos.plane_y = -0.66;
+	}
+}
+
+
 int	main(int argc, char *argv[])
 {
 	t_map_data	data;
 
 	ft_memset(&data, 0, sizeof(data));
-	data.p_pos.dir_x = -1;
-	data.p_pos.dir_y = 0;
-	data.p_pos.plane_x = 0;
-	data.p_pos.plane_y = 0.66;  
+	// data.p_pos.dir_x = -1;
+	// data.p_pos.dir_y = 0;
+	// data.p_pos.plane_x = 0;
+	// data.p_pos.plane_y = 0.66;
 	get_map_data(argv[argc - 1], &data);
 	printf_input(&data);
 	if (check_map(&data) == 0)
 		return (1);
+	set_player_angle(&data); // SA BUG POUR L'INSTANT
 	init_mlx(&data);
 	return (0);
 }
