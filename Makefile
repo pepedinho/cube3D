@@ -115,13 +115,15 @@ debug : all
 	@lldb $(NAME)
 
 docker:
-	@if [ -z $$(docker images -q minishell-app) ]; then \
-		echo "🐳$(BLUE)Image minishell-app not found, work in progress...$(END)🐳"; \
+	@if [ -z $$(docker images -q cube3d-app_x11) ]; then \
+		echo "🐳$(BLUE)Image cube3d-app_x11 not found, work in progress...$(END)🐳"; \
 		docker-compose build; \
 		echo "🐳$(BLUE)Docker container is built $(END)✅"; \
 	fi
 	@echo "🐳$(BLUE)Docker container is built $(END)✅"
+	xhost +local:
 	@docker-compose run app
+	xhost -local:
 
 clean : 
 	@rm -rf $(OBJS_DIR)

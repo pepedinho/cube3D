@@ -1,0 +1,12 @@
+version: '3'
+services:
+  app_x11:
+    build: .
+    container_name: cub3D
+    environment:
+      -: DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix    # Volume pour X11 (obligatoire pour le graphique)
+      - .:/usr/src/app                   # Volume pour monter le répertoire actuel
+    stdin_open: true
+    tty: true
