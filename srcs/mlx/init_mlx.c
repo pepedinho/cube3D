@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_mlx.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
+/*   By: itahri <itahri@contact.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/06 22:25:44 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 14:25:07 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ void	destroy_mlx(t_map_data *data)
 	exit(EXIT_SUCCESS);
 }
 
-
 int	handle_input(int keysym, t_map_data *data)
 {
 	double	rotSpeed;
@@ -166,12 +165,13 @@ int	handle_input(int keysym, t_map_data *data)
 		data->p_pos.plane_y = oldPlaneX * sin(-rotSpeed) + data->p_pos.plane_y
 			* cos(-rotSpeed);
 	}
-	else if (keysym == XK_w)
+	else if (keysym == XK_w || keysym == XK_z)
 	{
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
 				+ data->p_pos.dir_x + moveSpeed)] != '1')
 			data->p_pos.r_x += data->p_pos.dir_x * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_y + moveSpeed)][(int)(data->p_pos.r_x)] != '1')
+		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_y
+				+ moveSpeed)][(int)(data->p_pos.r_x)] != '1')
 			data->p_pos.r_y += data->p_pos.dir_y * moveSpeed;
 	}
 	else if (keysym == XK_s)
@@ -179,23 +179,26 @@ int	handle_input(int keysym, t_map_data *data)
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
 				- data->p_pos.dir_x + moveSpeed)] != '1')
 			data->p_pos.r_x -= data->p_pos.dir_x * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_y + moveSpeed)][(int)(data->p_pos.r_x)] != '1')
+		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_y
+				+ moveSpeed)][(int)(data->p_pos.r_x)] != '1')
 			data->p_pos.r_y -= data->p_pos.dir_y * moveSpeed;
-	}
-	else if (keysym == XK_a)
-	{
-		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
-				- data->p_pos.dir_y * moveSpeed)] != '1')
-			data->p_pos.r_x -= data->p_pos.dir_y * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_x * moveSpeed)][(int)(data->p_pos.r_x)] != '1')
-			data->p_pos.r_y -= data->p_pos.dir_x * moveSpeed;
 	}
 	else if (keysym == XK_d)
 	{
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
+				- data->p_pos.dir_y * moveSpeed)] != '1')
+			data->p_pos.r_x -= data->p_pos.dir_y * moveSpeed;
+		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_x
+				* moveSpeed)][(int)(data->p_pos.r_x)] != '1')
+			data->p_pos.r_y -= data->p_pos.dir_x * moveSpeed;
+	}
+	else if (keysym == XK_q || keysym == XK_a)
+	{
+		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
 				+ data->p_pos.dir_y * moveSpeed)] != '1')
 			data->p_pos.r_x += data->p_pos.dir_y * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_x * moveSpeed)][(int)(data->p_pos.r_x)] != '1')
+		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_x
+				* moveSpeed)][(int)(data->p_pos.r_x)] != '1')
 			data->p_pos.r_y += data->p_pos.dir_x * moveSpeed;
 	}
 	// raycasting(data);
@@ -204,9 +207,9 @@ int	handle_input(int keysym, t_map_data *data)
 
 int	render(t_map_data *data)
 {
-    if (data->mlx->window != NULL)
-        raycasting(data);
-    return (0);
+	if (data->mlx->window != NULL)
+		raycasting(data);
+	return (0);
 }
 
 int	init_img(t_map_data *map_data)
@@ -224,6 +227,10 @@ int	init_img(t_map_data *map_data)
 			&img_width, &img_height);
 	if (!map_data->mlx->black_i)
 		return (printf("Error with image loading\n"), 0);
+	map_data->mlx->wall_i = mlx_xpm_file_to_image(map_data->mlx->init, WALL,
+			&img_width, &img_height);
+	if (!map_data->mlx->white_i)
+		return (printf("Error with image loading\n"), 0);
 	return (1);
 }
 
@@ -239,13 +246,15 @@ int	init_mlx(t_map_data *data)
 	mlx->init = mlx_init();
 	if (!mlx->init)
 		return (destroy_mlx(data), 0);
-	mlx_get_screen_size(mlx->init, &mlx->width, &mlx->height);
-	// mlx->width = 1280;
-	// mlx->height = 720;
+	// mlx_get_screen_size(mlx->init, &mlx->width, &mlx->height);
+	mlx->width = 1920;
+	mlx->height = 1080;
 	mlx->window = mlx_new_window(mlx->init, mlx->width, mlx->height, "cube3D");
 	if (!mlx->window)
 		return (destroy_mlx(data), 0);
 	init_img(data);
+	mlx->adrr = mlx_get_data_addr(mlx->wall_i, &mlx->bits_per_pixel,
+			&mlx->size_line, &mlx->endiant);
 	// render_map(data);
 	// raycasting(data);
 	mlx_loop_hook(mlx->init, &render, data);

@@ -297,22 +297,34 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 // POUR PLUS TARD
 int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
-    return (red << 16 | green << 8 | blue);
+	return (red << 16 | green << 8 | blue);
 }
-
 
 #define W 1920
 #define H 1080
 
-void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color)
+void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color,
+		double wall_x)
 {
-	int	y;
+	int		y;
+	char	*target;
+	int		texture_x;
+	int		texture_y;
+	int		text_width;
 
+	text_width = 64;
 	y = 0;
 	while (y < drawStart)
 		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, 0X000000);
 	while (y <= drawEnd)
+	{
+		texture_y = (y - drawStart) * 64 / (drawEnd - drawStart);
+		texture_x = (int)(wall_x * text_width) % text_width;
+		target = map->mlx->adrr + (texture_y * map->mlx->size_line + texture_x
+				* (map->mlx->bits_per_pixel / 8));
+		color = *(unsigned int *)target;
 		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, color);
+	}
 	while (y <= map->mlx->height)
 		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, 5244559);
 }
@@ -337,6 +349,7 @@ void	raycasting(t_map_data *data)
 	int		lineHeight;
 	int		drawStart;
 	int		drawEnd;
+	double	wall_x;
 
 	x = 0;
 	while (x < W)
@@ -397,7 +410,12 @@ void	raycasting(t_map_data *data)
 		drawEnd = lineHeight / 2 + H / 2;
 		if (drawEnd >= H)
 			drawEnd = H - 1;
-		verLine(data, x, drawStart, drawEnd, 0XFF0000);
+		if (side == 0)
+			wall_x = data->p_pos.r_y + perpWallDist * rayDirY;
+		else
+			wall_x = data->p_pos.r_x + perpWallDist * rayDirX;
+		wall_x -= floor(wall_x);
+		verLine(data, x, drawStart, drawEnd, 0XFF0000, wall_x);
 		x++;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
+/*   By: itahri <itahri@contact.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/06 01:10:04 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 14:24:41 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,15 @@ typedef struct s_mlx
 {
 	int		width;
 	int		height;
+	char *adrr;
+	int  size_line;
+	int 	bits_per_pixel;
+	int		endiant;
 	void	*init;
 	void	*window;
 	void	*white_i;
 	void	*black_i;
+	void *wall_i;
 }			t_mlx;
 
 typedef struct s_map_data
