@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 20:41:30 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 01:24:18 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,7 +298,7 @@ inline double set_side_dist(double ray_dir, double pos, int map, double delta)
 
 int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
-	return (red << 16 | green << 8 | blue);
+	return (red * 256  * 256 + green * 256 + blue);
 }
 
 void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, double wall_x, int i)

@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 23:18:33 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 01:07:42 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,12 @@ void	destroy_mlx(t_map_data *data)
 	mlx = data->mlx;
 	if (mlx.window)
 		mlx_destroy_window(mlx.init, mlx.window);
-	mlx_destroy_display(mlx.init);
 	ft_free_2d(data->map);
+	mlx_destroy_image(mlx.init, mlx.wall[N].img);
+	mlx_destroy_image(mlx.init, mlx.wall[S].img);
+	mlx_destroy_image(mlx.init, mlx.wall[E].img);
+	mlx_destroy_image(mlx.init, mlx.wall[W].img);
+	mlx_destroy_display(mlx.init);
 	free(mlx.init);
 	free(data->input.tx_north);
 	free(data->input.tx_south);
@@ -130,11 +134,6 @@ void	destroy_mlx(t_map_data *data)
 	free(data->input.tx_west);
 	free(data->input.tx_ceiling);
 	free(data->input.tx_floor);
-	// free(mlx.wall_i.adrr);
-	free(mlx.wall[N].img);
-	free(mlx.wall[S].img);
-	free(mlx.wall[E].img);
-	free(mlx.wall[W].img);
 	exit(EXIT_SUCCESS);
 }
 
@@ -217,8 +216,11 @@ int	render(t_map_data *data)
 {
 	static int i;
 	
-	if (data->mlx.window != NULL && i++ % 24 == 0)
+	if (data->mlx.window != NULL && i++ % 240 == 0)
+	{
 		raycasting(data);
+		i = 0;
+	}
 	return (0);
 }
 
