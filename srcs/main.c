@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:46:00 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 21:23:43 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 23:19:54 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	main(int argc, char *argv[])
 	printf_input(&data);
 	if (check_map(&data) == 0)
 		return (1);
-	set_player_angle(&data); // SA BUG POUR L'INSTANT
+	set_player_angle(&data);
 	init_mlx(&data);
 	return (0);
 }

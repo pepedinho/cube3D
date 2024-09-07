@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 21:14:55 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 23:18:33 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int	handle_input(int keysym, t_map_data *data)
 	rotSpeed = 0.05;
 	if (keysym == XK_Escape)
 		destroy_mlx(data);
-	if (keysym == XK_Left)
+	if (keysym == XK_Right)
 	{
 		oldDirX = data->p_pos.dir_x;
 		data->p_pos.dir_x = data->p_pos.dir_x * cos(rotSpeed)
@@ -161,7 +161,7 @@ int	handle_input(int keysym, t_map_data *data)
 		data->p_pos.plane_y = oldPlaneX * sin(rotSpeed) + data->p_pos.plane_y
 			* cos(rotSpeed);
 	}
-	else if (keysym == XK_Right)
+	else if (keysym == XK_Left)
 	{
 		oldDirX = data->p_pos.dir_x;
 		data->p_pos.dir_x = data->p_pos.dir_x * cos(-rotSpeed)
@@ -195,22 +195,21 @@ int	handle_input(int keysym, t_map_data *data)
 	else if (keysym == XK_d)
 	{
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
-				- data->p_pos.dir_y * moveSpeed)] != '1')
-			data->p_pos.r_x -= data->p_pos.dir_y * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y - data->p_pos.dir_x
+				+ data->p_pos.plane_x * moveSpeed)] != '1')
+			data->p_pos.r_x += data->p_pos.plane_x * moveSpeed;
+		if (data->map[(int)(data->p_pos.r_y + data->p_pos.plane_y
 				* moveSpeed)][(int)(data->p_pos.r_x)] != '1')
-			data->p_pos.r_y -= data->p_pos.dir_x * moveSpeed;
+			data->p_pos.r_y += data->p_pos.plane_y * moveSpeed;
 	}
 	else if (keysym == XK_q || keysym == XK_a)
 	{
 		if (data->map[(int)(data->p_pos.r_y)][(int)(data->p_pos.r_x
-				+ data->p_pos.dir_y * moveSpeed)] != '1')
-			data->p_pos.r_x += data->p_pos.dir_y * moveSpeed;
-		if (data->map[(int)(data->p_pos.r_y + data->p_pos.dir_x
+				- data->p_pos.plane_x * moveSpeed)] != '1')
+			data->p_pos.r_x -= data->p_pos.plane_x * moveSpeed;
+		if (data->map[(int)(data->p_pos.r_y - data->p_pos.plane_y
 				* moveSpeed)][(int)(data->p_pos.r_x)] != '1')
-			data->p_pos.r_y += data->p_pos.dir_x * moveSpeed;
+			data->p_pos.r_y -= data->p_pos.plane_y * moveSpeed;
 	}
-	// raycasting(data);
 	return (1);
 }
 
