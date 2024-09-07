@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 19:01:11 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 20:36:12 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,22 @@ typedef struct s_input
 	int 	ceiling_color;
 }			t_input;
 
+#define N 0
+#define S 1
+#define E 2
+#define W 3
+
 typedef struct s_mlx
 {
 	int		width;
 	int		height;
 	void	*init;
 	void	*window;
-	t_img	wall_n;
-	t_img	wall_s;
-	t_img	wall_e;
-	t_img	wall_w;
-	t_img	wall_i; // ERRASE AFTER
+	t_img	wall[4];
+	// t_img	wall_s;
+	// t_img	wall_e;
+	// t_img	wall_w;
+	// t_img	wall_i; // ERRASE AFTER
 }			t_mlx;
 
 typedef struct s_map_data

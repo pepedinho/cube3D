@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 18:23:51 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 20:46:23 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,10 @@ void	destroy_mlx(t_map_data *data)
 	free(data->input.tx_ceiling);
 	free(data->input.tx_floor);
 	// free(mlx.wall_i.adrr);
-	free(mlx.wall_i.img);
+	free(mlx.wall[N].img);
+	free(mlx.wall[S].img);
+	free(mlx.wall[E].img);
+	free(mlx.wall[W].img);
 	exit(EXIT_SUCCESS);
 }
 
@@ -222,23 +225,6 @@ int	render(t_map_data *data)
 	return (0);
 }
 
-// int	init_img(t_mlx *mlx)
-// {
-// 	map_data->mlx.white_i = mlx_xpm_file_to_image(map_data->mlx.init, WHITE_I,
-// 			&img_width, &img_height);
-// 	if (!map_data->mlx.white_i)
-// 		return (printf("Error with image loading\n"), 0);
-// 	map_data->mlx.black_i = mlx_xpm_file_to_image(map_data->mlx.init, BLACK_I,
-// 			&img_width, &img_height);
-// 	if (!map_data->mlx.black_i)
-// 		return (printf("Error with image loading\n"), 0);
-// 	mlx->wall_i.img = mlx_xpm_file_to_image(mlx->init, WALL,
-// 			&mlx->wall_i.width, &mlx->wall_i.height);
-// 	if (!mlx->wall_i.img)
-// 		return (printf("Error with image loading\n"), 0);
-// 	return (1);
-// }
-
 void ft_init_img(t_map_data *data, t_img *img)
 {
 	img->img = mlx_xpm_file_to_image(data->mlx.init, img->path, &img->width, &img->height);
@@ -258,11 +244,10 @@ void ft_init_img(t_map_data *data, t_img *img)
 
 void path_to_mlx_img(t_map_data *data, t_mlx *mlx)
 {
-	mlx->wall_n.path = data->input.tx_north;
-	mlx->wall_s.path = data->input.tx_south;
-	mlx->wall_e.path = data->input.tx_east;
-	mlx->wall_w.path = data->input.tx_west;
-	mlx->wall_i.path = WALL;
+	mlx->wall[N].path = data->input.tx_north;
+	mlx->wall[S].path = data->input.tx_south;
+	mlx->wall[E].path = data->input.tx_east;
+	mlx->wall[W].path = data->input.tx_west;
 }
 
 int	init_mlx(t_map_data *data)
@@ -274,15 +259,17 @@ int	init_mlx(t_map_data *data)
 	if (!mlx.init)
 		return (destroy_mlx(data), 0);
 	path_to_mlx_img(data, &mlx);
-	mlx_get_screen_size(mlx.init, &mlx.width, &mlx.height);
-	// mlx->width = 1920;
-	// mlx->height = 1080;
+	// mlx_get_screen_size(mlx.init, &mlx.width, &mlx.height);
+	mlx.width = 1920;
+	mlx.height = 1080;
 	mlx.window = mlx_new_window(mlx.init, mlx.width, mlx.height, "cube3D");
 	if (!mlx.window)
 		return (destroy_mlx(data), 0);
-	// init_img(&mlx);
 	data->mlx = mlx;
-	ft_init_img(data, &mlx.wall_i);
+	ft_init_img(data, &mlx.wall[N]);
+	ft_init_img(data, &mlx.wall[S]);
+	ft_init_img(data, &mlx.wall[E]);
+	ft_init_img(data, &mlx.wall[W]);
 	// render_map(data);
 	// raycasting(data);
 	data->mlx = mlx;
