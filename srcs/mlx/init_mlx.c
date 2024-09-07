@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 17:54:18 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:17:39 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,15 @@ void ft_init_img(t_map_data *data, t_img *img)
 	}
 }
 
+void path_to_mlx_img(t_map_data *data, t_mlx *mlx)
+{
+	mlx->wall_n.path = data->input.tx_north;
+	mlx->wall_s.path = data->input.tx_south;
+	mlx->wall_e.path = data->input.tx_east;
+	mlx->wall_w.path = data->input.tx_west;
+	mlx->wall_i.path = WALL;
+}
+
 int	init_mlx(t_map_data *data)
 {
 	t_mlx	mlx;
@@ -264,6 +273,7 @@ int	init_mlx(t_map_data *data)
 	mlx.init = mlx_init();
 	if (!mlx.init)
 		return (destroy_mlx(data), 0);
+	path_to_mlx_img(data, &mlx);
 	mlx_get_screen_size(mlx.init, &mlx.width, &mlx.height);
 	// mlx->width = 1920;
 	// mlx->height = 1080;
@@ -272,7 +282,6 @@ int	init_mlx(t_map_data *data)
 		return (destroy_mlx(data), 0);
 	// init_img(&mlx);
 	data->mlx = mlx;
-	mlx.wall_i.path = WALL;
 	ft_init_img(data, &mlx.wall_i);
 	// render_map(data);
 	// raycasting(data);

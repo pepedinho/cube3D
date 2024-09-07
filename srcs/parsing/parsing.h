@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 17:43:45 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:18:53 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 
 	* r_x & r_y = x and y pos in mlx render when r_x = 2.0 b_x = 2 but when r_x = 1.9 b_x still egal to 1
  */
+
 typedef struct s_coord
 {
 	// int		b_x;
@@ -57,9 +58,7 @@ typedef struct s_img
 	int		endiant;
 	int		width;
 	int		height;
-}t_img;
-
-
+}			t_img;
 
 typedef struct s_input
 {
@@ -77,11 +76,11 @@ typedef struct s_mlx
 	int		height;
 	void	*init;
 	void	*window;
-	t_img	*wall_n;
-	t_img	*wall_s;
-	t_img	*wall_e;
-	t_img	*wall_w;
-	t_img	wall_i;
+	t_img	wall_n;
+	t_img	wall_s;
+	t_img	wall_e;
+	t_img	wall_w;
+	t_img	wall_i; // ERRASE AFTER
 }			t_mlx;
 
 typedef struct s_map_data
@@ -104,6 +103,5 @@ int			ft_isspace(char c);
 // checking
 int			check_map(t_map_data *data);
 int			check_map_playable(t_map_data *data);
-int			flood_fill(t_map_data *data);
 
 #endif
