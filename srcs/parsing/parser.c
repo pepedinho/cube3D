@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 17:07:06 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 17:34:46 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,18 @@ int	get_path(char *line, t_map_data *map_data, int type)
 	return (assign_path(path, map_data, type), 1);
 }
 
-int	parse_line(char *line, int fd, t_map_data *map_data)
+void	parse_line(char *line, int fd, t_map_data *map_data)
 {
 	if (!get_path(line, map_data, check_type(line)))
 	{
 		if (check_type(line) == 1)
+		{
 			get_map(map_data, line, fd);
-		return (0);
+			return;
+		}
 	}
-	return (1);
+	free(line);
+	return ;
 }
 
 t_map_data	*get_map_data(char *filename, t_map_data *map_data)
@@ -102,5 +105,6 @@ t_map_data	*get_map_data(char *filename, t_map_data *map_data)
 		parse_line(line, fd, map_data);
 		line = get_next_line(fd);
 	}
+	close(fd);
 	return (map_data);
 }

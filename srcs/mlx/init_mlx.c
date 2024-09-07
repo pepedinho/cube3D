@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 17:26:42 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 17:54:18 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ void	destroy_mlx(t_map_data *data)
 	free(data->input.tx_west);
 	free(data->input.tx_ceiling);
 	free(data->input.tx_floor);
+	// free(mlx.wall_i.adrr);
+	free(mlx.wall_i.img);
 	exit(EXIT_SUCCESS);
 }
 
@@ -237,6 +239,23 @@ int	init_img(t_mlx *mlx)
 	return (1);
 }
 
+void ft_init_img(t_map_data *data, t_img *img)
+{
+	img->img = mlx_xpm_file_to_image(data->mlx.init, img->path, &img->width, &img->height);
+	if (!img->img)
+	{
+		ft_printf("Error with image loading\n");
+		destroy_mlx(data);
+	}
+	img->adrr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
+			&img->size_line, &img->endiant);
+	if (!img->adrr)
+	{
+		ft_printf("Error when trying to get image data\n");
+		destroy_mlx(data);
+	}
+}
+
 int	init_mlx(t_map_data *data)
 {
 	t_mlx	mlx;
@@ -251,9 +270,10 @@ int	init_mlx(t_map_data *data)
 	mlx.window = mlx_new_window(mlx.init, mlx.width, mlx.height, "cube3D");
 	if (!mlx.window)
 		return (destroy_mlx(data), 0);
-	init_img(&mlx);
-	mlx.wall_i.adrr = mlx_get_data_addr(mlx.wall_i.img, &mlx.wall_i.bits_per_pixel,
-			&mlx.wall_i.size_line, &mlx.wall_i.endiant);
+	// init_img(&mlx);
+	data->mlx = mlx;
+	mlx.wall_i.path = WALL;
+	ft_init_img(data, &mlx.wall_i);
 	// render_map(data);
 	// raycasting(data);
 	data->mlx = mlx;
