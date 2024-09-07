@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 19:38:58 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 20:03:40 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,8 +301,7 @@ int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
 	return (red << 16 | green << 8 | blue);
 }
 
-void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color,
-		double wall_x)
+void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, double wall_x)
 {
 	int		y;
 	char	*target;
@@ -320,11 +319,24 @@ void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color,
 		texture_x = (int)(wall_x * text_width) % text_width;
 		target = map->mlx.wall_i.adrr + (texture_y * map->mlx.wall_i.size_line + texture_x
 				* (map->mlx.wall_i.bits_per_pixel / 8));
-		color = *(unsigned int *)target;
-		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, color);
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, *(unsigned int *)target);
 	}
 	while (y <= map->mlx.height)
 		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, map->input.floor_color);
+}
+
+
+void	verLine_test(t_map_data *map, int x, int drawStart, int drawEnd, double color)
+{
+	int		y;
+
+	y = 0;
+	while (y < drawStart)
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, map->input.ceiling_color);
+	while (y <= drawEnd)
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, color);	
+	while (y <= map->mlx.height)
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, map->input.floor_color);	
 }
 
 void	raycasting(t_map_data *data)
@@ -397,7 +409,15 @@ void	raycasting(t_map_data *data)
 		else
 			wall_x = data->p_pos.r_x + perpWallDist * rayDirX;
 		wall_x -= floor(wall_x);
-		verLine(data, x, drawStart, drawEnd, 0XFF0000, wall_x);
+		// verLine(data, x, drawStart, drawEnd, wall_x);
+		if (side == 1 && rayDirY >= 0)
+			verLine_test(data, x, drawStart, drawEnd, 0X0000FF);
+		else if (side == 1 && rayDirY < 0)
+			verLine_test(data, x, drawStart, drawEnd, 0XFFFFFF);
+		else if (side == 0 && rayDirX >= 0)
+			verLine_test(data, x, drawStart, drawEnd, 0XFF0000);
+		else if (side == 0 && rayDirX < 0)
+			verLine_test(data, x, drawStart, drawEnd, 0X00FF00);
 		x++;
 	}
 }
