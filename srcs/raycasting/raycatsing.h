@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:56:24 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 19:00:19 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 19:25:56 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 # include "../../includes/cube3D.h"
 
-typedef struct s_map_data	t_map_data;
+// typedef struct s_map_data	t_map_data;
 
 // raycast
 int							trace_perimeter(t_map_data *map_data, int r,

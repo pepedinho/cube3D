@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 19:05:04 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 19:38:58 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,19 +122,6 @@
 // 	return (angles);
 // }
 
-// int sign(double nb)
-// {
-// 	if (nb < 0)
-// 		return (-1);
-// 	return (1);
-// }
-
-// double set_side_dist(double ray_dir, double pos, int map, double delta)
-// {
-// 	if (ray_dir < 0)
-// 		return ((pos - map) * delta);
-// 	return ((map + 1.0 - pos) * delta);
-// }
 
 // int	dda(t_map_data *map_data, double angle)
 // {
@@ -227,6 +214,7 @@
 // int	find_r(t_map_data *map_data)
 // {
 // 	int	x;
+
 // 	int	y;
 // 	int	r;
 // 	int	iterator;
@@ -294,6 +282,20 @@
 // 	return (1);
 // }
 
+inline int sign(double nb)
+{
+	if (nb < 0)
+		return (-1);
+	return (1);
+}
+
+inline double set_side_dist(double ray_dir, double pos, int map, double delta)
+{
+	if (ray_dir < 0)
+		return ((pos - map) * delta);
+	return ((map + 1.0 - pos) * delta);
+}
+
 int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
 	return (red << 16 | green << 8 | blue);
@@ -314,7 +316,7 @@ void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color,
 		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, map->input.ceiling_color);
 	while (y <= drawEnd)
 	{
-		texture_y = (y - drawStart) * 64 / (drawEnd - drawStart);
+		texture_y = (y - drawStart) * map->mlx.wall_i.width / (drawEnd - drawStart);
 		texture_x = (int)(wall_x * text_width) % text_width;
 		target = map->mlx.wall_i.adrr + (texture_y * map->mlx.wall_i.size_line + texture_x
 				* (map->mlx.wall_i.bits_per_pixel / 8));
@@ -358,26 +360,10 @@ void	raycasting(t_map_data *data)
 		mapY = (int)data->p_pos.r_y;
 		deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
 		deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
-		if (rayDirX < 0)
-		{
-			stepX = -1;
-			sideDistX = (data->p_pos.r_x - mapX) * deltaDistX;
-		}
-		else
-		{
-			stepX = 1;
-			sideDistX = (mapX + 1.0 - data->p_pos.r_x) * deltaDistX;
-		}
-		if (rayDirY < 0)
-		{
-			stepY = -1;
-			sideDistY = (data->p_pos.r_y - mapY) * deltaDistY;
-		}
-		else
-		{
-			stepY = 1;
-			sideDistY = (mapY + 1.0 - data->p_pos.r_y) * deltaDistY;
-		}
+		stepX = sign(rayDirX);
+		sideDistX = set_side_dist(rayDirX, data->p_pos.r_x, mapX, deltaDistX);
+		stepY = sign(rayDirY);
+		sideDistY = set_side_dist(rayDirY, data->p_pos.r_y, mapY, deltaDistY);
 		while (hit == 0)
 		{
 			if (sideDistX < sideDistY)

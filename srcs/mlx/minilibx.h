@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minilibx.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@contact.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:15:47 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 13:59:35 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/07 19:25:33 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #  undef CUBE3D_H
 # endif
 
-typedef struct s_map_data	t_map_data;
+// typedef struct s_map_data	t_map_data;
 
 int							init_mlx(t_map_data *data);
 void						destroy_mlx(t_map_data *data);
