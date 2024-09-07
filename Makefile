@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/05 00:39:02 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/07 16:32:15 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,7 +99,7 @@ message :
 	@echo "$(BLUE)🔩compiling cube3D🔩$(END)"
 	
 leak : all
-	@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes --suppressions=.supp.supp ./minishell
+	@valgrind --leak-check=full --show-leak-kinds=all  ./minishell
 
 push:
 	@python3 -m c_formatter_42 $(addprefix $(SRCS_DIR), main.c $(PARSING) $(PROMPT) $(SIGNALS) \
@@ -113,6 +113,11 @@ push:
 
 debug : all
 	@lldb $(NAME)
+
+random : all
+	@make -C map_generator
+	@./map_generator/map_generator 50x50 maps/random.cub
+	@./cub3D maps/random.cub
 
 docker:
 	@if [ -z $$(docker images -q cube3d-app_x11) ]; then \

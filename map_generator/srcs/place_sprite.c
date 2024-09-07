@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   place_sprite.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 15:12:01 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/23 17:21:04 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:51:55 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,24 @@ void	ft_place_player(char **map, int x, int y)
 {
 	int	player_x;
 	int	player_y;
+	int orientation;
 
 	player_x = 0;
 	player_y = 0;
+	orientation = 0;
 	while (player_x == 0)
 		player_x = rand() % (x - 1);
 	while (player_y == 0)
 		player_y = rand() % (y - 1);
-	map[player_y][player_x] = 'P';
+	orientation = rand() % 4;
+	if (orientation == 0)
+		map[player_y][player_x] = 'N';
+	else if (orientation == 1)
+		map[player_y][player_x] = 'E';
+	else if (orientation == 2)
+		map[player_y][player_x] = 'S';
+	else if (orientation == 3)
+		map[player_y][player_x] = 'W';
 }
 
 void	ft_place_collectibles(char **map, int x, int y, int coins)

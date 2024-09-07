@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+         #
+#    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/06/23 17:31:48 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/07 15:54:44 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
 DIR_DUP = mkdir -p $(@D)
 
-NAME = so_long_generator
+NAME = map_generator
 
 LIBFT = libft.a
 

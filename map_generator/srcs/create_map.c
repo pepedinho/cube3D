@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@contact.42.fr>            +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:43:39 by madamou           #+#    #+#             */
-/*   Updated: 2024/06/23 19:02:04 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 15:54:01 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	ft_write_on_file(char *outfile, char **map)
 
 	true_outfile = outfile;
 	if (ft_strlen(outfile) <= 4)
-		true_outfile = ft_strjoin(outfile, ".ber");
-	else if (ft_strcmp(&outfile[ft_strlen(outfile) - 4], ".ber") != 0)
-		true_outfile = ft_strjoin(outfile, ".ber");
+		true_outfile = ft_strjoin(outfile, ".cub");
+	else if (ft_strcmp(&outfile[ft_strlen(outfile) - 4], ".cub") != 0)
+		true_outfile = ft_strjoin(outfile, ".cub");
 	if (!true_outfile)
 	{
 		ft_printf("Error with the outfile\n");
@@ -70,14 +70,12 @@ void	ft_write_on_file(char *outfile, char **map)
 	close(fd);
 }
 
-char	**ft_create_map(char **number, char *coins, char *outfile)
+char	**ft_create_map(char **number, char *outfile)
 {
-	int		nb_coins;
 	int		x;
 	int		y;
 	char	**map;
 
-	nb_coins = ft_atoi(coins);
 	x = ft_atoi(number[0]);
 	y = ft_atoi(number[1]);
 	map = malloc(sizeof(char *) * (y + 1));
@@ -87,8 +85,7 @@ char	**ft_create_map(char **number, char *coins, char *outfile)
 	if (!map)
 		return (NULL);
 	srand(time(NULL));
-	(ft_place_player(map, x, y), ft_place_exit(map, x, y));
-	ft_place_collectibles(map, x, y, nb_coins);
+	(ft_place_player(map, x, y));
 	map = ft_place_sprite(map, x, y);
 	if (!map)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/06 23:12:44 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 17:21:25 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,30 @@
 
 #define PRECISION 50
 
-void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
-{
-	double	x_start;
-	double	y_start;
-	double	x_step;
-	double	y_step;
-	int		steps;
-	int		i;
+// void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
+// {
+// 	double	x_start;
+// 	double	y_start;
+// 	double	x_step;
+// 	double	y_step;
+// 	int		steps;
+// 	int		i;
 
-	x_start = map_data->p_pos.r_x;
-	y_start = map_data->p_pos.r_y;
-	steps = fmax(fabs(to_x - x_start), fabs(to_y - y_start)) * PRECISION;
-	x_step = (to_x - x_start) / steps;
-	y_step = (to_y - y_start) / steps;
-	i = 0;
-	while (i <= steps)
-	{
-		mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-			* WIDTH, y_start * HEIGHT, color);
-		x_start += x_step;
-		y_start += y_step;
-		i++;
-	}
-}
+// 	x_start = map_data->p_pos.r_x;
+// 	y_start = map_data->p_pos.r_y;
+// 	steps = fmax(fabs(to_x - x_start), fabs(to_y - y_start)) * PRECISION;
+// 	x_step = (to_x - x_start) / steps;
+// 	y_step = (to_y - y_start) / steps;
+// 	i = 0;
+// 	while (i <= steps)
+// 	{
+// 		mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
+// 			* WIDTH, y_start * HEIGHT, color);
+// 		x_start += x_step;
+// 		y_start += y_step;
+// 		i++;
+// 	}
+// }
 
 // void draw_line(void *mlx_ptr, void *win_ptr, int x0, int y0, int x1, int y1,
 //	int color)
@@ -294,14 +294,12 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 // 	return (1);
 // }
 
+
 // POUR PLUS TARD
 int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
 	return (red << 16 | green << 8 | blue);
 }
-
-#define W 1920
-#define H 1080
 
 void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color,
 		double wall_x)
@@ -315,18 +313,18 @@ void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color,
 	text_width = 64;
 	y = 0;
 	while (y < drawStart)
-		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, 0X000000);
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, 0X000000);
 	while (y <= drawEnd)
 	{
 		texture_y = (y - drawStart) * 64 / (drawEnd - drawStart);
 		texture_x = (int)(wall_x * text_width) % text_width;
-		target = map->mlx->adrr + (texture_y * map->mlx->size_line + texture_x
-				* (map->mlx->bits_per_pixel / 8));
+		target = map->mlx.wall_i.adrr + (texture_y * map->mlx.wall_i.size_line + texture_x
+				* (map->mlx.wall_i.bits_per_pixel / 8));
 		color = *(unsigned int *)target;
-		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, color);
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, color);
 	}
-	while (y <= map->mlx->height)
-		mlx_pixel_put(map->mlx->init, map->mlx->window, x, y++, 5244559);
+	while (y <= map->mlx.height)
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, 5244559);
 }
 
 void	raycasting(t_map_data *data)
@@ -352,10 +350,10 @@ void	raycasting(t_map_data *data)
 	double	wall_x;
 
 	x = 0;
-	while (x < W)
+	while (x < data->mlx.width)
 	{
 		hit = 0;
-		cameraX = 2 * x / (double)W - 1;
+		cameraX = 2 * x / (double)data->mlx.width - 1;
 		rayDirX = data->p_pos.dir_x + data->p_pos.plane_x * cameraX;
 		rayDirY = data->p_pos.dir_y + data->p_pos.plane_y * cameraX;
 		mapX = (int)data->p_pos.r_x;
@@ -403,13 +401,13 @@ void	raycasting(t_map_data *data)
 			perpWallDist = (sideDistX - deltaDistX);
 		else
 			perpWallDist = (sideDistY - deltaDistY);
-		lineHeight = (int)(H / perpWallDist);
-		drawStart = -lineHeight / 2 + H / 2;
+		lineHeight = (int)(data->mlx.height / perpWallDist);
+		drawStart = -lineHeight / 2 + data->mlx.height / 2;
 		if (drawStart < 0)
 			drawStart = 0;
-		drawEnd = lineHeight / 2 + H / 2;
-		if (drawEnd >= H)
-			drawEnd = H - 1;
+		drawEnd = lineHeight / 2 + data->mlx.height / 2;
+		if (drawEnd >= data->mlx.height)
+			drawEnd = data->mlx.height - 1;
 		if (side == 0)
 			wall_x = data->p_pos.r_y + perpWallDist * rayDirY;
 		else

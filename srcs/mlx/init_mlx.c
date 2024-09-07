@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_mlx.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@contact.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 14:25:07 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/07 17:26:42 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,76 +54,82 @@ double	x_len(char *line)
 	return ((double)i);
 }
 
-void	moov(t_map_data *data, double alpha, int key)
-{
-	double	n_pos;
+// void	moov(t_map_data *data, double alpha, int key)
+// {
+// 	double	n_pos;
 
-	// printf("------| a : %f | p_x(r) : %f | p_y(r) : %f |------\n", alpha,
-	// data->p_pos.r_x, data->p_pos.r_y);
-	// printf("//////| a : %f | p_x(b) : %d | p_y(b) : %d |\\\\\\\\\\\\\n",
-	//	alpha,
-	// 	data->p_pos.b_x, data->p_pos.b_y);
-	(void)alpha;
-	if (key == XK_a)
-	{
-		n_pos = data->p_pos.r_x - 0.1;
-		if (n_pos < 0.0)
-			return ;
-		if (is_same(data->p_pos.r_x, n_pos)
-			&& data->map[data->p_pos.b_y][data->p_pos.b_x - 1] == '1')
-			return ;
-		if (is_same(data->p_pos.r_x, n_pos))
-			data->p_pos.b_x -= 1;
-		data->p_pos.r_x = n_pos;
-	}
-	else if (key == XK_d)
-	{
-		n_pos = data->p_pos.r_x + 0.1;
-		if (n_pos > ft_strlen(data->map[data->p_pos.b_y]))
-			return ;
-		if (is_same(data->p_pos.r_x, n_pos)
-			&& data->map[data->p_pos.b_y][data->p_pos.b_x + 1] == '1')
-			return ;
-		if (is_same(data->p_pos.r_x, n_pos))
-			data->p_pos.b_x += 1;
-		data->p_pos.r_x = n_pos;
-	}
-	else if (key == XK_z)
-	{
-		n_pos = data->p_pos.r_y - 0.1;
-		if (n_pos < 0.0)
-			return ;
-		if (is_same(data->p_pos.r_y, n_pos) && data->map[data->p_pos.b_y
-			- 1][data->p_pos.b_x] == '1')
-			return ;
-		if (is_same(data->p_pos.r_y, n_pos))
-			data->p_pos.b_y -= 1;
-		data->p_pos.r_y = n_pos;
-	}
-	else if (key == XK_s)
-	{
-		n_pos = data->p_pos.r_y + 0.1;
-		if (is_same(data->p_pos.r_y, n_pos)
-			&& data->map[(int)floor(n_pos)][data->p_pos.b_x] == '1')
-			return ;
-		if (is_same(data->p_pos.r_y, n_pos))
-			data->p_pos.b_y += 1;
-		data->p_pos.r_y = n_pos;
-	}
-	// render_map(data);
-	// trace_perimeter(data, 1, alpha);
-}
+// 	// printf("------| a : %f | p_x(r) : %f | p_y(r) : %f |------\n", alpha,
+// 	// data->p_pos.r_x, data->p_pos.r_y);
+// 	// printf("//////| a : %f | p_x(b) : %d | p_y(b) : %d |\\\\\\\\\\\\\n",
+// 	//	alpha,
+// 	// 	data->p_pos.b_x, data->p_pos.b_y);
+// 	(void)alpha;
+// 	if (key == XK_a)
+// 	{
+// 		n_pos = data->p_pos.r_x - 0.1;
+// 		if (n_pos < 0.0)
+// 			return ;
+// 		if (is_same(data->p_pos.r_x, n_pos)
+// 			&& data->map[data->p_pos.b_y][data->p_pos.b_x - 1] == '1')
+// 			return ;
+// 		if (is_same(data->p_pos.r_x, n_pos))
+// 			data->p_pos.b_x -= 1;
+// 		data->p_pos.r_x = n_pos;
+// 	}
+// 	else if (key == XK_d)
+// 	{
+// 		n_pos = data->p_pos.r_x + 0.1;
+// 		if (n_pos > ft_strlen(data->map[data->p_pos.b_y]))
+// 			return ;
+// 		if (is_same(data->p_pos.r_x, n_pos)
+// 			&& data->map[data->p_pos.b_y][data->p_pos.b_x + 1] == '1')
+// 			return ;
+// 		if (is_same(data->p_pos.r_x, n_pos))
+// 			data->p_pos.b_x += 1;
+// 		data->p_pos.r_x = n_pos;
+// 	}
+// 	else if (key == XK_z)
+// 	{
+// 		n_pos = data->p_pos.r_y - 0.1;
+// 		if (n_pos < 0.0)
+// 			return ;
+// 		if (is_same(data->p_pos.r_y, n_pos) && data->map[data->p_pos.b_y
+// 			- 1][data->p_pos.b_x] == '1')
+// 			return ;
+// 		if (is_same(data->p_pos.r_y, n_pos))
+// 			data->p_pos.b_y -= 1;
+// 		data->p_pos.r_y = n_pos;
+// 	}
+// 	else if (key == XK_s)
+// 	{
+// 		n_pos = data->p_pos.r_y + 0.1;
+// 		if (is_same(data->p_pos.r_y, n_pos)
+// 			&& data->map[(int)floor(n_pos)][data->p_pos.b_x] == '1')
+// 			return ;
+// 		if (is_same(data->p_pos.r_y, n_pos))
+// 			data->p_pos.b_y += 1;
+// 		data->p_pos.r_y = n_pos;
+// 	}
+// 	// render_map(data);
+// 	// trace_perimeter(data, 1, alpha);
+// }
 
 void	destroy_mlx(t_map_data *data)
 {
-	t_mlx	*mlx;
+	t_mlx	mlx;
 
 	mlx = data->mlx;
-	if (mlx->window)
-		mlx_destroy_window(mlx->init, mlx->window);
-	mlx_destroy_display(mlx->init);
-	free(mlx->init);
-	free(mlx);
+	if (mlx.window)
+		mlx_destroy_window(mlx.init, mlx.window);
+	mlx_destroy_display(mlx.init);
+	ft_free_2d(data->map);
+	free(mlx.init);
+	free(data->input.tx_north);
+	free(data->input.tx_south);
+	free(data->input.tx_east);
+	free(data->input.tx_west);
+	free(data->input.tx_ceiling);
+	free(data->input.tx_floor);
 	exit(EXIT_SUCCESS);
 }
 
@@ -207,59 +213,53 @@ int	handle_input(int keysym, t_map_data *data)
 
 int	render(t_map_data *data)
 {
-	if (data->mlx->window != NULL)
+	static int i;
+	
+	if (data->mlx.window != NULL && i++ % 24 == 0)
 		raycasting(data);
 	return (0);
 }
 
-int	init_img(t_map_data *map_data)
+int	init_img(t_mlx *mlx)
 {
-	int	img_width;
-	int	img_height;
-
-	img_width = WIDTH;
-	img_height = HEIGHT;
-	map_data->mlx->white_i = mlx_xpm_file_to_image(map_data->mlx->init, WHITE_I,
-			&img_width, &img_height);
-	if (!map_data->mlx->white_i)
-		return (printf("Error with image loading\n"), 0);
-	map_data->mlx->black_i = mlx_xpm_file_to_image(map_data->mlx->init, BLACK_I,
-			&img_width, &img_height);
-	if (!map_data->mlx->black_i)
-		return (printf("Error with image loading\n"), 0);
-	map_data->mlx->wall_i = mlx_xpm_file_to_image(map_data->mlx->init, WALL,
-			&img_width, &img_height);
-	if (!map_data->mlx->white_i)
+	// map_data->mlx.white_i = mlx_xpm_file_to_image(map_data->mlx.init, WHITE_I,
+	// 		&img_width, &img_height);
+	// if (!map_data->mlx.white_i)
+	// 	return (printf("Error with image loading\n"), 0);
+	// map_data->mlx.black_i = mlx_xpm_file_to_image(map_data->mlx.init, BLACK_I,
+	// 		&img_width, &img_height);
+	// if (!map_data->mlx.black_i)
+	// 	return (printf("Error with image loading\n"), 0);
+	mlx->wall_i.img = mlx_xpm_file_to_image(mlx->init, WALL,
+			&mlx->wall_i.width, &mlx->wall_i.height);
+	if (!mlx->wall_i.img)
 		return (printf("Error with image loading\n"), 0);
 	return (1);
 }
 
 int	init_mlx(t_map_data *data)
 {
-	t_mlx	*mlx;
+	t_mlx	mlx;
 
-	data->mlx = malloc(sizeof(t_mlx));
-	if (!data->mlx)
-		return (0);
-	mlx = data->mlx;
-	ft_memset(mlx, 0, sizeof(mlx));
-	mlx->init = mlx_init();
-	if (!mlx->init)
+	ft_memset(&mlx, 0, sizeof(mlx));
+	mlx.init = mlx_init();
+	if (!mlx.init)
 		return (destroy_mlx(data), 0);
-	// mlx_get_screen_size(mlx->init, &mlx->width, &mlx->height);
-	mlx->width = 1920;
-	mlx->height = 1080;
-	mlx->window = mlx_new_window(mlx->init, mlx->width, mlx->height, "cube3D");
-	if (!mlx->window)
+	mlx_get_screen_size(mlx.init, &mlx.width, &mlx.height);
+	// mlx->width = 1920;
+	// mlx->height = 1080;
+	mlx.window = mlx_new_window(mlx.init, mlx.width, mlx.height, "cube3D");
+	if (!mlx.window)
 		return (destroy_mlx(data), 0);
-	init_img(data);
-	mlx->adrr = mlx_get_data_addr(mlx->wall_i, &mlx->bits_per_pixel,
-			&mlx->size_line, &mlx->endiant);
+	init_img(&mlx);
+	mlx.wall_i.adrr = mlx_get_data_addr(mlx.wall_i.img, &mlx.wall_i.bits_per_pixel,
+			&mlx.wall_i.size_line, &mlx.wall_i.endiant);
 	// render_map(data);
 	// raycasting(data);
-	mlx_loop_hook(mlx->init, &render, data);
-	mlx_hook(mlx->window, 17, 0L, click_cross, data);
-	mlx_hook(mlx->window, 2, 1L << 0, handle_input, data);
-	mlx_loop(mlx->init);
+	data->mlx = mlx;
+	mlx_loop_hook(mlx.init, &render, data);
+	mlx_hook(mlx.window, 17, 0L, click_cross, data);
+	mlx_hook(mlx.window, 2, 1L << 0, handle_input, data);
+	mlx_loop(mlx.init);
 	return (1);
 }

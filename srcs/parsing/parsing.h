@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@contact.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 14:24:41 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/07 17:25:52 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
  */
 typedef struct s_coord
 {
-	int		b_x;
-	int		b_y;
+	// int		b_x;
+	// int		b_y;
 	double	r_x;
 	double	r_y;
 	double	dir_x;
@@ -46,6 +46,19 @@ typedef struct s_coord
 	double	plane_x;
 	double	plane_y;
 }			t_coord;
+
+typedef struct s_img
+{
+	void	*img;
+	char	*adrr;
+	int		size_line;
+	int 	bits_per_pixel;
+	int		endiant;
+	int		width;
+	int		height;
+}t_img;
+
+
 
 typedef struct s_input
 {
@@ -61,22 +74,19 @@ typedef struct s_mlx
 {
 	int		width;
 	int		height;
-	char *adrr;
-	int  size_line;
-	int 	bits_per_pixel;
-	int		endiant;
 	void	*init;
 	void	*window;
-	void	*white_i;
-	void	*black_i;
-	void *wall_i;
+	t_img	*wall_n;
+	t_img	*wall_s;
+	t_img	*wall_e;
+	t_img	*wall_w;
+	t_img	wall_i;
 }			t_mlx;
 
 typedef struct s_map_data
 {
 	t_input	input;
-	t_mlx	*mlx;
-	char	*map_path;
+	t_mlx	mlx;
 	t_coord	p_pos;
 	char	**map;
 }			t_map_data;

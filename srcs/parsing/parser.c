@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/02 11:50:12 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/07 17:07:06 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ t_map_data	*get_map_data(char *filename, t_map_data *map_data)
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (NULL);
-	map_data->map_path = filename;
 	line = get_next_line(fd);
 	while (line)
 	{
