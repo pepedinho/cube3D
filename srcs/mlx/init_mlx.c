@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 18:17:39 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 18:23:51 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,22 +222,22 @@ int	render(t_map_data *data)
 	return (0);
 }
 
-int	init_img(t_mlx *mlx)
-{
-	// map_data->mlx.white_i = mlx_xpm_file_to_image(map_data->mlx.init, WHITE_I,
-	// 		&img_width, &img_height);
-	// if (!map_data->mlx.white_i)
-	// 	return (printf("Error with image loading\n"), 0);
-	// map_data->mlx.black_i = mlx_xpm_file_to_image(map_data->mlx.init, BLACK_I,
-	// 		&img_width, &img_height);
-	// if (!map_data->mlx.black_i)
-	// 	return (printf("Error with image loading\n"), 0);
-	mlx->wall_i.img = mlx_xpm_file_to_image(mlx->init, WALL,
-			&mlx->wall_i.width, &mlx->wall_i.height);
-	if (!mlx->wall_i.img)
-		return (printf("Error with image loading\n"), 0);
-	return (1);
-}
+// int	init_img(t_mlx *mlx)
+// {
+// 	map_data->mlx.white_i = mlx_xpm_file_to_image(map_data->mlx.init, WHITE_I,
+// 			&img_width, &img_height);
+// 	if (!map_data->mlx.white_i)
+// 		return (printf("Error with image loading\n"), 0);
+// 	map_data->mlx.black_i = mlx_xpm_file_to_image(map_data->mlx.init, BLACK_I,
+// 			&img_width, &img_height);
+// 	if (!map_data->mlx.black_i)
+// 		return (printf("Error with image loading\n"), 0);
+// 	mlx->wall_i.img = mlx_xpm_file_to_image(mlx->init, WALL,
+// 			&mlx->wall_i.width, &mlx->wall_i.height);
+// 	if (!mlx->wall_i.img)
+// 		return (printf("Error with image loading\n"), 0);
+// 	return (1);
+// }
 
 void ft_init_img(t_map_data *data, t_img *img)
 {

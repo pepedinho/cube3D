@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 18:18:53 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 19:01:11 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ typedef struct s_input
 	char	*tx_east;
 	char	*tx_west;
 	char	*tx_floor;
+	int 	floor_color;
 	char	*tx_ceiling;
+	int 	ceiling_color;
 }			t_input;
 
 typedef struct s_mlx

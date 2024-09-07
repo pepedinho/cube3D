@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 17:21:25 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/07 19:05:04 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,8 +294,6 @@
 // 	return (1);
 // }
 
-
-// POUR PLUS TARD
 int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
 	return (red << 16 | green << 8 | blue);
@@ -313,7 +311,7 @@ void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color,
 	text_width = 64;
 	y = 0;
 	while (y < drawStart)
-		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, 0X000000);
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, map->input.ceiling_color);
 	while (y <= drawEnd)
 	{
 		texture_y = (y - drawStart) * 64 / (drawEnd - drawStart);
@@ -324,7 +322,7 @@ void	verLine(t_map_data *map, int x, int drawStart, int drawEnd, int color,
 		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, color);
 	}
 	while (y <= map->mlx.height)
-		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, 5244559);
+		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++, map->input.floor_color);
 }
 
 void	raycasting(t_map_data *data)
