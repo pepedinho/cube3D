@@ -33,7 +33,8 @@
 /*
  * b_x & b_y = x and y pos in orhtogonal buffer
 
-	* r_x & r_y = x and y pos in mlx render when r_x = 2.0 b_x = 2 but when r_x = 1.9 b_x still egal to 1
+	* r_x & r_y = x and y pos in mlx render when r_x = 2.0 b_x = 2
+  * but when r_x = 1.9 b_x still egal to 1
  */
 
 typedef struct s_coord
@@ -46,15 +47,18 @@ typedef struct s_coord
 	double	dir_y;
 	double	plane_x;
 	double	plane_y;
+	int		mouse_x;
+	int		mouse_y;
+
 }			t_coord;
 
 typedef struct s_img
 {
 	void	*img;
-	char 	*path;
+	char	*path;
 	char	*adrr;
 	int		size_line;
-	int 	bits_per_pixel;
+	int		bits_per_pixel;
 	int		endiant;
 	int		width;
 	int		height;
@@ -67,15 +71,15 @@ typedef struct s_input
 	char	*tx_east;
 	char	*tx_west;
 	char	*tx_floor;
-	int 	floor_color;
+	int		floor_color;
 	char	*tx_ceiling;
-	int 	ceiling_color;
+	int		ceiling_color;
 }			t_input;
 
-#define N 0
-#define S 1
-#define E 2
-#define W 3
+# define N 0
+# define S 1
+# define E 2
+# define W 3
 
 typedef struct s_mlx
 {
@@ -106,6 +110,10 @@ int			get_map(t_map_data *map_data, char *line, int fd);
 
 // utils
 int			ft_isspace(char c);
+int			check_type(char *line);
+void		assign_path(char *path, t_map_data *map_data, int type);
+int			get_path(char *line, t_map_data *map_data, int type);
+void		parse_line(char *line, int fd, t_map_data *map_data);
 
 // checking
 int			check_map(t_map_data *data);

@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/08 00:57:31 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/08 12:33:38 by itahri           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ END= 	$(shell tput -Txterm sgr0)
 
 CC = cc
 
-C_FLAGS = -Wall -Werror -Wextra -O3 -funroll-loops -std=c99 -MMD -g3
+C_FLAGS = -Wall -Werror -Wextra -funroll-loops -std=c99 -MMD -g3
 
 SRCS_DIR = srcs/
 
@@ -29,11 +29,13 @@ CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
 
 MINI_MAP = $(addprefix minimap/, render_map.c)
 
+MOVE = $(addprefix move/, fov_move.c player_move.c)
+
 RAYCASTING = $(addprefix raycasting/, raycast.c $(MINI_MAP))
 
 PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 
-MLX = $(addprefix mlx/, init_mlx.c)
+MLX = $(addprefix mlx/, init_mlx.c trigger_functions.c $(MOVE))
 
 OBJS_DIR = .objets/
 
@@ -112,7 +114,7 @@ push:
 	echo "$(YELLOW)All has been pushed with '$$commit_message' in commit$(END)"
 
 debug : all
-	@lldb $(NAME)
+	@lldb $(NAME) ./maps/test.cub
 
 random : all
 	@make -C map_generator

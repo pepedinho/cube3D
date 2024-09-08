@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 21:18:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/07 17:09:43 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 12:23:54 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int	check_the_map(t_map_data *map_data)
 			{
 				if (map_data->map[y][x] != '0')
 				{
-					// map_data->p_pos.b_x = x;
-					// map_data->p_pos.b_y = y;
 					map_data->p_pos.r_x = x;
 					map_data->p_pos.r_y = y;
 				}
