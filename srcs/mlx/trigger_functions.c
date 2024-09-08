@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 19:58:42 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 20:20:29 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ int render(t_map_data *data)
 	int y;
 
 	mlx_mouse_get_pos(data->mlx.init, data->mlx.window, &x, &y);
-	printf("x == %d | y == %d\n", x, y);
+	if (x < data->mlx.width / 2)
+		left_fov(data, 0, ROT_SPEED * 2, 0);
+	if (x > data->mlx.width / 2)
+		right_fov(data, 0, ROT_SPEED * 2, 0);
+	mlx_mouse_move(data->mlx.init, data->mlx.window, data->mlx.width / 2, data->mlx.height / 2);
     if (data->mlx.window != NULL)
     {
         raycasting(data);

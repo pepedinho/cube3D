@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/08 19:16:55 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 20:13:09 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ int	init_mlx(t_map_data *data)
 	ft_init_img(data, &mlx.wall[S]);
 	ft_init_img(data, &mlx.wall[E]);
 	ft_init_img(data, &mlx.wall[W]);
+	mlx_mouse_move(mlx.init, mlx.window, mlx.width / 2, mlx.height / 2);
+	mlx_mouse_hide(mlx.init, mlx.window);
 	data->mlx = mlx;
 	mlx_loop_hook(mlx.init, render, data);
 	mlx_hook(mlx.window, 17, 0L, click_cross, data);
