@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:34:01 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 17:38:07 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 19:54:50 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 # include <stdio.h>
 # include <unistd.h>
 #include <sys/time.h>
+
+# define MOVE_SPEED 0.1
+# define ROT_SPEED 0.05
 
 void	print_2d_array(char **tab);
 
