@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/08 12:33:06 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/08 19:01:50 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,23 @@ void	ft_init_img(t_map_data *data, t_img *img)
 	}
 }
 
+void new_image(t_map_data *data, t_img *img)
+{
+	img->img = mlx_new_image(data->mlx.init, data->mlx.width, data->mlx.height);
+	if (!img->img)
+	{
+		ft_printf("Error with image loading\n");
+		destroy_mlx(data);
+	}
+	img->adrr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
+			&img->size_line, &img->endiant);
+	if (!img->adrr)
+	{
+		ft_printf("Error when trying to get image data\n");
+		destroy_mlx(data);
+	}
+}
+
 void	path_to_mlx_img(t_map_data *data, t_mlx *mlx)
 {
 	mlx->wall[N].path = data->input.tx_north;
@@ -78,6 +95,7 @@ int	init_mlx(t_map_data *data)
 	if (!mlx.window)
 		return (destroy_mlx(data), 0);
 	data->mlx = mlx;
+	new_image(data, &mlx.img);
 	ft_init_img(data, &mlx.wall[N]);
 	ft_init_img(data, &mlx.wall[S]);
 	ft_init_img(data, &mlx.wall[E]);

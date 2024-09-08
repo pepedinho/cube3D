@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 16:18:37 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 18:53:22 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,27 @@ int	handle_input(int keysym, t_map_data *data)
 	return (1);
 }
 
-int	render(t_map_data *data)
+int render(t_map_data *data)
 {
-	if (data->mlx.window != NULL)
-		raycasting(data);
-	return (0);
+    static time_t last_time = 0;
+    struct timeval current_time;
+    static size_t frame_count = 0;
+    static size_t fps = 0;
+    
+    if (data->mlx.window != NULL)
+    {
+        raycasting(data);
+		mlx_put_image_to_window(data->mlx.init, data->mlx.window, data->mlx.img.img, 0, 0);
+        gettimeofday(&current_time, NULL);
+        if (current_time.tv_sec > last_time)
+        {
+            fps = frame_count;
+            frame_count = 0;
+            last_time = current_time.tv_sec;
+        }
+        mlx_string_put(data->mlx.init, data->mlx.window, 1800, 50, 0XFFFFFF, ft_sprintf("fps = %d", fps));
+    }
+    frame_count++;
+    return (1);
 }
+

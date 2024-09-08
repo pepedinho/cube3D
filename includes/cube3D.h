@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:34:01 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 19:27:22 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 17:38:07 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <math.h>
 # include <stdio.h>
 # include <unistd.h>
+#include <sys/time.h>
 
 void	print_2d_array(char **tab);
 

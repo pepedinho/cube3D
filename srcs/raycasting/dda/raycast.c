@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 17:26:28 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/08 19:07:57 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,34 +281,66 @@
 // 	return (1);
 // }
 
-void	print_stripe(t_map_data *map, int x, int draw_start, int draw_end,
+void	fill_ceiling(t_map_data *map, int x, int draw_start)
+{
+	int		y;
+	char	*target;
+
+	y = 0;
+	while (y < draw_start)
+	{
+		target = map->mlx.img.adrr + (y * map->mlx.img.size_line + x * (map->mlx.img.bits_per_pixel / 8));
+		*(unsigned int *)target = map->input.ceiling_color;
+		y++;
+	}
+}
+
+void	draw_wall_stripe(t_map_data *map, int x, int draw_start, int draw_end,
 		double wall_x, int i)
 {
 	int		y;
 	char	*target;
+	char	*target_1;
 	int		texture_x;
 	int		texture_y;
 	int		text_width;
 
+	y = draw_start;
 	text_width = 64;
-	y = 0;
-	while (y < draw_start)
-		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++,
-				map->input.ceiling_color);
 	while (y <= draw_end)
 	{
-		texture_y = (y - draw_start) * map->mlx.wall[i].width / (draw_end
-				- draw_start);
+		texture_y = (y - draw_start) * map->mlx.wall[i].width / (draw_end - draw_start);
 		texture_x = (int)(wall_x * text_width) % text_width;
 		target = map->mlx.wall[i].adrr + (texture_y * map->mlx.wall[i].size_line
 				+ texture_x * (map->mlx.wall[i].bits_per_pixel / 8));
-		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++,
-				*(unsigned int *)target);
+		target_1 = map->mlx.img.adrr + (y * map->mlx.img.size_line + x * (map->mlx.img.bits_per_pixel / 8));
+		*(unsigned int *)target_1 = *(unsigned int *)target;
+		y++;
 	}
-	while (y <= map->mlx.height)
-		mlx_pixel_put(map->mlx.init, map->mlx.window, x, y++,
-				map->input.floor_color);
 }
+
+void	fill_floor(t_map_data *map, int x, int draw_end)
+{
+	int		y;
+	char	*target;
+
+	y = draw_end + 1;
+	while (y <= map->mlx.height)
+	{
+		target = map->mlx.img.adrr + (y * map->mlx.img.size_line + x * (map->mlx.img.bits_per_pixel / 8));
+		*(unsigned int *)target = map->input.floor_color;
+		y++;
+	}
+}
+
+void	print_stripe(t_map_data *map, int x, int draw_start, int draw_end,
+		double wall_x, int i)
+{
+	fill_ceiling(map, x, draw_start);
+	draw_wall_stripe(map, x, draw_start, draw_end, wall_x, i);
+	fill_floor(map, x, draw_end);
+}
+
 
 void	set_ray_variables(t_ray *ray, t_map_data *data)
 {
