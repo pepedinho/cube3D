@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/08 12:33:38 by itahri           ###   ########.fr        #
+#    Updated: 2024/09/08 17:23:47 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,11 +27,13 @@ SRCS_DIR = srcs/
 
 CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
 
+DDA = $(addprefix dda/, raycast.c raycast_utils.c)
+
 MINI_MAP = $(addprefix minimap/, render_map.c)
 
 MOVE = $(addprefix move/, fov_move.c player_move.c)
 
-RAYCASTING = $(addprefix raycasting/, raycast.c $(MINI_MAP))
+RAYCASTING = $(addprefix raycasting/, $(DDA) $(MINI_MAP))
 
 PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 

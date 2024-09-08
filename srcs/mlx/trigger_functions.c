@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trigger_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 12:30:52 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/08 16:18:37 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,7 @@ int	handle_input(int keysym, t_map_data *data)
 
 int	render(t_map_data *data)
 {
-	static int	i;
-
-	if (data->mlx.window != NULL && i++ % 240 == 0)
-	{
+	if (data->mlx.window != NULL)
 		raycasting(data);
-		i = 0;
-	}
 	return (0);
 }
