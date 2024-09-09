@@ -48,6 +48,7 @@ int	handle_input(int keysym, t_map_data *data)
 			else if (data->map[data->door_y][data->door_x] == 'O')
 				data->map[data->door_y][data->door_x] = 'D';
 			data->door_trigger = 0;
+    print_2d_array(data->map);
 		}
 	}
 	return (1);

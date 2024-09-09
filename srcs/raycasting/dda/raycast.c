@@ -392,6 +392,20 @@ void	set_ray_variables(t_ray *ray, t_map_data *data)
 			ray->deltadisty);
 }
 
+void	open_door_gesture(t_ray *ray, t_map_data *data)
+{
+	if (ray->side == 0)
+		ray->perpwalldist = (ray->sidedistx - ray->deltadistx);
+	else
+		ray->perpwalldist = (ray->sidedisty - ray->deltadisty);
+	if (data->map[ray->mapy][ray->mapx] == 'O' && ray->perpwalldist <= 2)
+	{
+		data->door_trigger = 1;
+		data->door_x = ray->mapx;
+		data->door_y = ray->mapy;
+	}
+}
+
 void	dda(t_ray *ray, t_map_data *data)
 {
 	while (ray->hit == 0)
@@ -408,6 +422,8 @@ void	dda(t_ray *ray, t_map_data *data)
 			ray->mapy += ray->stepy;
 			ray->side = 1;
 		}
+		if (data->map[ray->mapy][ray->mapx] == 'O')
+			open_door_gesture(ray, data);
 		if (data->map[ray->mapy][ray->mapx] == '1'
 			|| data->map[ray->mapy][ray->mapx] == 'D')
 			ray->hit = 1;
