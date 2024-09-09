@@ -42,40 +42,49 @@ int	handle_input(int keysym, t_map_data *data)
 	return (1);
 }
 
-int render(t_map_data *data)
+int	render(t_map_data *data)
 {
-    static time_t last_time;
-    struct timeval current_time;
-    static size_t frame_count;
-    static size_t fps;
-	char *str;
-	int x;
-	int y;
+	static time_t	last_time;
+	struct timeval	current_time;
+	static size_t	frame_count;
+	static size_t	fps;
+	char			*str;
+	int				x;
+	int				y;
+	int				rest;
+	float			rot_speed;
 
 	mlx_mouse_get_pos(data->mlx.init, data->mlx.window, &x, &y);
-	if (x < data->mlx.width / 2)
-		left_fov(data, 0, ROT_SPEED * 2, 0);
-	if (x > data->mlx.width / 2)
-		right_fov(data, 0, ROT_SPEED * 2, 0);
-	mlx_mouse_move(data->mlx.init, data->mlx.window, data->mlx.width / 2, data->mlx.height / 2);
-    if (data->mlx.window != NULL)
-    {
-        raycasting(data);
-		mlx_put_image_to_window(data->mlx.init, data->mlx.window, data->mlx.img.img, 0, 0);
-        gettimeofday(&current_time, NULL);
-        if (current_time.tv_sec > last_time)
-        {
-            fps = frame_count;
-            frame_count = 0;
-            last_time = current_time.tv_sec;
-        }
+	rest = (data->mlx.width / 2) - x;
+	rot_speed = ROT_SPEED * SENSITIVITY * abs(rest);
+	if (abs(rest) > MIN_MOUSE_MOVE)
+	{
+		if (rest > 0)
+			left_fov(data, 0, rot_speed, 0);
+		if (rest < 0)
+			right_fov(data, 0, rot_speed, 0);
+		mlx_mouse_move(data->mlx.init, data->mlx.window, data->mlx.width / 2,
+			data->mlx.height / 2);
+	}
+	if (data->mlx.window != NULL)
+	{
+		raycasting(data);
+		mlx_put_image_to_window(data->mlx.init, data->mlx.window,
+			data->mlx.img.img, 0, 0);
+		gettimeofday(&current_time, NULL);
+		if (current_time.tv_sec > last_time)
+		{
+			fps = frame_count;
+			frame_count = 0;
+			last_time = current_time.tv_sec;
+		}
 		str = ft_sprintf("fps = %d", fps);
 		if (!str)
 			destroy_mlx(data);
-        mlx_string_put(data->mlx.init, data->mlx.window, 1800, 50, 0XFFFFFF, str);
+		mlx_string_put(data->mlx.init, data->mlx.window, 1800, 50, 0XFFFFFF,
+			str);
 		free(str);
-    }
-    frame_count++;
-    return (1);
+	}
+	frame_count++;
+	return (1);
 }
-
