@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 20:20:29 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/10 00:43:38 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,63 @@ int	click_cross(t_map_data *data)
 	return (1);
 }
 
-int	handle_input(int keysym, t_map_data *data)
+int key_prees(int keysym, t_map_data *data)
 {
-	double	old_dir_x;
-	double	old_plane_x;
-
-	old_dir_x = 0;
-	old_plane_x = 0;
-	if (keysym == XK_Escape)
-		destroy_mlx(data);
 	if (keysym == XK_Right)
-		right_fov(data, old_dir_x, ROT_SPEED, old_plane_x);
-	else if (keysym == XK_Left)
-		left_fov(data, old_dir_x, ROT_SPEED, old_plane_x);
-	else if (keysym == XK_w || keysym == XK_z)
+		data->key.cam_right = 1;
+	if (keysym == XK_Left)
+		data->key.cam_left = 1;
+	if (keysym == XK_w || keysym == XK_z ||  keysym == XK_Up)
+		data->key.up = 1;
+	if (keysym == XK_s ||  keysym == XK_Down)
+		data->key.down = 1;
+	if (keysym == XK_d)
+		data->key.right = 1;
+	if (keysym == XK_q || keysym == XK_a)
+		data->key.left = 1;
+	if (keysym == XK_Escape)
+		data->key.escape = 1;
+	if (keysym == XK_space)
+		data->key.space = 1;
+	return (1);
+}
+
+int key_release(int keysym, t_map_data *data)
+{
+	if (keysym == XK_Right)
+		data->key.cam_right = 0;
+	if (keysym == XK_Left)
+		data->key.cam_left = 0;
+	if (keysym == XK_w || keysym == XK_z ||  keysym == XK_Up)
+		data->key.up = 0;
+	if (keysym == XK_s ||  keysym == XK_Down)
+		data->key.down = 0;
+	if (keysym == XK_d)
+		data->key.right = 0;
+	if (keysym == XK_q || keysym == XK_a)
+		data->key.left = 0;
+	if (keysym == XK_space)
+		data->key.space = 0;
+	return (1);
+}
+
+void change_player(t_map_data *data)
+{
+	if (data->key.escape == true)
+		destroy_mlx(data);
+	if (data->key.cam_right == true)
+		right_fov(data, 0, ROT_SPEED, 0);
+	if (data->key.cam_left == true)
+		left_fov(data, 0, ROT_SPEED, 0);
+	if (data->key.up == true)
 		forward(data, MOVE_SPEED);
-	else if (keysym == XK_s)
+	if (data->key.down == true)
 		behind(data, MOVE_SPEED);
-	else if (keysym == XK_d)
+	if (data->key.right == true)
 		right(data, MOVE_SPEED);
-	else if (keysym == XK_q || keysym == XK_a)
+	if (data->key.left == true)
 		left(data, MOVE_SPEED);
-	else if (keysym == XK_space)
+	if (data->key.space == true)
 	{
 		if (data->door_trigger)
 		{
@@ -50,7 +85,6 @@ int	handle_input(int keysym, t_map_data *data)
 			data->door_trigger = 0;
 		}
 	}
-	return (1);
 }
 
 int	render(t_map_data *data)
@@ -77,6 +111,7 @@ int	render(t_map_data *data)
 		mlx_mouse_move(data->mlx.init, data->mlx.window, data->mlx.width / 2,
 			data->mlx.height / 2);
 	}
+	change_player(data);
 	if (data->mlx.window != NULL)
 	{
 		data->door_trigger = 0;

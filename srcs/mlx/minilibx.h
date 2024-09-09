@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:15:47 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/08 12:32:57 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/10 00:24:06 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,7 @@ void	left_fov(t_map_data *data, double old_dir_x, double rot_speed,
 int		click_cross(t_map_data *data);
 int		handle_input(int keysym, t_map_data *data);
 int		render(t_map_data *data);
+int key_prees(int keysym, t_map_data *data);
+int key_release(int keysym, t_map_data *data);
 
 #endif

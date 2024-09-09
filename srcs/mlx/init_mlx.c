@@ -6,11 +6,12 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/08 20:13:09 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/10 00:36:30 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cube3D.h"
+#include <X11/X.h>
 
 void	destroy_mlx(t_map_data *data)
 {
@@ -106,8 +107,10 @@ int	init_mlx(t_map_data *data)
 	mlx_mouse_hide(mlx.init, mlx.window);
 	data->mlx = mlx;
 	mlx_loop_hook(mlx.init, render, data);
+	mlx_hook(mlx.window, KeyPress, KeyPressMask, key_prees, data);
+	mlx_hook(mlx.window, KeyRelease, KeyReleaseMask, key_release, data);
 	mlx_hook(mlx.window, 17, 0L, click_cross, data);
-	mlx_hook(mlx.window, 2, 1L << 0, handle_input, data);
+	// mlx_hook(mlx.window, 2, 1L << 0, handle_input, data);
 	mlx_loop(mlx.init);
 	return (1);
 }

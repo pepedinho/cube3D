@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 18:35:26 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/10 00:35:17 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@
 
 typedef struct s_coord
 {
-	// int		b_x;
-	// int		b_y;
 	double	r_x;
 	double	r_y;
 	double	dir_x;
@@ -93,6 +91,19 @@ typedef struct s_mlx
 	t_img	door;
 }			t_mlx;
 
+typedef struct s_key
+{
+	int up;
+	int down;
+	int left;
+	int right;
+	int cam_left;
+	int cam_right;
+	int escape;
+	int space;
+}t_key;
+
+
 typedef struct s_map_data
 {
 	t_input	input;
@@ -102,6 +113,7 @@ typedef struct s_map_data
 	int		door_x;
 	int		door_y;
 	char	**map;
+	t_key	key;
 }			t_map_data;
 
 // parsing
