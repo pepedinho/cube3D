@@ -289,7 +289,8 @@ void	fill_ceiling(t_map_data *map, int x, int draw_start)
 	y = 0;
 	while (y < draw_start)
 	{
-		target = map->mlx.img.adrr + (y * map->mlx.img.size_line + x * (map->mlx.img.bits_per_pixel / 8));
+		target = map->mlx.img.adrr + (y * map->mlx.img.size_line + x
+				* (map->mlx.img.bits_per_pixel / 8));
 		*(unsigned int *)target = map->input.ceiling_color;
 		y++;
 	}
@@ -309,11 +310,39 @@ void	draw_wall_stripe(t_map_data *map, int x, int draw_start, int draw_end,
 	text_width = 64;
 	while (y <= draw_end)
 	{
-		texture_y = (y - draw_start) * map->mlx.wall[i].width / (draw_end - draw_start);
+		texture_y = (y - draw_start) * map->mlx.wall[i].width / (draw_end
+				- draw_start);
 		texture_x = (int)(wall_x * text_width) % text_width;
 		target = map->mlx.wall[i].adrr + (texture_y * map->mlx.wall[i].size_line
 				+ texture_x * (map->mlx.wall[i].bits_per_pixel / 8));
-		target_1 = map->mlx.img.adrr + (y * map->mlx.img.size_line + x * (map->mlx.img.bits_per_pixel / 8));
+		target_1 = map->mlx.img.adrr + (y * map->mlx.img.size_line + x
+				* (map->mlx.img.bits_per_pixel / 8));
+		*(unsigned int *)target_1 = *(unsigned int *)target;
+		y++;
+	}
+}
+
+void	draw_door_stripe(t_map_data *map, int x, int draw_start, int draw_end,
+		double wall_x, int i)
+{
+	int		y;
+	char	*target;
+	char	*target_1;
+	int		texture_x;
+	int		texture_y;
+	int		text_width;
+
+	y = draw_start;
+	text_width = 64;
+	while (y <= draw_end)
+	{
+		texture_y = (y - draw_start) * map->mlx.door.width / (draw_end
+				- draw_start);
+		texture_x = (int)(wall_x * text_width) % text_width;
+		target = map->mlx.door.adrr + (texture_y * map->mlx.door.size_line
+				+ texture_x * (map->mlx.wall[i].bits_per_pixel / 8));
+		target_1 = map->mlx.img.adrr + (y * map->mlx.img.size_line + x
+				* (map->mlx.img.bits_per_pixel / 8));
 		*(unsigned int *)target_1 = *(unsigned int *)target;
 		y++;
 	}
@@ -327,7 +356,8 @@ void	fill_floor(t_map_data *map, int x, int draw_end)
 	y = draw_end + 1;
 	while (y <= map->mlx.height)
 	{
-		target = map->mlx.img.adrr + (y * map->mlx.img.size_line + x * (map->mlx.img.bits_per_pixel / 8));
+		target = map->mlx.img.adrr + (y * map->mlx.img.size_line + x
+				* (map->mlx.img.bits_per_pixel / 8));
 		*(unsigned int *)target = map->input.floor_color;
 		y++;
 	}
@@ -337,10 +367,12 @@ void	print_stripe(t_map_data *map, int x, int draw_start, int draw_end,
 		double wall_x, int i)
 {
 	fill_ceiling(map, x, draw_start);
-	draw_wall_stripe(map, x, draw_start, draw_end, wall_x, i);
+	if (i == D)
+		draw_door_stripe(map, x, draw_start, draw_end, wall_x, i);
+	else
+		draw_wall_stripe(map, x, draw_start, draw_end, wall_x, i);
 	fill_floor(map, x, draw_end);
 }
-
 
 void	set_ray_variables(t_ray *ray, t_map_data *data)
 {
@@ -376,18 +408,27 @@ void	dda(t_ray *ray, t_map_data *data)
 			ray->mapy += ray->stepy;
 			ray->side = 1;
 		}
-		if (data->map[ray->mapy][ray->mapx] == '1')
+		if (data->map[ray->mapy][ray->mapx] == '1'
+			|| data->map[ray->mapy][ray->mapx] == 'D')
 			ray->hit = 1;
 	}
 	if (ray->side == 0)
 		ray->perpwalldist = (ray->sidedistx - ray->deltadistx);
 	else
 		ray->perpwalldist = (ray->sidedisty - ray->deltadisty);
+	if (data->map[ray->mapy][ray->mapx] == 'D' && ray->perpwalldist <= 2)
+	{
+		data->door_trigger = 1;
+		data->door_x = ray->mapx;
+		data->door_y = ray->mapy;
+	}
 }
 
 void	print_on_display(t_ray *ray, t_map_data *data, double wall_x)
 {
-	if (ray->side == 1 && ray->raydiry >= 0)
+	if (data->map[ray->mapy][ray->mapx] == 'D')
+		print_stripe(data, ray->x, ray->draw_start, ray->draw_end, wall_x, D);
+	else if (ray->side == 1 && ray->raydiry >= 0)
 		print_stripe(data, ray->x, ray->draw_start, ray->draw_end, wall_x, S);
 	else if (ray->side == 1 && ray->raydiry < 0)
 		print_stripe(data, ray->x, ray->draw_start, ray->draw_end, wall_x, N);

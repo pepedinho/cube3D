@@ -39,6 +39,14 @@ int	handle_input(int keysym, t_map_data *data)
 		right(data, MOVE_SPEED);
 	else if (keysym == XK_q || keysym == XK_a)
 		left(data, MOVE_SPEED);
+	else if (keysym == XK_space)
+	{
+		if (data->door_trigger)
+		{
+			data->map[data->door_y][data->door_x] = '0';
+			data->door_trigger = 0;
+		}
+	}
 	return (1);
 }
 
@@ -83,6 +91,9 @@ int	render(t_map_data *data)
 			destroy_mlx(data);
 		mlx_string_put(data->mlx.init, data->mlx.window, 1800, 50, 0XFFFFFF,
 			str);
+		if (data->door_trigger)
+			mlx_string_put(data->mlx.init, data->mlx.window, 900, 900, 0XFFFFF,
+				"press space to open the door");
 		free(str);
 	}
 	frame_count++;

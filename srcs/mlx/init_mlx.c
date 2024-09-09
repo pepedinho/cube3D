@@ -53,7 +53,7 @@ void	ft_init_img(t_map_data *data, t_img *img)
 	}
 }
 
-void new_image(t_map_data *data, t_img *img)
+void	new_image(t_map_data *data, t_img *img)
 {
 	img->img = mlx_new_image(data->mlx.init, data->mlx.width, data->mlx.height);
 	if (!img->img)
@@ -95,11 +95,13 @@ int	init_mlx(t_map_data *data)
 	if (!mlx.window)
 		return (destroy_mlx(data), 0);
 	data->mlx = mlx;
+	mlx.door.path = DOOR;
 	new_image(data, &mlx.img);
 	ft_init_img(data, &mlx.wall[N]);
 	ft_init_img(data, &mlx.wall[S]);
 	ft_init_img(data, &mlx.wall[E]);
 	ft_init_img(data, &mlx.wall[W]);
+	ft_init_img(data, &mlx.door);
 	mlx_mouse_move(mlx.init, mlx.window, mlx.width / 2, mlx.height / 2);
 	mlx_mouse_hide(mlx.init, mlx.window);
 	data->mlx = mlx;

@@ -19,7 +19,7 @@ int	check_map_char_line(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (!ft_is_in_charset(line[i++], " 01NSEW"))
+		if (!ft_is_in_charset(line[i++], " 01NSEWD"))
 			return (0);
 	}
 	return (1);

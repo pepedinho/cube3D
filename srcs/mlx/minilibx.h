@@ -24,6 +24,8 @@
 # define WHITE_I "assets/white_tile.xpm"
 # define BLACK_I "assets/black_tile.xpm"
 # define WALL "assets/wall_sprite.xpm"
+# define COIN "assets/coin_sprite.xpm"
+# define DOOR "assets/door_sprite.xpm"
 # include "../../includes/cube3D.h"
 
 # ifdef CUBE3D_H

@@ -80,6 +80,7 @@ typedef struct s_input
 # define S 1
 # define E 2
 # define W 3
+# define D 4
 
 typedef struct s_mlx
 {
@@ -89,6 +90,7 @@ typedef struct s_mlx
 	void	*window;
 	t_img	img;
 	t_img	wall[4];
+	t_img	door;
 }			t_mlx;
 
 typedef struct s_map_data
@@ -96,6 +98,9 @@ typedef struct s_map_data
 	t_input	input;
 	t_mlx	mlx;
 	t_coord	p_pos;
+	int		door_trigger;
+	int		door_x;
+	int		door_y;
 	char	**map;
 }			t_map_data;
 
