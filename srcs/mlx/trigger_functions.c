@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/10 00:43:38 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/11 18:56:05 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,45 +21,47 @@ int	click_cross(t_map_data *data)
 int key_prees(int keysym, t_map_data *data)
 {
 	if (keysym == XK_Right)
-		data->key.cam_right = 1;
+		data->key.cam_right = true;
 	if (keysym == XK_Left)
-		data->key.cam_left = 1;
+		data->key.cam_left = true;
 	if (keysym == XK_w || keysym == XK_z ||  keysym == XK_Up)
-		data->key.up = 1;
+		data->key.up = true;
 	if (keysym == XK_s ||  keysym == XK_Down)
-		data->key.down = 1;
+		data->key.down = true;
 	if (keysym == XK_d)
-		data->key.right = 1;
+		data->key.right = true;
 	if (keysym == XK_q || keysym == XK_a)
-		data->key.left = 1;
+		data->key.left = true;
 	if (keysym == XK_Escape)
-		data->key.escape = 1;
+		data->key.escape = true;
 	if (keysym == XK_space)
-		data->key.space = 1;
+		data->key.space = true;
 	return (1);
 }
 
 int key_release(int keysym, t_map_data *data)
 {
 	if (keysym == XK_Right)
-		data->key.cam_right = 0;
+		data->key.cam_right = false;
 	if (keysym == XK_Left)
-		data->key.cam_left = 0;
+		data->key.cam_left = false;
 	if (keysym == XK_w || keysym == XK_z ||  keysym == XK_Up)
-		data->key.up = 0;
+		data->key.up = false;
 	if (keysym == XK_s ||  keysym == XK_Down)
-		data->key.down = 0;
+		data->key.down = false;
 	if (keysym == XK_d)
-		data->key.right = 0;
+		data->key.right = false;
 	if (keysym == XK_q || keysym == XK_a)
-		data->key.left = 0;
+		data->key.left = false;
 	if (keysym == XK_space)
-		data->key.space = 0;
+		data->key.space = false;
 	return (1);
 }
 
 void change_player(t_map_data *data)
 {
+	static bool is_press;
+	
 	if (data->key.escape == true)
 		destroy_mlx(data);
 	if (data->key.cam_right == true)
@@ -74,15 +76,18 @@ void change_player(t_map_data *data)
 		right(data, MOVE_SPEED);
 	if (data->key.left == true)
 		left(data, MOVE_SPEED);
+	if (data->key.space == false)
+		is_press = false;
 	if (data->key.space == true)
 	{
-		if (data->door_trigger)
+		if (data->door_trigger && is_press == false)
 		{
 			if (data->map[data->door_y][data->door_x] == 'D')
 				data->map[data->door_y][data->door_x] = 'O';
 			else if (data->map[data->door_y][data->door_x] == 'O')
 				data->map[data->door_y][data->door_x] = 'D';
 			data->door_trigger = 0;
+			is_press = true;
 		}
 	}
 }
