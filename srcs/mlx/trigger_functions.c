@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/11 18:56:05 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/11 20:02:05 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,32 @@ void change_player(t_map_data *data)
 	}
 }
 
-int	render(t_map_data *data)
+void	string_put(t_map_data *data, size_t fps)
 {
-	static time_t	last_time;
-	struct timeval	current_time;
-	static size_t	frame_count;
-	static size_t	fps;
 	char			*str;
+
+	str = ft_sprintf("fps = %d", fps);
+	if (!str)
+		destroy_mlx(data);
+	mlx_string_put(data->mlx.init, data->mlx.window, 1800, 50, 0XFFFFFF,
+		str);
+	if (data->door_trigger && data->map[data->door_y][data->door_x] == 'D')
+		mlx_string_put(data->mlx.init, data->mlx.window, 900, 900, 0XFFFFF,
+			"press space to open the door");
+	else if (data->door_trigger
+		&& data->map[data->door_y][data->door_x] == 'O')
+		mlx_string_put(data->mlx.init, data->mlx.window, 900, 900, 0XFFFFF,
+			"press space to close the door");
+	free(str);
+}
+
+void	mouse_movement(t_map_data *data)
+{
 	int				x;
 	int				y;
 	int				rest;
 	float			rot_speed;
-
+	
 	mlx_mouse_get_pos(data->mlx.init, data->mlx.window, &x, &y);
 	rest = (data->mlx.width / 2) - x;
 	rot_speed = ROT_SPEED * SENSITIVITY * abs(rest);
@@ -116,6 +130,16 @@ int	render(t_map_data *data)
 		mlx_mouse_move(data->mlx.init, data->mlx.window, data->mlx.width / 2,
 			data->mlx.height / 2);
 	}
+}
+
+int	render(t_map_data *data)
+{
+	static time_t	last_time;
+	struct timeval	current_time;
+	static size_t	frame_count;
+	static size_t	fps;
+
+	mouse_movement(data);
 	change_player(data);
 	if (data->mlx.window != NULL)
 	{
@@ -130,19 +154,7 @@ int	render(t_map_data *data)
 			frame_count = 0;
 			last_time = current_time.tv_sec;
 		}
-		str = ft_sprintf("fps = %d", fps);
-		if (!str)
-			destroy_mlx(data);
-		mlx_string_put(data->mlx.init, data->mlx.window, 1800, 50, 0XFFFFFF,
-			str);
-		if (data->door_trigger && data->map[data->door_y][data->door_x] == 'D')
-			mlx_string_put(data->mlx.init, data->mlx.window, 900, 900, 0XFFFFF,
-				"press space to open the door");
-		else if (data->door_trigger
-			&& data->map[data->door_y][data->door_x] == 'O')
-			mlx_string_put(data->mlx.init, data->mlx.window, 900, 900, 0XFFFFF,
-				"press space to close the door");
-		free(str);
+		string_put(data, fps);
 	}
 	frame_count++;
 	return (1);
