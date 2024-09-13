@@ -6,11 +6,12 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 19:07:57 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/13 04:16:39 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../raycatsing.h"
+#include <stdbool.h>
 
 #define PRECISION 50
 
@@ -281,203 +282,209 @@
 // 	return (1);
 // }
 
-void	fill_ceiling(t_map_data *map, int x, int draw_start)
+void	fill_ceiling(t_map_data *map, t_ray *ray)
 {
-	int		y;
 	char	*target;
 
-	y = 0;
-	while (y < draw_start)
+	while (ray->coord.y < ray->draw_start)
 	{
-		target = map->mlx.img.adrr + (y * map->mlx.img.size_line + x
+		target = map->mlx.img.adrr + (ray->coord.y * map->mlx.img.size_line + ray->coord.x
 				* (map->mlx.img.bits_per_pixel / 8));
-		*(unsigned int *)target = map->input.ceiling_color;
-		y++;
+		if (*(unsigned int *)target != (unsigned int)map->input.ceiling_color)
+			*(unsigned int *)target = (unsigned int)map->input.ceiling_color;
+		ray->coord.y++;
 	}
 }
 
-void	draw_wall_stripe(t_map_data *map, int x, int draw_start, int draw_end,
-		double wall_x, int i)
+void	draw_wall_stripe(t_map_data *map, t_ray *ray, int i)
 {
-	int		y;
-	char	*target;
-	char	*target_1;
+	char	*texture_color;
+	char	*screen_pixel;
 	int		texture_x;
 	int		texture_y;
-	int		text_width;
+	double step;
+	double tex_pos;
 
-	y = draw_start;
-	text_width = 64;
-	while (y <= draw_end)
+	texture_x = (int)(ray->wall_x * map->mlx.wall[i].width);
+	if ((ray->side == 0 && ray->ray_dir.x > 0)
+		|| (ray->side == 1 && ray->ray_dir.y < 0))
+		texture_x = map->mlx.wall[i].width - texture_x - 1;
+	step = 1.0 * map->mlx.wall[i].height / ray->wallheight;
+	tex_pos = (ray->draw_start - map->mlx.height / 2 + ray->wallheight / 2) * step;
+	while (ray->coord.y <= ray->draw_end)
 	{
-		texture_y = (y - draw_start) * map->mlx.wall[i].width / (draw_end
-				- draw_start);
-		texture_x = (int)(wall_x * text_width) % text_width;
-		target = map->mlx.wall[i].adrr + (texture_y * map->mlx.wall[i].size_line
+		texture_y = (int)tex_pos % map->mlx.wall[i].height;
+        tex_pos += step;
+		texture_color = map->mlx.wall[i].adrr + (texture_y * map->mlx.wall[i].size_line
 				+ texture_x * (map->mlx.wall[i].bits_per_pixel / 8));
-		target_1 = map->mlx.img.adrr + (y * map->mlx.img.size_line + x
+		screen_pixel = map->mlx.img.adrr + (ray->coord.y * map->mlx.img.size_line + ray->coord.x
 				* (map->mlx.img.bits_per_pixel / 8));
-		*(unsigned int *)target_1 = *(unsigned int *)target;
-		y++;
+		if (*(unsigned int *)screen_pixel != *(unsigned int *)texture_color)
+			*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
+		ray->coord.y++;
 	}
 }
 
-void	draw_door_stripe(t_map_data *map, int x, int draw_start, int draw_end,
-		double wall_x, int i)
+void	draw_door_stripe(t_map_data *map, t_ray *ray)
 {
-	int		y;
-	char	*target;
-	char	*target_1;
+	char	*texture_color;
+	char	*screen_pixel;
 	int		texture_x;
 	int		texture_y;
-	int		text_width;
+	double step;
+	double tex_pos;
 
-	y = draw_start;
-	text_width = 64;
-	while (y <= draw_end)
+	texture_x = (int)(ray->wall_x * map->mlx.door.width);
+	if ((ray->side == 0 && ray->ray_dir.x > 0)
+		|| (ray->side == 1 && ray->ray_dir.y < 0))
+		texture_x = map->mlx.door.width - texture_x - 1;
+	step = 1.0 * map->mlx.door.height / ray->wallheight;
+	tex_pos = (ray->draw_start - map->mlx.height / 2 + ray->wallheight / 2) * step;
+	while (ray->coord.y <= ray->draw_end)
 	{
-		texture_y = (y - draw_start) * map->mlx.door.width / (draw_end
-				- draw_start);
-		texture_x = (int)(wall_x * text_width) % text_width;
-		target = map->mlx.door.adrr + (texture_y * map->mlx.door.size_line
-				+ texture_x * (map->mlx.wall[i].bits_per_pixel / 8));
-		target_1 = map->mlx.img.adrr + (y * map->mlx.img.size_line + x
+		texture_y = (int)tex_pos % map->mlx.door.height;
+        tex_pos += step;
+		texture_color = map->mlx.door.adrr + (texture_y * map->mlx.door.size_line
+				+ texture_x * (map->mlx.door.bits_per_pixel / 8));
+		screen_pixel = map->mlx.img.adrr + (ray->coord.y * map->mlx.img.size_line + ray->coord.x
 				* (map->mlx.img.bits_per_pixel / 8));
-		*(unsigned int *)target_1 = *(unsigned int *)target;
-		y++;
+		if (*(unsigned int *)screen_pixel != *(unsigned int *)texture_color)
+			*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
+		ray->coord.y++;
 	}
 }
 
-void	fill_floor(t_map_data *map, int x, int draw_end)
+void	fill_floor(t_map_data *map, t_ray *ray)
 {
-	int		y;
 	char	*target;
 
-	y = draw_end + 1;
-	while (y <= map->mlx.height)
+	while (ray->coord.y <= map->mlx.height)
 	{
-		target = map->mlx.img.adrr + (y * map->mlx.img.size_line + x
+		target = map->mlx.img.adrr + (ray->coord.y * map->mlx.img.size_line + ray->coord.x
 				* (map->mlx.img.bits_per_pixel / 8));
-		*(unsigned int *)target = map->input.floor_color;
-		y++;
+		if (*(unsigned int *)target != (unsigned int)map->input.floor_color)
+			*(unsigned int *)target = (unsigned int)map->input.floor_color;
+		ray->coord.y++;
 	}
 }
 
-void	print_stripe(t_map_data *map, int x, int draw_start, int draw_end,
-		double wall_x, int i)
+void	print_stripe(t_map_data *map, t_ray *ray, int i)
 {
-	fill_ceiling(map, x, draw_start);
+	fill_ceiling(map, ray);
 	if (i == D)
-		draw_door_stripe(map, x, draw_start, draw_end, wall_x, i);
+		draw_door_stripe(map, ray);
 	else
-		draw_wall_stripe(map, x, draw_start, draw_end, wall_x, i);
-	fill_floor(map, x, draw_end);
+		draw_wall_stripe(map, ray, i);
+	fill_floor(map, ray);
 }
 
-void	set_ray_variables(t_ray *ray, t_map_data *data)
+void set_ray_variables(t_ray *ray, t_map_data *data)
 {
-	ray->hit = 0;
-	ray->camerax = 2 * ray->x / (double)data->mlx.width - 1;
-	ray->raydirx = data->p_pos.dir_x + data->p_pos.plane_x * ray->camerax;
-	ray->raydiry = data->p_pos.dir_y + data->p_pos.plane_y * ray->camerax;
-	ray->mapx = (int)data->p_pos.r_x;
-	ray->mapy = (int)data->p_pos.r_y;
-	ray->deltadistx = set_deltadist(ray->raydirx);
-	ray->deltadisty = set_deltadist(ray->raydiry);
-	ray->stepx = sign(ray->raydirx);
-	ray->sidedistx = set_side_dist(ray->raydirx, data->p_pos.r_x, ray->mapx,
-			ray->deltadistx);
-	ray->stepy = sign(ray->raydiry);
-	ray->sidedisty = set_side_dist(ray->raydiry, data->p_pos.r_y, ray->mapy,
-			ray->deltadisty);
+    ray->hit = 0;
+    ray->coord.y = 0;
+    ray->camera_x = 2 * ray->coord.x / (double)data->mlx.width - 1;
+    ray->ray_dir.x = data->p_pos.dir_x + data->p_pos.plane_x * ray->camera_x;
+    ray->ray_dir.y = data->p_pos.dir_y + data->p_pos.plane_y * ray->camera_x;
+    ray->map.x = (int)data->p_pos.r_x;
+    ray->map.y = (int)data->p_pos.r_y;
+    ray->delta_dist.x = set_deltadist(ray->ray_dir.x);
+    ray->delta_dist.y = set_deltadist(ray->ray_dir.y);
+    ray->step.x = sign(ray->ray_dir.x);
+    ray->side_dist.x = set_side_dist(ray->ray_dir.x, data->p_pos.r_x, ray->map.x, ray->delta_dist.x);
+    ray->step.y = sign(ray->ray_dir.y);
+    ray->side_dist.y = set_side_dist(ray->ray_dir.y, data->p_pos.r_y, ray->map.y, ray->delta_dist.y);
 }
 
-void	open_door_gesture(t_ray *ray, t_map_data *data)
+void open_door_gesture(t_ray *ray, t_map_data *data)
 {
-	if (ray->side == 0)
-		ray->perpwalldist = (ray->sidedistx - ray->deltadistx);
-	else
-		ray->perpwalldist = (ray->sidedisty - ray->deltadisty);
-	if (data->map[ray->mapy][ray->mapx] == 'O' && ray->perpwalldist <= 2)
-	{
-		data->door_trigger = 1;
-		data->door_x = ray->mapx;
-		data->door_y = ray->mapy;
-	}
+    if (ray->side == 0)
+        ray->perpwalldist = (ray->side_dist.x - ray->delta_dist.x);
+    else
+        ray->perpwalldist = (ray->side_dist.y - ray->delta_dist.y);
+    
+    if (data->map[ray->map.y][ray->map.x] == 'O' && ray->perpwalldist <= 2)
+    {
+        data->door_trigger = 1;
+        data->door_x = ray->map.x;
+        data->door_y = ray->map.y;
+    }
 }
 
-void	dda(t_ray *ray, t_map_data *data)
+void dda(t_ray *ray, t_map_data *data)
 {
-	while (ray->hit == 0)
-	{
-		if (ray->sidedistx < ray->sidedisty)
-		{
-			ray->sidedistx += ray->deltadistx;
-			ray->mapx += ray->stepx;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->sidedisty += ray->deltadisty;
-			ray->mapy += ray->stepy;
-			ray->side = 1;
-		}
-		if (data->map[ray->mapy][ray->mapx] == 'O')
-			open_door_gesture(ray, data);
-		if (data->map[ray->mapy][ray->mapx] == '1'
-			|| data->map[ray->mapy][ray->mapx] == 'D')
-			ray->hit = 1;
-	}
-	if (ray->side == 0)
-		ray->perpwalldist = (ray->sidedistx - ray->deltadistx);
-	else
-		ray->perpwalldist = (ray->sidedisty - ray->deltadisty);
-	if (data->map[ray->mapy][ray->mapx] == 'D' && ray->perpwalldist <= 2)
-	{
-		data->door_trigger = 1;
-		data->door_x = ray->mapx;
-		data->door_y = ray->mapy;
-	}
+    while (ray->hit == 0)
+    {
+        if (ray->side_dist.x < ray->side_dist.y)
+        {
+            ray->side_dist.x += ray->delta_dist.x;
+            ray->map.x += ray->step.x;
+            ray->side = 0;
+        }
+        else
+        {
+            ray->side_dist.y += ray->delta_dist.y;
+            ray->map.y += ray->step.y;
+            ray->side = 1;
+        }
+
+        if (data->map[ray->map.y][ray->map.x] == 'O')
+            open_door_gesture(ray, data);
+        if (data->map[ray->map.y][ray->map.x] == '1'
+			|| data->map[ray->map.y][ray->map.x] == 'D')
+            ray->hit = 1;
+    }
+    if (ray->side == 0)
+        ray->perpwalldist = (ray->side_dist.x - ray->delta_dist.x);
+    else
+        ray->perpwalldist = (ray->side_dist.y - ray->delta_dist.y);
+    if (data->map[ray->map.y][ray->map.x] == 'D' && ray->perpwalldist <= 2)
+    {
+        data->door_trigger = 1;
+        data->door_x = ray->map.x;
+        data->door_y = ray->map.y;
+    }
 }
 
-void	print_on_display(t_ray *ray, t_map_data *data, double wall_x)
+
+void print_on_display(t_ray *ray, t_map_data *data)
 {
-	if (data->map[ray->mapy][ray->mapx] == 'D')
-		print_stripe(data, ray->x, ray->draw_start, ray->draw_end, wall_x, D);
-	else if (ray->side == 1 && ray->raydiry >= 0)
-		print_stripe(data, ray->x, ray->draw_start, ray->draw_end, wall_x, S);
-	else if (ray->side == 1 && ray->raydiry < 0)
-		print_stripe(data, ray->x, ray->draw_start, ray->draw_end, wall_x, N);
-	else if (ray->side == 0 && ray->raydirx >= 0)
-		print_stripe(data, ray->x, ray->draw_start, ray->draw_end, wall_x, E);
-	else if (ray->side == 0 && ray->raydirx < 0)
-		print_stripe(data, ray->x, ray->draw_start, ray->draw_end, wall_x, W);
+    if (data->map[ray->map.y][ray->map.x] == 'D')
+        print_stripe(data, ray,  D);
+    else if (ray->side == 1 && ray->ray_dir.y >= 0)
+        print_stripe(data, ray, S);
+    else if (ray->side == 1 && ray->ray_dir.y < 0)
+        print_stripe(data, ray, N);
+    else if (ray->side == 0 && ray->ray_dir.x >= 0)
+        print_stripe(data, ray, E);
+    else if (ray->side == 0 && ray->ray_dir.x < 0)
+        print_stripe(data, ray, W);
 }
 
-void	raycasting(t_map_data *data)
+void raycasting(t_map_data *data)
 {
-	t_ray	ray;
-	int		wallheight;
-	double	wall_x;
+    t_ray   ray;
 
-	ray.x = 0;
-	while (ray.x < data->mlx.width)
-	{
-		set_ray_variables(&ray, data);
-		dda(&ray, data);
-		wallheight = (int)(data->mlx.height / ray.perpwalldist);
-		ray.draw_start = -wallheight / 2 + data->mlx.height / 2;
-		if (ray.draw_start < 0)
-			ray.draw_start = 0;
-		ray.draw_end = wallheight / 2 + data->mlx.height / 2;
-		if (ray.draw_end >= data->mlx.height)
-			ray.draw_end = data->mlx.height - 1;
-		if (ray.side == 0)
-			wall_x = data->p_pos.r_y + ray.perpwalldist * ray.raydiry;
-		else
-			wall_x = data->p_pos.r_x + ray.perpwalldist * ray.raydirx;
-		wall_x -= floor(wall_x);
-		print_on_display(&ray, data, wall_x);
-		ray.x++;
-	}
+    ray.coord.x = 0;
+    while (ray.coord.x < data->mlx.width)
+    {
+        set_ray_variables(&ray, data);
+        dda(&ray, data);
+        ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
+        ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
+        if (ray.draw_start < 0)
+            ray.draw_start = 0;
+        ray.draw_end = ray.wallheight / 2 + data->mlx.height / 2;
+        if (ray.draw_end >= data->mlx.height)
+            ray.draw_end = data->mlx.height - 1;
+        
+        if (ray.side == 0)
+            ray.wall_x = data->p_pos.r_y + ray.perpwalldist * ray.ray_dir.y;
+        else
+            ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
+        
+        ray.wall_x -= floor(ray.wall_x);
+        print_on_display(&ray, data);
+        ray.coord.x++;
+    }
 }
+
