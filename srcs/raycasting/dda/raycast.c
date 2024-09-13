@@ -6,12 +6,14 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/13 04:16:39 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/13 23:55:48 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../raycatsing.h"
+#include <X11/X.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #define PRECISION 50
 
@@ -354,6 +356,37 @@ void	draw_door_stripe(t_map_data *map, t_ray *ray)
 	}
 }
 
+void	draw_enemies(t_map_data *map, t_ray *ray)
+{
+	char	*texture_color;
+	char	*screen_pixel;
+	int		texture_x;
+	int		texture_y;
+	double step;
+	double tex_pos;
+    char *test;
+
+    test = "\0";
+	texture_x = (int)(ray->wall_x * map->mlx.enemy.img.width);
+	if ((ray->side == 0 && ray->ray_dir.x > 0)
+		|| (ray->side == 1 && ray->ray_dir.y < 0))
+		texture_x = map->mlx.enemy.img.width - texture_x - 1;
+	step = 1.0 * map->mlx.enemy.img.height / ray->wallheight;
+	tex_pos = (ray->draw_start - map->mlx.height / 2 + ray->wallheight / 2) * step;
+	while (ray->coord.y <= ray->draw_end)
+	{
+		texture_y = (int)tex_pos % map->mlx.enemy.img.height;
+        tex_pos += step;
+		texture_color = map->mlx.enemy.img.adrr + (texture_y * map->mlx.enemy.img.size_line
+				+ texture_x * (map->mlx.enemy.img.bits_per_pixel / 8));
+		screen_pixel = map->mlx.img.adrr + (ray->coord.y * map->mlx.img.size_line + ray->coord.x
+				* (map->mlx.img.bits_per_pixel / 8));
+		if (*(unsigned int *)texture_color != 0xFF000000)
+			*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
+		ray->coord.y++;
+	}
+}
+
 void	fill_floor(t_map_data *map, t_ray *ray)
 {
 	char	*target;
@@ -373,6 +406,8 @@ void	print_stripe(t_map_data *map, t_ray *ray, int i)
 	fill_ceiling(map, ray);
 	if (i == D)
 		draw_door_stripe(map, ray);
+	else if  (i == M)
+		draw_enemies(map, ray);
 	else
 		draw_wall_stripe(map, ray, i);
 	fill_floor(map, ray);
@@ -430,7 +465,8 @@ void dda(t_ray *ray, t_map_data *data)
         if (data->map[ray->map.y][ray->map.x] == 'O')
             open_door_gesture(ray, data);
         if (data->map[ray->map.y][ray->map.x] == '1'
-			|| data->map[ray->map.y][ray->map.x] == 'D')
+			|| data->map[ray->map.y][ray->map.x] == 'D'
+            || data->map[ray->map.y][ray->map.x] == 'M')
             ray->hit = 1;
     }
     if (ray->side == 0)
@@ -445,11 +481,42 @@ void dda(t_ray *ray, t_map_data *data)
     }
 }
 
+int dda_enemies(t_ray *ray, t_map_data *data)
+{
+    while (ray->hit == 0)
+    {
+        if (ray->side_dist.x < ray->side_dist.y)
+        {
+            ray->side_dist.x += ray->delta_dist.x;
+            ray->map.x += ray->step.x;
+            ray->side = 0;
+        }
+        else
+        {
+            ray->side_dist.y += ray->delta_dist.y;
+            ray->map.y += ray->step.y;
+            ray->side = 1;
+        }
+        if (data->map[ray->map.y][ray->map.x] == '1'
+			|| data->map[ray->map.y][ray->map.x] == 'D')
+            return (0);
+        if (data->map[ray->map.y][ray->map.x] == 'M')
+            ray->hit = 1;
+    }
+    if (ray->side == 0)
+        ray->perpwalldist = (ray->side_dist.x - ray->delta_dist.x);
+    else
+        ray->perpwalldist = (ray->side_dist.y - ray->delta_dist.y);
+    return (1);
+}
+
 
 void print_on_display(t_ray *ray, t_map_data *data)
 {
     if (data->map[ray->map.y][ray->map.x] == 'D')
         print_stripe(data, ray,  D);
+    else if (data->map[ray->map.y][ray->map.x] == 'M')
+        print_stripe(data, ray,  M);
     else if (ray->side == 1 && ray->ray_dir.y >= 0)
         print_stripe(data, ray, S);
     else if (ray->side == 1 && ray->ray_dir.y < 0)
@@ -469,6 +536,32 @@ void raycasting(t_map_data *data)
     {
         set_ray_variables(&ray, data);
         dda(&ray, data);
+        ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
+        ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
+        if (ray.draw_start < 0)
+            ray.draw_start = 0;
+        ray.draw_end = ray.wallheight / 2 + data->mlx.height / 2;
+        if (ray.draw_end >= data->mlx.height)
+            ray.draw_end = data->mlx.height - 1;
+        
+        if (ray.side == 0)
+            ray.wall_x = data->p_pos.r_y + ray.perpwalldist * ray.ray_dir.y;
+        else
+            ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
+        
+        ray.wall_x -= floor(ray.wall_x);
+        print_on_display(&ray, data);
+        ray.coord.x++;
+    }
+    ray.coord.x = 0;
+    while (ray.coord.x < data->mlx.width)
+    {
+        set_ray_variables(&ray, data);
+        if (dda_enemies(&ray, data) == 0)
+        {
+            ray.coord.x++;
+            continue;
+        }
         ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
         ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
         if (ray.draw_start < 0)

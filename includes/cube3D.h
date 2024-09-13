@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:34:01 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/13 02:27:05 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/13 18:47:16 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_vecint t_vecint;
 # include <unistd.h>
 #include <sys/time.h>
 #include <stdbool.h>
+# include <time.h>
 
 # define MOVE_SPEED 0.1
 # define ROT_SPEED 0.05
