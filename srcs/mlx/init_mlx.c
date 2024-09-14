@@ -118,6 +118,7 @@ int	init_mlx(t_map_data *data)
 	mlx_mouse_move(mlx.init, mlx.window, mlx.width / 2, mlx.height / 2);
 	mlx_mouse_hide(mlx.init, mlx.window);
 	data->mlx = mlx;
+	data->key.speed_boost = 0;
 	mlx_loop_hook(mlx.init, render, data);
 	mlx_hook(mlx.window, KeyPress, KeyPressMask, key_prees, data);
 	mlx_hook(mlx.window, KeyRelease, KeyReleaseMask, key_release, data);

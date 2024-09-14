@@ -37,6 +37,8 @@ int	key_prees(int keysym, t_map_data *data)
 		data->key.escape = true;
 	if (keysym == XK_space)
 		data->key.space = true;
+	if (keysym == XK_Shift_L)
+		data->key.speed_boost = 0.07;
 	return (1);
 }
 
@@ -56,6 +58,8 @@ int	key_release(int keysym, t_map_data *data)
 		data->key.left = false;
 	if (keysym == XK_space)
 		data->key.space = false;
+	if (keysym == XK_Shift_L)
+		data->key.speed_boost = 0.0;
 	return (1);
 }
 
@@ -70,13 +74,13 @@ void	change_player(t_map_data *data)
 	if (data->key.cam_left == true)
 		left_fov(data, 0, ROT_SPEED, 0);
 	if (data->key.up == true)
-		forward(data, MOVE_SPEED);
+		forward(data, MOVE_SPEED + data->key.speed_boost);
 	if (data->key.down == true)
-		behind(data, MOVE_SPEED);
+		behind(data, MOVE_SPEED + data->key.speed_boost);
 	if (data->key.right == true)
-		right(data, MOVE_SPEED);
+		right(data, MOVE_SPEED + data->key.speed_boost);
 	if (data->key.left == true)
-		left(data, MOVE_SPEED);
+		left(data, MOVE_SPEED + data->key.speed_boost);
 	if (data->key.space == false)
 		is_press = false;
 	if (data->key.space == true)
@@ -131,19 +135,19 @@ void	mouse_movement(t_map_data *data)
 	}
 }
 
-double rand_value(double min, double max) 
+double	rand_value(double min, double max)
 {
-    double range;
-    double div; 
-	
-	range = (max - min); 
+	double	range;
+	double	div;
+
+	range = (max - min);
 	div = RAND_MAX / range;
-    return (min + (rand() / div));
+	return (min + (rand() / div));
 }
 
-int get_map_height(char **map)
+int	get_map_height(char **map)
 {
-	int y;
+	int	y;
 
 	y = 0;
 	while (map[y])
@@ -151,11 +155,11 @@ int get_map_height(char **map)
 	return (y);
 }
 
-void random_enemies(t_map_data *data)
+void	random_enemies(t_map_data *data)
 {
-	int map_height;
-	double x;
-	double y;
+	int		map_height;
+	double	x;
+	double	y;
 
 	map_height = get_map_height(data->map);
 	x = 0;
@@ -174,20 +178,22 @@ int	render(t_map_data *data)
 	struct timeval	current_time;
 	static size_t	frame_count;
 	static size_t	fps;
-	// static long long frame_enemies;
 
+	// static long long frame_enemies;
 	gettimeofday(&current_time, NULL);
 	if (last_time != 0)
 	{
-		data->delta_time = (current_time.tv_sec - last_time) + 
-							((current_time.tv_usec - last_time) / 1000000.0);
+		data->delta_time = (current_time.tv_sec - last_time)
+			+ ((current_time.tv_usec - last_time) / 1000000.0);
 	}
 	last_time = current_time.tv_sec;
 	mouse_movement(data);
 	change_player(data);
 	if (data->mlx.window != NULL)
 	{
-		ft_memset(data->mlx.img.adrr, 0, (data->mlx.height * data->mlx.img.size_line + data->mlx.width * (data->mlx.img.bits_per_pixel / 8)));
+		ft_memset(data->mlx.img.adrr, 0, (data->mlx.height
+				* data->mlx.img.size_line + data->mlx.width
+				* (data->mlx.img.bits_per_pixel / 8)));
 		data->door_trigger = 0;
 		raycasting(data);
 		mlx_put_image_to_window(data->mlx.init, data->mlx.window,

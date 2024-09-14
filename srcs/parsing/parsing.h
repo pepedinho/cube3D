@@ -119,6 +119,7 @@ typedef struct s_key
 	int				cam_right;
 	int				escape;
 	int				space;
+	float			speed_boost;
 }					t_key;
 
 typedef struct s_map_data

@@ -29,7 +29,7 @@ typedef struct s_vecint t_vecint;
 #include <stdbool.h>
 # include <time.h>
 
-# define MOVE_SPEED 0.1
+# define MOVE_SPEED 0.08
 # define ROT_SPEED 0.05
 
 
