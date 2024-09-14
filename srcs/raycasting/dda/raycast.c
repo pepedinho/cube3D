@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 17:58:18 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/14 18:36:49 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,17 +284,24 @@
 // 	return (1);
 // }
 
-void	fill_ceiling(t_map_data *map, t_ray *ray)
+void	fill_ceiling(t_map_data *map)
 {
 	char	*target;
+	int x;
+	int y;
 
-	while (ray->coord.y < ray->draw_start)
+	y = 0;
+	while (y < map->mlx.height / 2)
 	{
-		target = map->mlx.img.adrr + (ray->coord.y * map->mlx.img.size_line
-				+ ray->coord.x * (map->mlx.img.bits_per_pixel / 8));
-		if (*(unsigned int *)target != (unsigned int)map->input.ceiling_color)
+		x = 0;
+		while (x < map->mlx.width)
+		{
+			target = map->mlx.img.adrr + (y * map->mlx.img.size_line
+					+ x * (map->mlx.img.bits_per_pixel / 8));
 			*(unsigned int *)target = (unsigned int)map->input.ceiling_color;
-		ray->coord.y++;
+			x++;
+		}
+		y++;
 	}
 }
 
@@ -324,8 +331,7 @@ void	draw_wall_stripe(t_map_data *map, t_ray *ray, int i)
 		screen_pixel = map->mlx.img.adrr + (ray->coord.y
 				* map->mlx.img.size_line + ray->coord.x
 				* (map->mlx.img.bits_per_pixel / 8));
-		if (*(unsigned int *)screen_pixel != *(unsigned int *)texture_color)
-			*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
+		*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 		ray->coord.y++;
 	}
 }
@@ -356,8 +362,7 @@ void	draw_door_stripe(t_map_data *map, t_ray *ray)
 		screen_pixel = map->mlx.img.adrr + (ray->coord.y
 				* map->mlx.img.size_line + ray->coord.x
 				* (map->mlx.img.bits_per_pixel / 8));
-		if (*(unsigned int *)screen_pixel != *(unsigned int *)texture_color)
-			*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
+		*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 		ray->coord.y++;
 	}
 }
@@ -396,30 +401,36 @@ void	draw_enemies(t_map_data *map, t_ray *ray)
 	}
 }
 
-void	fill_floor(t_map_data *map, t_ray *ray)
+void	fill_floor(t_map_data *map)
 {
 	char	*target;
+	int x;
+	int y;
 
-	while (ray->coord.y <= map->mlx.height)
+	y = map->mlx.height / 2;
+	while (y <= map->mlx.height)
 	{
-		target = map->mlx.img.adrr + (ray->coord.y * map->mlx.img.size_line
-				+ ray->coord.x * (map->mlx.img.bits_per_pixel / 8));
-		if (*(unsigned int *)target != (unsigned int)map->input.floor_color)
+		x = 0;
+		while (x < map->mlx.width)
+		{
+			target = map->mlx.img.adrr + (y * map->mlx.img.size_line
+					+ x * (map->mlx.img.bits_per_pixel / 8));
 			*(unsigned int *)target = (unsigned int)map->input.floor_color;
-		ray->coord.y++;
+			x++;
+		}
+		y++;
 	}
 }
 
 void	print_stripe(t_map_data *map, t_ray *ray, int i)
 {
-	fill_ceiling(map, ray);
+	ray->coord.y = ray->draw_start;
 	if (i == D)
 		draw_door_stripe(map, ray);
 	else if (i == M)
 		draw_enemies(map, ray);
 	else
 		draw_wall_stripe(map, ray, i);
-	fill_floor(map, ray);
 }
 
 void	set_ray_variables(t_ray *ray, t_map_data *data)
@@ -546,6 +557,8 @@ void	raycasting(t_map_data *data)
 	t_ray	ray;
 
 	ray.coord.x = 0;
+	fill_ceiling(data);
+	fill_floor(data);
 	while (ray.coord.x < data->mlx.width)
 	{
 		set_ray_variables(&ray, data);
