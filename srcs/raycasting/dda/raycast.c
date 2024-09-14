@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 08:37:18 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/14 17:58:18 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -565,28 +565,28 @@ void	raycasting(t_map_data *data)
 		print_on_display(&ray, data);
 		ray.coord.x++;
 	}
-	ray.coord.x = 0;
-	while (ray.coord.x < data->mlx.width)
-	{
-		set_ray_variables(&ray, data);
-		if (dda_enemies(&ray, data) == 0)
-		{
-			ray.coord.x++;
-			continue ;
-		}
-		ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
-		ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
-		if (ray.draw_start < 0)
-			ray.draw_start = 0;
-		ray.draw_end = ray.wallheight / 2 + data->mlx.height / 2;
-		if (ray.draw_end >= data->mlx.height)
-			ray.draw_end = data->mlx.height - 1;
-		if (ray.side == 0)
-			ray.wall_x = data->p_pos.r_y + ray.perpwalldist * ray.ray_dir.y;
-		else
-			ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
-		ray.wall_x -= floor(ray.wall_x);
-		print_on_display(&ray, data);
-		ray.coord.x++;
-	}
+	// ray.coord.x = 0;
+	// while (ray.coord.x < data->mlx.width)
+	// {
+	// 	set_ray_variables(&ray, data);
+	// 	if (dda_enemies(&ray, data) == 0)
+	// 	{
+	// 		ray.coord.x++;
+	// 		continue ;
+	// 	}
+	// 	ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
+	// 	ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
+	// 	if (ray.draw_start < 0)
+	// 		ray.draw_start = 0;
+	// 	ray.draw_end = ray.wallheight / 2 + data->mlx.height / 2;
+	// 	if (ray.draw_end >= data->mlx.height)
+	// 		ray.draw_end = data->mlx.height - 1;
+	// 	if (ray.side == 0)
+	// 		ray.wall_x = data->p_pos.r_y + ray.perpwalldist * ray.ray_dir.y;
+	// 	else
+	// 		ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
+	// 	ray.wall_x -= floor(ray.wall_x);
+	// 	print_on_display(&ray, data);
+	// 	ray.coord.x++;
+	// }
 }

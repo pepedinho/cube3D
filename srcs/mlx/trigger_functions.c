@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 00:31:52 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/14 17:58:42 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,15 +232,8 @@ int	render(t_map_data *data)
 	struct timeval	current_time;
 	static size_t	frame_count;
 	static size_t	fps;
-
 	// static long long frame_enemies;
-	gettimeofday(&current_time, NULL);
-	if (last_time != 0)
-	{
-		data->delta_time = (current_time.tv_sec - last_time)
-			+ ((current_time.tv_usec - last_time) / 1000000.0);
-	}
-	last_time = current_time.tv_sec;
+	
 	mouse_movement(data);
 	change_player(data);
 	if (data->mlx.window != NULL)
