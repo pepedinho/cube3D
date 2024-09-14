@@ -6,12 +6,14 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 19:11:27 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/14 21:05:05 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../raycatsing.h"
 #include <X11/X.h>
+#include <cstdio>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -371,9 +373,7 @@ void	draw_enemies(t_map_data *map, t_ray *ray)
 	int		texture_y;
 	double	step;
 	double	tex_pos;
-	char	*test;
 
-	test = "\0";
 	texture_x = (int)(ray->wall_x * map->mlx.enemy.img.width);
 	if ((ray->side == 0 && ray->ray_dir.x > 0) || (ray->side == 1
 			&& ray->ray_dir.y < 0))
@@ -476,8 +476,7 @@ void	dda(t_ray *ray, t_map_data *data)
 		if (data->map[ray->map.y][ray->map.x] == 'O')
 			open_door_gesture(ray, data);
 		if (data->map[ray->map.y][ray->map.x] == '1'
-			|| data->map[ray->map.y][ray->map.x] == 'D'
-			|| data->map[ray->map.y][ray->map.x] == 'M')
+			|| data->map[ray->map.y][ray->map.x] == 'D')
 			ray->hit = 1;
 	}
 	if (ray->side == 0)
@@ -531,8 +530,8 @@ void	print_on_display(t_ray *ray, t_map_data *data)
 {
 	if (data->map[ray->map.y][ray->map.x] == 'D')
 		print_stripe(data, ray, D);
-	else if (data->map[ray->map.y][ray->map.x] == 'M')
-		print_stripe(data, ray, M);
+	// else if (data->map[ray->map.y][ray->map.x] == 'M')
+	// 	print_stripe(data, ray, M);
 	else if (ray->side == 1 && ray->ray_dir.y >= 0)
 		print_stripe(data, ray, S);
 	else if (ray->side == 1 && ray->ray_dir.y < 0)
@@ -546,6 +545,11 @@ void	print_on_display(t_ray *ray, t_map_data *data)
 void	raycasting(t_map_data *data)
 {
 	t_ray	ray;
+	int nb_sprites;
+	int *sprite_order;
+	double *sprite_distance;
+	int i;
+	t_sprite *current;
 
 	ray.coord.x = 0;
 	fill_ceiling(data);
@@ -554,6 +558,7 @@ void	raycasting(t_map_data *data)
 	{
 		set_ray_variables(&ray, data);
 		dda(&ray, data);
+		ray.z_buffer[ray.coord.x] = ray.perpwalldist;  // Stock la distance perpendiculaire a la camera dans un tab
 		ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
 		ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
 		if (ray.draw_start < 0)
@@ -569,6 +574,27 @@ void	raycasting(t_map_data *data)
 		print_on_display(&ray, data);
 		ray.coord.x++;
 	}
+	nb_sprites = len_sprites(data->sprites);
+	if (nb_sprites == 0)
+		return ;
+	sprite_order = malloc(sizeof(int) * nb_sprites);
+	if (!sprite_order)
+		destroy_mlx(data);
+	sprite_distance = malloc(sizeof(double) * nb_sprites);
+	if (!sprite_distance)
+	{
+		free(sprite_order);
+		destroy_mlx(data);
+	}
+	i = 0;
+	current = data->sprites;
+	while (i < nb_sprites)
+	{
+		sprite_order[i] = i;
+		sprite_distance[i] = (pow(data->p_pos.r_x - current->pos.x, 2) + pow(data->p_pos.r_y - current->pos.y, 2));
+		++i;
+		current = current->next;
+	}	
 	ray.coord.x = 0;
 	while (ray.coord.x < data->mlx.width)
 	{
@@ -590,7 +616,7 @@ void	raycasting(t_map_data *data)
 		else
 			ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
 		ray.wall_x -= floor(ray.wall_x);
-		print_on_display(&ray, data);
+		print_stripe(data, &ray, M);
 		ray.coord.x++;
 	}
 }

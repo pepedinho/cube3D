@@ -6,12 +6,14 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 19:12:01 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/14 20:56:43 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cube3D.h"
+#include "minilibx.h"
 #include <X11/X.h>
+#include <cstdio>
 
 int	click_cross(t_map_data *data)
 {
@@ -135,43 +137,6 @@ void	mouse_movement(t_map_data *data)
 	}
 }
 
-double	rand_value(double min, double max)
-{
-	double	range;
-	double	div;
-
-	range = (max - min);
-	div = RAND_MAX / range;
-	return (min + (rand() / div));
-}
-
-int	get_map_height(char **map)
-{
-	int	y;
-
-	y = 0;
-	while (map[y])
-		y++;
-	return (y);
-}
-
-void	random_enemies(t_map_data *data)
-{
-	int		map_height;
-	double	x;
-	double	y;
-
-	map_height = get_map_height(data->map);
-	x = 0;
-	y = 0;
-	while (data->map[(int)floor(y)][(int)floor(x)] != '0')
-	{
-		y = rand_value(0, map_height);
-		x = rand_value(0, ft_strlen(data->map[(int)floor(y)]));
-	}
-	data->map[(int)floor(y)][(int)floor(x)] = 'M';
-}
-
 void	display_gun(t_map_data *data)
 {
 	int				center_x;
@@ -231,7 +196,7 @@ int	render(t_map_data *data)
 	struct timeval	current_time;
 	static size_t	frame_count;
 	static size_t	fps;
-	// static long long frame_enemies;
+	static long long frame_enemies;
 	
 	mouse_movement(data);
 	change_player(data);
@@ -251,14 +216,14 @@ int	render(t_map_data *data)
 			fps = frame_count;
 			frame_count = 0;
 			last_time = current_time.tv_sec;
-			// frame_enemies++;
-			// if (frame_enemies >= data->mlx.enemy.spawn)
-			// {
-			// 	frame_enemies = 0;
-			// 	if (data->mlx.enemy.spawn != 0)
-			// 		data->mlx.enemy.spawn--;
-			// 	random_enemies(data);
-			// }
+			frame_enemies++;
+			if (frame_enemies >= data->mlx.enemy.spawn)
+			{
+				frame_enemies = 0;
+				// if (data->mlx.enemy.spawn != 0)
+				// 	data->mlx.enemy.spawn--;
+				random_enemies(data);
+			}
 		}
 		string_put(data, fps);
 		trace_perimeter(data, 5);

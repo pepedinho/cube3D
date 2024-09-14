@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycatsing.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:56:24 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 08:41:08 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/14 19:50:45 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_ray
 	int			draw_end;
 	int			wallheight;
 	double		wall_x;
+	double		z_buffer[1920];
 }				t_ray;
 
 // raycast

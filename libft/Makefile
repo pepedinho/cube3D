@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/23 16:07:55 by madamou           #+#    #+#              #
-#    Updated: 2024/09/01 21:13:10 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/14 19:19:16 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ PURPLE			=	\033[0;35m
 END= 	$(shell tput -Txterm sgr0)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -O3 -g3
 
 OBJS_DIR = .objets/
 

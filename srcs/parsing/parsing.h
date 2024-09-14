@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 08:40:03 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/14 20:43:15 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,18 @@ typedef struct s_key
 	float			speed_boost;
 }					t_key;
 
+typedef enum s_sprite_type
+{
+	MONSTER,
+}t_sprite_type;
+
+typedef struct s_sprite
+{
+	t_sprite_type type;
+	t_vec	pos;
+	struct s_sprite *next;
+}t_sprite;
+
 typedef struct s_map_data
 {
 	t_input			input;
@@ -134,6 +146,7 @@ typedef struct s_map_data
 	char			**map;
 	t_key			key;
 	double			delta_time;
+	t_sprite		*sprites;
 }					t_map_data;
 
 // parsing

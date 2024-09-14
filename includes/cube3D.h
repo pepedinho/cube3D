@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:34:01 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/13 18:47:16 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/14 20:58:45 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ typedef struct s_vecint t_vecint;
 # include "../srcs/parsing/parsing.h"
 # include "../minilibx-linux/mlx.h"
 # include "../srcs/mlx/minilibx.h"
+# include "../srcs/mlx/sprites/sprites.h"
 # include "../srcs/raycasting/raycatsing.h"
+# include "../srcs/utils/utils.h"
 # include <fcntl.h>
 # include <math.h>
 # include <stdio.h>
@@ -29,7 +31,7 @@ typedef struct s_vecint t_vecint;
 #include <stdbool.h>
 # include <time.h>
 
-# define MOVE_SPEED 0.08
+# define MOVE_SPEED 0.03
 # define ROT_SPEED 0.05
 
 

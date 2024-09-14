@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_mlx.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/14 08:39:35 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/14 19:47:01 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	init_mlx(t_map_data *data)
 	data->mlx = mlx;
 	mlx.door.path = DOOR;
 	mlx.enemy.img.path = ENEMY;
-	mlx.enemy.spawn = 2;
+	mlx.enemy.spawn = 5;
 	mlx.white.path = WHITE_I;
 	mlx.dot.path = DOT;
 	mlx.blue.path = BLUE;
