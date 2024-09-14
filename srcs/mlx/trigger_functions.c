@@ -172,6 +172,60 @@ void	random_enemies(t_map_data *data)
 	data->map[(int)floor(y)][(int)floor(x)] = 'M';
 }
 
+void	display_gun(t_map_data *data)
+{
+	int				center_x;
+	int				center_y;
+	char			*gun_color;
+	char			*img_color;
+	unsigned int	transparency;
+	t_vecint		gun;
+	t_vecint		img;
+
+	// int				pixel_offset_gun;
+	// int				pixel_offset_img;
+	transparency = 0xFF000000;
+	gun.y = 0;
+	center_x = data->mlx.width / 2;
+	center_y = data->mlx.height / 2;
+	while (gun.y < data->mlx.gun.height)
+	{
+		gun.x = 0;
+		while (gun.x < data->mlx.gun.width)
+		{
+			// texture_color = map->mlx.door.adrr + (texture_y
+			// 		* map->mlx.door.size_line + texture_x
+			// 		* (map->mlx.door.bits_per_pixel / 8));
+			// screen_pixel = map->mlx.img.adrr + (ray->coord.y
+			// 		* map->mlx.img.size_line + ray->coord.x
+			// 		* (map->mlx.img.bits_per_pixel / 8));
+			// pixel_offset_gun = gun.y * data->mlx.gun.size_line + gun.x
+			// 	* (data->mlx.gun.bits_per_pixel / 8);
+			gun_color = data->mlx.gun.adrr + (gun.y * data->mlx.gun.size_line
+					+ gun.x * (data->mlx.gun.bits_per_pixel / 8));
+			if (*(unsigned int *)gun_color != transparency)
+			{
+				img.x = center_x + gun.x;
+				img.y = center_y + gun.y;
+				// pixel_offset_img = img.y * data->mlx.img.size_line + img.x
+				// 	* (data->mlx.img.bits_per_pixel / 8);
+				if (img.x >= 0 && img.x < data->mlx.width && img.y >= 0
+					&& img.y < data->mlx.height)
+				{
+					img_color = (data->mlx.img.adrr + img.y
+							* data->mlx.img.size_line + img.x
+							* (data->mlx.img.bits_per_pixel / 8));
+					*(unsigned int *)img_color = *(unsigned int *)gun_color;
+					// printf("debug: %d switched by -> %d\n",
+					// 	*(unsigned int *)img_color, *(unsigned int *)gun_color);
+				}
+			}
+			gun.x++;
+		}
+		gun.y++;
+	}
+}
+
 int	render(t_map_data *data)
 {
 	static time_t	last_time;
@@ -196,6 +250,7 @@ int	render(t_map_data *data)
 				* (data->mlx.img.bits_per_pixel / 8)));
 		data->door_trigger = 0;
 		raycasting(data);
+		display_gun(data);
 		mlx_put_image_to_window(data->mlx.init, data->mlx.window,
 			data->mlx.img.img, 0, 0);
 		gettimeofday(&current_time, NULL);

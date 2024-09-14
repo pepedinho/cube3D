@@ -29,6 +29,7 @@
 # define ENEMY "assets/enemy.xpm"
 # define DOT "assets/dot.xpm"
 # define BLUE "assets/door_m_map.xpm"
+# define GUN "assets/gun_sprite.xpm"
 # include "../../includes/cube3D.h"
 
 # ifdef CUBE3D_H

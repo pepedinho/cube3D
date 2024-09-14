@@ -107,6 +107,7 @@ typedef struct s_mlx
 	t_enemies		enemy;
 	t_img			dot;
 	t_img			blue;
+	t_img			gun;
 }					t_mlx;
 
 typedef struct s_key

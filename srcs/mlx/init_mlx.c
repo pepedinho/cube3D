@@ -27,6 +27,12 @@ void	destroy_mlx(t_map_data *data)
 	mlx_destroy_image(mlx.init, mlx.wall[S].img);
 	mlx_destroy_image(mlx.init, mlx.wall[E].img);
 	mlx_destroy_image(mlx.init, mlx.wall[W].img);
+	mlx_destroy_image(mlx.init, mlx.dot.img);
+	mlx_destroy_image(mlx.init, mlx.gun.img);
+	mlx_destroy_image(mlx.init, mlx.enemy.img.img);
+	mlx_destroy_image(mlx.init, mlx.blue.img);
+	mlx_destroy_image(mlx.init, mlx.white.img);
+	mlx_destroy_image(mlx.init, mlx.door.img);
 	mlx_destroy_display(mlx.init);
 	free(mlx.init);
 	free(data->input.tx_north);
@@ -54,6 +60,9 @@ void	ft_init_img(t_map_data *data, t_img *img)
 		ft_printf("Error when trying to get image data\n");
 		destroy_mlx(data);
 	}
+	printf("Image properties(%s): width=%d, height=%d, bpp=%d, size_line=%d\n",
+		img->path, img->width, img->height, img->bits_per_pixel,
+		img->size_line);
 }
 
 void	new_image(t_map_data *data, t_img *img)
@@ -105,6 +114,7 @@ int	init_mlx(t_map_data *data)
 	mlx.white.path = WHITE_I;
 	mlx.dot.path = DOT;
 	mlx.blue.path = BLUE;
+	mlx.gun.path = GUN;
 	new_image(data, &mlx.img);
 	ft_init_img(data, &mlx.wall[N]);
 	ft_init_img(data, &mlx.wall[S]);
@@ -114,6 +124,7 @@ int	init_mlx(t_map_data *data)
 	ft_init_img(data, &mlx.white);
 	ft_init_img(data, &mlx.blue);
 	ft_init_img(data, &mlx.dot);
+	ft_init_img(data, &mlx.gun);
 	ft_init_img(data, &mlx.enemy.img);
 	mlx_mouse_move(mlx.init, mlx.window, mlx.width / 2, mlx.height / 2);
 	mlx_mouse_hide(mlx.init, mlx.window);
