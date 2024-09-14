@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:15:47 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/10 00:24:06 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/13 18:21:03 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define WALL "assets/wall_sprite.xpm"
 # define COIN "assets/coin_sprite.xpm"
 # define DOOR "assets/door_sprite.xpm"
+# define ENEMY "assets/enemy.xpm"
 # include "../../includes/cube3D.h"
 
 # ifdef CUBE3D_H

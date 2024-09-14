@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   init_mlx.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
+/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/11 18:55:21 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/14 08:39:35 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cube3D.h"
+#include "minilibx.h"
 #include <X11/X.h>
+#include <stdio.h>
 
 void	destroy_mlx(t_map_data *data)
 {
@@ -71,6 +73,8 @@ void	new_image(t_map_data *data, t_img *img)
 	}
 }
 
+
+
 void	path_to_mlx_img(t_map_data *data, t_mlx *mlx)
 {
 	mlx->wall[N].path = data->input.tx_north;
@@ -83,6 +87,7 @@ int	init_mlx(t_map_data *data)
 {
 	t_mlx	mlx;
 
+	srand(time(NULL));
 	mlx.init = mlx_init();
 	if (!mlx.init)
 		return (destroy_mlx(data), 0);
@@ -97,6 +102,8 @@ int	init_mlx(t_map_data *data)
 		return (destroy_mlx(data), 0);
 	data->mlx = mlx;
 	mlx.door.path = DOOR;
+	mlx.enemy.img.path = ENEMY;
+	mlx.enemy.spawn = 2;
 	mlx.white.path = WHITE_I;
 	new_image(data, &mlx.img);
 	ft_init_img(data, &mlx.wall[N]);
@@ -105,6 +112,7 @@ int	init_mlx(t_map_data *data)
 	ft_init_img(data, &mlx.wall[W]);
 	ft_init_img(data, &mlx.door);
 	ft_init_img(data, &mlx.white);
+	ft_init_img(data, &mlx.enemy.img);
 	mlx_mouse_move(mlx.init, mlx.window, mlx.width / 2, mlx.height / 2);
 	mlx_mouse_hide(mlx.init, mlx.window);
 	data->mlx = mlx;
