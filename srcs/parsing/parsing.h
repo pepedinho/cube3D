@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
+/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/10 00:35:17 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/12 15:20:27 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,20 +89,20 @@ typedef struct s_mlx
 	t_img	img;
 	t_img	wall[4];
 	t_img	door;
+	t_img	white;
 }			t_mlx;
 
 typedef struct s_key
 {
-	int up;
-	int down;
-	int left;
-	int right;
-	int cam_left;
-	int cam_right;
-	int escape;
-	int space;
-}t_key;
-
+	int		up;
+	int		down;
+	int		left;
+	int		right;
+	int		cam_left;
+	int		cam_right;
+	int		escape;
+	int		space;
+}			t_key;
 
 typedef struct s_map_data
 {

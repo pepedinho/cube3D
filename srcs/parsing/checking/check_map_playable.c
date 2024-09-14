@@ -42,9 +42,9 @@ int	check_the_map(t_map_data *map_data)
 		{
 			if (map_data->map[y][x] == '0' || map_data->map[y][x] == 'N'
 				|| map_data->map[y][x] == 'S' || map_data->map[y][x] == 'E'
-				|| map_data->map[y][x] == 'W')
+				|| map_data->map[y][x] == 'W' || map_data->map[y][x] == 'D')
 			{
-				if (map_data->map[y][x] != '0')
+				if (ft_is_in_charset(map_data->map[y][x], "NSEW"))
 				{
 					map_data->p_pos.r_x = x;
 					map_data->p_pos.r_y = y;

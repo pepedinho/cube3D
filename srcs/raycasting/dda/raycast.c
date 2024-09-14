@@ -12,32 +12,6 @@
 
 #include "../raycatsing.h"
 
-#define PRECISION 50
-
-// void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
-// {
-// 	double	x_start;
-// 	double	y_start;
-// 	double	x_step;
-// 	double	y_step;
-// 	int		steps;
-// 	int		i;
-
-// 	x_start = map_data->p_pos.r_x;
-// 	y_start = map_data->p_pos.r_y;
-// 	steps = fmax(fabs(to_x - x_start), fabs(to_y - y_start)) * PRECISION;
-// 	x_step = (to_x - x_start) / steps;
-// 	y_step = (to_y - y_start) / steps;
-// 	i = 0;
-// 	while (i <= steps)
-// 	{
-// 		mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, x_start
-// 			* WIDTH, y_start * HEIGHT, color);
-// 		x_start += x_step;
-// 		y_start += y_step;
-// 		i++;
-// 	}
-// }
 
 // void draw_line(void *mlx_ptr, void *win_ptr, int x0, int y0, int x1, int y1,
 //	int color)
@@ -254,31 +228,6 @@
 // 	if (iterator > r)
 // 		r = iterator;
 // 	return (r);
-// }
-
-// int	trace_perimeter(t_map_data *map_data, int r, double alpha)
-// {
-// 	// double	h;
-// 	// double	k;
-// 	// double	radiant;
-// 	// int		i;
-
-// 	// i = 0;
-// 	(void)r;
-// 	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window,
-// 		map_data->p_pos.r_x * WIDTH, map_data->p_pos.r_y * HEIGHT, 0XFF0000);
-// 	// while (i < 5000)
-// 	// {
-// 	// 	radiant = 2 * M_PI * i / 5000;
-// 	// 	h = map_data->p_pos.r_x + r * cos(radiant);
-// 	// 	k = map_data->p_pos.r_y + r * sin(radiant);
-// 	// 	mlx_pixel_put(map_data->mlx->init, map_data->mlx->window, h * WIDTH, k
-// 	// 		* HEIGHT, 0XFFFFFF);
-// 	// 	i++;
-// 	// }
-// 	raycast(map_data, find_r(map_data), define_fov(map_data, find_r(map_data),
-// 			alpha), 1500);
-// 	return (1);
 // }
 
 void	fill_ceiling(t_map_data *map, int x, int draw_start)
