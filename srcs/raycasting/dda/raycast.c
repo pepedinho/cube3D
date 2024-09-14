@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 18:36:49 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/14 19:11:27 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,21 +287,17 @@
 void	fill_ceiling(t_map_data *map)
 {
 	char	*target;
-	int x;
-	int y;
+	int i;
+	int end;
 
-	y = 0;
-	while (y < map->mlx.height / 2)
+	i = 0;
+	end = (map->mlx.height / 2) * map->mlx.img.size_line + map->mlx.width * (map->mlx.img.bits_per_pixel / 8);
+	while (i <= end)
 	{
-		x = 0;
-		while (x < map->mlx.width)
-		{
-			target = map->mlx.img.adrr + (y * map->mlx.img.size_line
-					+ x * (map->mlx.img.bits_per_pixel / 8));
-			*(unsigned int *)target = (unsigned int)map->input.ceiling_color;
-			x++;
-		}
-		y++;
+		target = map->mlx.img.adrr + i;
+		*(unsigned int *)target = (unsigned int)map->input.ceiling_color;
+		i += (map->mlx.img.bits_per_pixel / 8);
+		
 	}
 }
 
@@ -404,21 +400,16 @@ void	draw_enemies(t_map_data *map, t_ray *ray)
 void	fill_floor(t_map_data *map)
 {
 	char	*target;
-	int x;
-	int y;
+	int i;
+	int end;
 
-	y = map->mlx.height / 2;
-	while (y <= map->mlx.height)
+	i = (map->mlx.height / 2) * map->mlx.img.size_line + map->mlx.width * (map->mlx.img.bits_per_pixel / 8);
+	end = map->mlx.height * map->mlx.img.size_line + map->mlx.width * (map->mlx.img.bits_per_pixel / 8);
+	while (i <= end)
 	{
-		x = 0;
-		while (x < map->mlx.width)
-		{
-			target = map->mlx.img.adrr + (y * map->mlx.img.size_line
-					+ x * (map->mlx.img.bits_per_pixel / 8));
-			*(unsigned int *)target = (unsigned int)map->input.floor_color;
-			x++;
-		}
-		y++;
+		target = map->mlx.img.adrr + i;
+		*(unsigned int *)target = (unsigned int)map->input.floor_color;
+		i += (map->mlx.img.bits_per_pixel / 8);
 	}
 }
 
@@ -578,28 +569,28 @@ void	raycasting(t_map_data *data)
 		print_on_display(&ray, data);
 		ray.coord.x++;
 	}
-	// ray.coord.x = 0;
-	// while (ray.coord.x < data->mlx.width)
-	// {
-	// 	set_ray_variables(&ray, data);
-	// 	if (dda_enemies(&ray, data) == 0)
-	// 	{
-	// 		ray.coord.x++;
-	// 		continue ;
-	// 	}
-	// 	ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
-	// 	ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
-	// 	if (ray.draw_start < 0)
-	// 		ray.draw_start = 0;
-	// 	ray.draw_end = ray.wallheight / 2 + data->mlx.height / 2;
-	// 	if (ray.draw_end >= data->mlx.height)
-	// 		ray.draw_end = data->mlx.height - 1;
-	// 	if (ray.side == 0)
-	// 		ray.wall_x = data->p_pos.r_y + ray.perpwalldist * ray.ray_dir.y;
-	// 	else
-	// 		ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
-	// 	ray.wall_x -= floor(ray.wall_x);
-	// 	print_on_display(&ray, data);
-	// 	ray.coord.x++;
-	// }
+	ray.coord.x = 0;
+	while (ray.coord.x < data->mlx.width)
+	{
+		set_ray_variables(&ray, data);
+		if (dda_enemies(&ray, data) == 0)
+		{
+			ray.coord.x++;
+			continue ;
+		}
+		ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
+		ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
+		if (ray.draw_start < 0)
+			ray.draw_start = 0;
+		ray.draw_end = ray.wallheight / 2 + data->mlx.height / 2;
+		if (ray.draw_end >= data->mlx.height)
+			ray.draw_end = data->mlx.height - 1;
+		if (ray.side == 0)
+			ray.wall_x = data->p_pos.r_y + ray.perpwalldist * ray.ray_dir.y;
+		else
+			ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
+		ray.wall_x -= floor(ray.wall_x);
+		print_on_display(&ray, data);
+		ray.coord.x++;
+	}
 }
