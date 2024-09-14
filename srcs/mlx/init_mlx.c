@@ -73,8 +73,6 @@ void	new_image(t_map_data *data, t_img *img)
 	}
 }
 
-
-
 void	path_to_mlx_img(t_map_data *data, t_mlx *mlx)
 {
 	mlx->wall[N].path = data->input.tx_north;
@@ -105,6 +103,8 @@ int	init_mlx(t_map_data *data)
 	mlx.enemy.img.path = ENEMY;
 	mlx.enemy.spawn = 2;
 	mlx.white.path = WHITE_I;
+	mlx.dot.path = DOT;
+	mlx.blue.path = BLUE;
 	new_image(data, &mlx.img);
 	ft_init_img(data, &mlx.wall[N]);
 	ft_init_img(data, &mlx.wall[S]);
@@ -112,6 +112,8 @@ int	init_mlx(t_map_data *data)
 	ft_init_img(data, &mlx.wall[W]);
 	ft_init_img(data, &mlx.door);
 	ft_init_img(data, &mlx.white);
+	ft_init_img(data, &mlx.blue);
+	ft_init_img(data, &mlx.dot);
 	ft_init_img(data, &mlx.enemy.img);
 	mlx_mouse_move(mlx.init, mlx.window, mlx.width / 2, mlx.height / 2);
 	mlx_mouse_hide(mlx.init, mlx.window);

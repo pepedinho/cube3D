@@ -15,8 +15,8 @@
 
 # include <X11/keysym.h>
 
-# define WIDTH 32
-# define HEIGHT 32
+# define WIDTH 16
+# define HEIGHT 16
 # define WIDTH_X2 64
 # define HEIGHT_X2 64
 # define SENSITIVITY 0.02
@@ -27,6 +27,8 @@
 # define COIN "assets/coin_sprite.xpm"
 # define DOOR "assets/door_sprite.xpm"
 # define ENEMY "assets/enemy.xpm"
+# define DOT "assets/dot.xpm"
+# define BLUE "assets/door_m_map.xpm"
 # include "../../includes/cube3D.h"
 
 # ifdef CUBE3D_H
@@ -56,7 +58,7 @@ void	left_fov(t_map_data *data, double old_dir_x, double rot_speed,
 int		click_cross(t_map_data *data);
 int		handle_input(int keysym, t_map_data *data);
 int		render(t_map_data *data);
-int key_prees(int keysym, t_map_data *data);
-int key_release(int keysym, t_map_data *data);
+int		key_prees(int keysym, t_map_data *data);
+int		key_release(int keysym, t_map_data *data);
 
 #endif
