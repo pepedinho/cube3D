@@ -6,13 +6,12 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 21:05:05 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/16 03:12:45 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../raycatsing.h"
 #include <X11/X.h>
-#include <cstdio>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -550,6 +549,22 @@ void	raycasting(t_map_data *data)
 	double *sprite_distance;
 	int i;
 	t_sprite *current;
+	double inv_det;
+	double transform_x;
+	double transform_y;
+	double sprite_x;
+	double sprite_y;
+	int sprite_screen_x;
+	int sprite_height;
+	int sprite_width;
+	t_vecint draw_start;
+	t_vecint draw_end;
+	int y;
+	int tex_x;
+	int tex_y;
+	int d;
+	char *texture_color;
+	char *screen_pixel;
 
 	ray.coord.x = 0;
 	fill_ceiling(data);
@@ -591,32 +606,65 @@ void	raycasting(t_map_data *data)
 	while (i < nb_sprites)
 	{
 		sprite_order[i] = i;
-		sprite_distance[i] = (pow(data->p_pos.r_x - current->pos.x, 2) + pow(data->p_pos.r_y - current->pos.y, 2));
+		sprite_distance[i] = (data->p_pos.r_x - current->pos.x) * (data->p_pos.r_x - current->pos.x) + (data->p_pos.r_y - current->pos.y) * (data->p_pos.r_y - current->pos.y);
 		++i;
 		current = current->next;
-	}	
-	ray.coord.x = 0;
-	while (ray.coord.x < data->mlx.width)
+	}
+	sort_sprites(sprite_order, sprite_distance, nb_sprites);
+	i = 0;
+	int j;
+	while (i < nb_sprites)
 	{
-		set_ray_variables(&ray, data);
-		if (dda_enemies(&ray, data) == 0)
+		current = data->sprites;
+		j = 0;
+		while (j++ < sprite_order[i])
+			current = current->next;
+		sprite_x = current->pos.x - data->p_pos.r_x;
+		sprite_y = current->pos.y - data->p_pos.r_y;
+
+		inv_det = 1.0 / (data->p_pos.plane_x * data->p_pos.dir_y - data->p_pos.dir_x * data->p_pos.plane_y);
+		
+		transform_x = inv_det * (data->p_pos.dir_y * sprite_x - data->p_pos.dir_x * sprite_y);
+		transform_y = inv_det * (-data->p_pos.plane_y * sprite_x + data->p_pos.plane_x * sprite_y);
+		
+		sprite_screen_x = (int)((data->mlx.width / 2) * (1 + transform_x / transform_y));
+		
+		sprite_height = (int)fabs(data->mlx.height / transform_y);
+		draw_start.y = -sprite_height / 2 + data->mlx.height / 2;
+		if (draw_start.y < 0)
+			draw_start.y = 0;
+		draw_end.y = sprite_height / 2 + data->mlx.height / 2;
+		if (draw_end.y >= data->mlx.height)
+			draw_end.y = data->mlx.height - 1;
+
+		
+		sprite_width = (int)fabs(data->mlx.height / transform_y);
+		draw_start.x = -sprite_width / 2 + sprite_screen_x;
+		if (draw_start.x < 0)
+			draw_start.x = 0;
+		draw_end.x = sprite_width / 2 + sprite_screen_x;
+		if (draw_end.x >= data->mlx.width)
+			draw_end.x = data->mlx.width - 1;
+		j = draw_start.x;
+		while (j < draw_end.x)
 		{
-			ray.coord.x++;
-			continue ;
+			tex_x = (int)(256 * (j - (-sprite_width / 2 + sprite_screen_x)) * data->mlx.enemy.img.width / sprite_width) / 256;
+			if (transform_y > 0 && j > 0 && j < data->mlx.height && transform_y < ray.z_buffer[j])
+			{
+				y = draw_start.y;
+				while (y < draw_end.y)
+				{
+					d = y * 256 - data->mlx.height * 128 + sprite_height * 128;
+					tex_y = ((d * data->mlx.enemy.img.height) / sprite_height) / 256;
+					texture_color = data->mlx.enemy.img.adrr + (tex_y * data->mlx.enemy.img.size_line + tex_x * (data->mlx.enemy.img.bits_per_pixel / 8));
+					screen_pixel = data->mlx.img.adrr + (y * data->mlx.img.size_line + j * (data->mlx.img.bits_per_pixel / 8));
+					if (*(unsigned int *)texture_color != 0xFF000000)
+						*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
+					y++;
+				}
+			}
+			j++;
 		}
-		ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
-		ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
-		if (ray.draw_start < 0)
-			ray.draw_start = 0;
-		ray.draw_end = ray.wallheight / 2 + data->mlx.height / 2;
-		if (ray.draw_end >= data->mlx.height)
-			ray.draw_end = data->mlx.height - 1;
-		if (ray.side == 0)
-			ray.wall_x = data->p_pos.r_y + ray.perpwalldist * ray.ray_dir.y;
-		else
-			ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
-		ray.wall_x -= floor(ray.wall_x);
-		print_stripe(data, &ray, M);
-		ray.coord.x++;
+		i++;
 	}
 }

@@ -6,14 +6,13 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 20:56:43 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/15 01:13:18 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cube3D.h"
 #include "minilibx.h"
 #include <X11/X.h>
-#include <cstdio>
 
 int	click_cross(t_map_data *data)
 {

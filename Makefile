@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/14 19:18:14 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/16 01:52:37 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,9 +21,13 @@ END= 	$(shell tput -Txterm sgr0)
 
 CC = cc
 
-C_FLAGS = -Wall -Werror -Wextra -funroll-loops -MMD -O3 -g3
+C_FLAGS = -Wall -Werror -Wextra -funroll-loops -MMD -g3
 
 SRCS_DIR = srcs/
+
+UTILS = $(addprefix utils/, utils.c)
+
+SPRITE = $(addprefix sprites/, sprites_functions.c)
 
 CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
 
@@ -37,11 +41,11 @@ RAYCASTING = $(addprefix raycasting/, $(DDA) $(MINI_MAP))
 
 PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 
-MLX = $(addprefix mlx/, init_mlx.c trigger_functions.c $(MOVE))
+MLX = $(addprefix mlx/, init_mlx.c trigger_functions.c $(MOVE) $(SPRITE))
 
 OBJS_DIR = .objets/
 
-SRCS = main.c $(PARSING) $(RAYCASTING) $(MLX)
+SRCS = main.c $(PARSING) $(RAYCASTING) $(MLX) $(UTILS)
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 

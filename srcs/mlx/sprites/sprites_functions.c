@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 20:52:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/14 21:00:33 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/15 02:39:19 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,29 @@ t_sprite *new_sprite(double x, double y, t_sprite_type type)
 	new->pos.x = x;
 	new->pos.y = y;
 	return (new);
+}
+
+void	sort_sprites(int *order, double *dist, int amount)
+{
+	int	i;
+	int	j;
+	int	max;
+
+	i = 0;
+	while (i < amount - 1)
+	{
+		max = i;
+		j = i + 1;
+		while (j < amount)
+		{
+			if (dist[j] > dist[max])
+				max = j;
+			j++;
+		}
+		swap(&order[i], &order[max]);
+		swap_double(&dist[i], &dist[max]);
+		i++;
+	}
 }
 
 void	random_enemies(t_map_data *data)

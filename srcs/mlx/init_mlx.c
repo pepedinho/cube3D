@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/14 19:47:01 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/15 03:47:14 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	init_mlx(t_map_data *data)
 	data->mlx = mlx;
 	mlx.door.path = DOOR;
 	mlx.enemy.img.path = ENEMY;
-	mlx.enemy.spawn = 5;
+	mlx.enemy.spawn = 1;
 	mlx.white.path = WHITE_I;
 	mlx.dot.path = DOT;
 	mlx.blue.path = BLUE;
