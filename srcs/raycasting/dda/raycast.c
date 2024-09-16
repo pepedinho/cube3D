@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/16 17:03:08 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/16 20:12:13 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -539,6 +539,44 @@ void	print_on_display(t_ray *ray, t_map_data *data)
 		print_stripe(data, ray, W);
 }
 
+int is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y, double r)
+{
+    double enemy_dir_x = enemy_x - data->p_pos.r_x;
+    double enemy_dir_y = enemy_y - data->p_pos.r_y;
+    double norm_camera = sqrt(data->p_pos.dir_x * data->p_pos.dir_x + data->p_pos.dir_y * data->p_pos.dir_y);
+    double norm_enemy = sqrt(enemy_dir_x * enemy_dir_x + enemy_dir_y * enemy_dir_y);
+    double camera_dir_x = data->p_pos.dir_x / norm_camera;
+    double camera_dir_y = data->p_pos.dir_y / norm_camera;
+    enemy_dir_x = enemy_dir_x / norm_enemy;
+    enemy_dir_y = enemy_dir_y / norm_enemy;
+    double dot_product = camera_dir_x * enemy_dir_x + camera_dir_y * enemy_dir_y;
+    double threshold = 0.50;
+    if (dot_product > threshold)
+    {
+        double distance_to_enemy = norm_enemy;
+        if (distance_to_enemy <= r)
+            return (1);
+    }
+    return (0);
+}
+
+void check_if_crosshair_on_enemy(t_map_data *data)
+{
+	t_sprite *current;
+
+	current = data->sprites;
+	while (current)
+	{
+		if (is_looking_at_enemy(data, current->pos.x, current->pos.y, 2) == 1)
+		{
+			printf("ok\n");
+			del_one_sprite(&data->sprites, current);
+			return;
+		}
+		current = current->next;
+	}
+}
+
 void	raycasting(t_map_data *data)
 {
 	t_ray	ray;
@@ -565,6 +603,7 @@ void	raycasting(t_map_data *data)
 	char *screen_pixel;
 
 	ray.coord.x = 0;
+	check_if_crosshair_on_enemy(data);
 	fill_ceiling(data);
 	fill_floor(data);
 	while (ray.coord.x < data->mlx.width)
