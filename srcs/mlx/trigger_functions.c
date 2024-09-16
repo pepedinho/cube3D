@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/15 01:13:18 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/16 18:54:50 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,34 @@ void	display_gun(t_map_data *data)
 	}
 }
 
+void display_crosshair(t_map_data *data)
+{
+	int center_x = data->mlx.width / 2;
+	int center_y = data->mlx.height / 2;
+	int crosshair_size = 20; 
+	int x;
+	int y;
+	char *target;
+
+	for (y = center_y - crosshair_size; y <= center_y + crosshair_size; y++)
+	{
+		if (y >= 0 && y < data->mlx.height)
+		{
+			target = data->mlx.img.adrr + (y * data->mlx.img.size_line + center_x * (data->mlx.img.bits_per_pixel / 8));
+			*(unsigned int *)target = 0xFFFFFF;
+		}
+	}
+	for (x = center_x - crosshair_size; x <= center_x + crosshair_size; x++)
+	{
+		if (x >= 0 && x < data->mlx.width)
+		{
+			target = data->mlx.img.adrr + (center_y * data->mlx.img.size_line + x * (data->mlx.img.bits_per_pixel / 8));
+			*(unsigned int *)target = 0xFFFFFF;
+		}
+	}
+}
+
+
 int	render(t_map_data *data)
 {
 	static time_t	last_time;
@@ -207,6 +235,7 @@ int	render(t_map_data *data)
 		data->door_trigger = 0;
 		raycasting(data);
 		display_gun(data);
+		display_crosshair(data);
 		mlx_put_image_to_window(data->mlx.init, data->mlx.window,
 			data->mlx.img.img, 0, 0);
 		gettimeofday(&current_time, NULL);

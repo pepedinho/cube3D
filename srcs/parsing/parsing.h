@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 20:43:15 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/16 18:48:25 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct s_mlx
 	t_img			dot;
 	t_img			blue;
 	t_img			gun;
+	t_img			crosshair;
 }					t_mlx;
 
 typedef struct s_key

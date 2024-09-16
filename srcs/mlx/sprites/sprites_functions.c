@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 20:52:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/15 02:39:19 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/16 17:07:34 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,26 @@ void add_back_sprite(t_sprite **sprites, t_sprite *add)
 		buff->next = add;
 	}
 	add->next = NULL;
+}
+
+void del_one_sprite(t_sprite **sprites, t_sprite *to_del)
+{
+	t_sprite *current;
+	t_sprite *before;
+
+	before = NULL;
+	current = *sprites;
+	while (current && current != to_del)
+	{
+		before = current;
+		current = current->next;
+	}
+	if (before)
+		before->next = current->next;
+	else
+		*sprites = current->next;
+	free(to_del);
+	to_del = NULL;
 }
 
 t_sprite *new_sprite(double x, double y, t_sprite_type type)
@@ -94,7 +114,6 @@ void	random_enemies(t_map_data *data)
 		y = rand_value(0, map_height);
 		x = rand_value(0, ft_strlen(data->map[(int)floor(y)]));
 	}
-	// data->map[(int)floor(y)][(int)floor(x)] = 'M';
 	new = new_sprite(x, y, MONSTER); // add protection because malloc
 	add_back_sprite(&data->sprites, new);
 }

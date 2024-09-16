@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/16 13:54:28 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/16 17:03:08 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -529,8 +529,6 @@ void	print_on_display(t_ray *ray, t_map_data *data)
 {
 	if (data->map[ray->map.y][ray->map.x] == 'D')
 		print_stripe(data, ray, D);
-	// else if (data->map[ray->map.y][ray->map.x] == 'M')
-	// 	print_stripe(data, ray, M);
 	else if (ray->side == 1 && ray->ray_dir.y >= 0)
 		print_stripe(data, ray, S);
 	else if (ray->side == 1 && ray->ray_dir.y < 0)
@@ -621,14 +619,10 @@ void	raycasting(t_map_data *data)
 			current = current->next;
 		sprite_x = current->pos.x - data->p_pos.r_x;
 		sprite_y = current->pos.y - data->p_pos.r_y;
-
 		inv_det = 1.0 / (data->p_pos.plane_x * data->p_pos.dir_y - data->p_pos.dir_x * data->p_pos.plane_y);
-		
 		transform_x = inv_det * (data->p_pos.dir_y * sprite_x - data->p_pos.dir_x * sprite_y);
 		transform_y = inv_det * (-data->p_pos.plane_y * sprite_x + data->p_pos.plane_x * sprite_y);
-		
 		sprite_screen_x = (int)((data->mlx.width / 2) * (1 + transform_x / transform_y));
-		
 		sprite_height = (int)fabs(data->mlx.height / transform_y);
 		draw_start.y = -sprite_height / 2 + data->mlx.height / 2;
 		if (draw_start.y < 0)
@@ -636,8 +630,6 @@ void	raycasting(t_map_data *data)
 		draw_end.y = sprite_height / 2 + data->mlx.height / 2;
 		if (draw_end.y >= data->mlx.height)
 			draw_end.y = data->mlx.height - 1;
-
-		
 		sprite_width = (int)fabs(data->mlx.height / transform_y);
 		draw_start.x = -sprite_width / 2 + sprite_screen_x;
 		if (draw_start.x < 0)
@@ -662,6 +654,7 @@ void	raycasting(t_map_data *data)
 						*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 					y++;
 				}
+				
 			}
 			j++;
 		}
