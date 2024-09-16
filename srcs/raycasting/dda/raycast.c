@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/16 03:12:45 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/16 13:54:28 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -649,7 +649,7 @@ void	raycasting(t_map_data *data)
 		while (j < draw_end.x)
 		{
 			tex_x = (int)(256 * (j - (-sprite_width / 2 + sprite_screen_x)) * data->mlx.enemy.img.width / sprite_width) / 256;
-			if (transform_y > 0 && j > 0 && j < data->mlx.height && transform_y < ray.z_buffer[j])
+			if (transform_y > 0 && j > 0 && j < data->mlx.width && transform_y < ray.z_buffer[j])
 			{
 				y = draw_start.y;
 				while (y < draw_end.y)
