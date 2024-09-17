@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 20:52:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/16 17:07:34 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/17 12:37:11 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void del_one_sprite(t_sprite **sprites, t_sprite *to_del)
 	else
 		*sprites = current->next;
 	free(to_del);
-	to_del = NULL;
 }
 
 t_sprite *new_sprite(double x, double y, t_sprite_type type)
