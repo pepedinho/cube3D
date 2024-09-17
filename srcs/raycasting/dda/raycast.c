@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/16 20:12:13 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/17 11:35:32 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -550,13 +550,9 @@ int is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y, double
     enemy_dir_x = enemy_dir_x / norm_enemy;
     enemy_dir_y = enemy_dir_y / norm_enemy;
     double dot_product = camera_dir_x * enemy_dir_x + camera_dir_y * enemy_dir_y;
-    double threshold = 0.50;
-    if (dot_product > threshold)
-    {
-        double distance_to_enemy = norm_enemy;
-        if (distance_to_enemy <= r)
-            return (1);
-    }
+    double angle_between = acos(dot_product) * RAD_TO_DEG;
+    if (fabs(angle_between) <= r)
+        return (1);
     return (0);
 }
 
@@ -567,9 +563,8 @@ void check_if_crosshair_on_enemy(t_map_data *data)
 	current = data->sprites;
 	while (current)
 	{
-		if (is_looking_at_enemy(data, current->pos.x, current->pos.y, 2) == 1)
+		if (is_looking_at_enemy(data, current->pos.x, current->pos.y, 1.0) == 1)
 		{
-			printf("ok\n");
 			del_one_sprite(&data->sprites, current);
 			return;
 		}

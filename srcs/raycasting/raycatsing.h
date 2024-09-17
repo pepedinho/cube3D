@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:56:24 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 19:50:45 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/17 11:33:47 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 # define M_PI 3.14159265358979323846 /* pi */
 # define PRECISION 50
+#define RAD_TO_DEG (180.0 / M_PI)
 
 typedef struct s_vecint
 {
