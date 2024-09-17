@@ -189,42 +189,53 @@ void	display_gun(t_map_data *data)
 	}
 }
 
-void display_crosshair(t_map_data *data)
+void	display_crosshair(t_map_data *data)
 {
-	int center_x = data->mlx.width / 2;
-	int center_y = data->mlx.height / 2;
-	int crosshair_size = 20; 
-	int x;
-	int y;
-	char *target;
+	int		center_x;
+	int		center_y;
+	int		crosshair_size;
+	int		x;
+	int		y;
+	char	*target;
 
+	center_x = data->mlx.width / 2;
+	center_y = data->mlx.height / 2;
+	crosshair_size = 10;
 	for (y = center_y - crosshair_size; y <= center_y + crosshair_size; y++)
 	{
 		if (y >= 0 && y < data->mlx.height)
 		{
-			target = data->mlx.img.adrr + (y * data->mlx.img.size_line + center_x * (data->mlx.img.bits_per_pixel / 8));
-			*(unsigned int *)target = 0xFFFFFF;
+			if (y < center_y - 3 || y > center_y + 3)
+			{
+				target = data->mlx.img.adrr + (y * data->mlx.img.size_line
+						+ center_x * (data->mlx.img.bits_per_pixel / 8));
+				*(unsigned int *)target = 0xFFFFFF;
+			}
 		}
 	}
 	for (x = center_x - crosshair_size; x <= center_x + crosshair_size; x++)
 	{
 		if (x >= 0 && x < data->mlx.width)
 		{
-			target = data->mlx.img.adrr + (center_y * data->mlx.img.size_line + x * (data->mlx.img.bits_per_pixel / 8));
-			*(unsigned int *)target = 0xFFFFFF;
+			if (x < center_x - 3 || x > center_x + 3)
+			{
+				target = data->mlx.img.adrr + (center_y
+						* data->mlx.img.size_line + x
+						* (data->mlx.img.bits_per_pixel / 8));
+				*(unsigned int *)target = 0xFFFFFF;
+			}
 		}
 	}
 }
 
-
 int	render(t_map_data *data)
 {
-	static time_t	last_time;
-	struct timeval	current_time;
-	static size_t	frame_count;
-	static size_t	fps;
-	static long long frame_enemies;
-	
+	static time_t		last_time;
+	struct timeval		current_time;
+	static size_t		frame_count;
+	static size_t		fps;
+	static long long	frame_enemies;
+
 	mouse_movement(data);
 	change_player(data);
 	if (data->mlx.window != NULL)
