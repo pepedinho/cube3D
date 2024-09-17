@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/17 11:35:32 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/17 12:31:32 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -496,35 +496,6 @@ void	dda(t_ray *ray, t_map_data *data)
 	}
 }
 
-int	dda_enemies(t_ray *ray, t_map_data *data)
-{
-	while (ray->hit == 0)
-	{
-		if (ray->side_dist.x < ray->side_dist.y)
-		{
-			ray->side_dist.x += ray->delta_dist.x;
-			ray->map.x += ray->step.x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist.y += ray->delta_dist.y;
-			ray->map.y += ray->step.y;
-			ray->side = 1;
-		}
-		if (data->map[ray->map.y][ray->map.x] == '1'
-			|| data->map[ray->map.y][ray->map.x] == 'D')
-			return (0);
-		if (data->map[ray->map.y][ray->map.x] == 'M')
-			ray->hit = 1;
-	}
-	if (ray->side == 0)
-		ray->perpwalldist = (ray->side_dist.x - ray->delta_dist.x);
-	else
-		ray->perpwalldist = (ray->side_dist.y - ray->delta_dist.y);
-	return (1);
-}
-
 void	print_on_display(t_ray *ray, t_map_data *data)
 {
 	if (data->map[ray->map.y][ray->map.x] == 'D')
@@ -539,31 +510,34 @@ void	print_on_display(t_ray *ray, t_map_data *data)
 		print_stripe(data, ray, W);
 }
 
-int is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y, double r)
+int is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y, double angle_tolerance, double dist_wall)
 {
+    double inv_norm_camera = 1.0 / sqrt(data->p_pos.dir_x * data->p_pos.dir_x + data->p_pos.dir_y * data->p_pos.dir_y);
+    double camera_dir_x = data->p_pos.dir_x * inv_norm_camera;
+    double camera_dir_y = data->p_pos.dir_y * inv_norm_camera;
     double enemy_dir_x = enemy_x - data->p_pos.r_x;
     double enemy_dir_y = enemy_y - data->p_pos.r_y;
-    double norm_camera = sqrt(data->p_pos.dir_x * data->p_pos.dir_x + data->p_pos.dir_y * data->p_pos.dir_y);
-    double norm_enemy = sqrt(enemy_dir_x * enemy_dir_x + enemy_dir_y * enemy_dir_y);
-    double camera_dir_x = data->p_pos.dir_x / norm_camera;
-    double camera_dir_y = data->p_pos.dir_y / norm_camera;
-    enemy_dir_x = enemy_dir_x / norm_enemy;
-    enemy_dir_y = enemy_dir_y / norm_enemy;
+	double distance_to_enemy = sqrt(enemy_dir_x * enemy_dir_x + enemy_dir_y * enemy_dir_y);
+	if (distance_to_enemy > dist_wall)
+		return (0);
+    double inv_norm_enemy = 1.0 / sqrt(enemy_dir_x * enemy_dir_x + enemy_dir_y * enemy_dir_y);
+    enemy_dir_x *= inv_norm_enemy;
+    enemy_dir_y *= inv_norm_enemy;
     double dot_product = camera_dir_x * enemy_dir_x + camera_dir_y * enemy_dir_y;
-    double angle_between = acos(dot_product) * RAD_TO_DEG;
-    if (fabs(angle_between) <= r)
+    if (dot_product > cos(angle_tolerance * M_PI / 180.0))
         return (1);
     return (0);
 }
 
-void check_if_crosshair_on_enemy(t_map_data *data)
+
+void check_if_crosshair_on_enemy(t_map_data *data, double dist_wall)
 {
 	t_sprite *current;
 
 	current = data->sprites;
 	while (current)
 	{
-		if (is_looking_at_enemy(data, current->pos.x, current->pos.y, 1.0) == 1)
+		if (is_looking_at_enemy(data, current->pos.x, current->pos.y, 1.0, dist_wall) == 1)
 		{
 			del_one_sprite(&data->sprites, current);
 			return;
@@ -598,7 +572,6 @@ void	raycasting(t_map_data *data)
 	char *screen_pixel;
 
 	ray.coord.x = 0;
-	check_if_crosshair_on_enemy(data);
 	fill_ceiling(data);
 	fill_floor(data);
 	while (ray.coord.x < data->mlx.width)
@@ -618,6 +591,8 @@ void	raycasting(t_map_data *data)
 		else
 			ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
 		ray.wall_x -= floor(ray.wall_x);
+		if (ray.coord.x == data->mlx.width / 2)
+			check_if_crosshair_on_enemy(data, ray.perpwalldist);
 		print_on_display(&ray, data);
 		ray.coord.x++;
 	}
