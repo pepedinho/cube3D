@@ -136,7 +136,7 @@ void	mouse_movement(t_map_data *data)
 	}
 }
 
-void	display_gun(t_map_data *data)
+void	display_gun(t_map_data *data, t_img img_sprite)
 {
 	int				center_x;
 	int				center_y;
@@ -153,13 +153,13 @@ void	display_gun(t_map_data *data)
 	gun.y = 0;
 	center_x = data->mlx.width / 2;
 	center_y = data->mlx.height / 2;
-	while (gun.y < data->mlx.gun.height)
+	while (gun.y < img_sprite.height)
 	{
 		gun.x = 0;
-		while (gun.x < data->mlx.gun.width)
+		while (gun.x < img_sprite.width)
 		{
-			gun_color = data->mlx.gun.adrr + (gun.y * data->mlx.gun.size_line
-					+ gun.x * (data->mlx.gun.bits_per_pixel / 8));
+			gun_color = img_sprite.adrr + (gun.y * img_sprite.size_line + gun.x
+					* (data->mlx.gun.bits_per_pixel / 8));
 			if (*(unsigned int *)gun_color != transparency)
 			{
 				img_scale.y = 0;
@@ -228,6 +228,38 @@ void	display_crosshair(t_map_data *data)
 	}
 }
 
+void	animate_gun(t_map_data *data, int an)
+{
+	int	i;
+
+	(void)an;
+	i = 0;
+	while (i < 90)
+	{
+		if (i <= 30)
+		{
+			// clear_gun(data, data->mlx.gun);
+			display_gun(data, data->mlx.shoot[0]);
+			// usleep(100000);
+		}
+		else if (i > 30 && i <= 60)
+		{
+			// clear_gun(data, data->mlx.shoot[0]);
+			display_gun(data, data->mlx.shoot[1]);
+			// usleep(100000);
+		}
+		else if (i > 60)
+		{
+			// clear_gun(data, data->mlx.shoot[1]);
+			display_gun(data, data->mlx.gun);
+			// usleep(100000);
+		}
+		mlx_put_image_to_window(data->mlx.init, data->mlx.window,
+			data->mlx.img.img, 0, 0);
+		i++;
+	}
+}
+
 int	render(t_map_data *data)
 {
 	static time_t		last_time;
@@ -235,6 +267,7 @@ int	render(t_map_data *data)
 	static size_t		frame_count;
 	static size_t		fps;
 	static long long	frame_enemies;
+	static int			cnt;
 
 	mouse_movement(data);
 	change_player(data);
@@ -245,7 +278,10 @@ int	render(t_map_data *data)
 				* (data->mlx.img.bits_per_pixel / 8)));
 		data->door_trigger = 0;
 		raycasting(data);
-		display_gun(data);
+		display_gun(data, data->mlx.gun);
+		if (check_if_crosshair_on_enemy(data))
+			animate_gun(data, cnt++);
+		// check_if_crosshair_on_enemy(data);
 		display_crosshair(data);
 		mlx_put_image_to_window(data->mlx.init, data->mlx.window,
 			data->mlx.img.img, 0, 0);

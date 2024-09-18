@@ -288,17 +288,17 @@
 void	fill_ceiling(t_map_data *map)
 {
 	char	*target;
-	int i;
-	int end;
+	int		i;
+	int		end;
 
 	i = 0;
-	end = (map->mlx.height / 2) * map->mlx.img.size_line + map->mlx.width * (map->mlx.img.bits_per_pixel / 8);
+	end = (map->mlx.height / 2) * map->mlx.img.size_line + map->mlx.width
+		* (map->mlx.img.bits_per_pixel / 8);
 	while (i <= end)
 	{
 		target = map->mlx.img.adrr + i;
 		*(unsigned int *)target = (unsigned int)map->input.ceiling_color;
 		i += (map->mlx.img.bits_per_pixel / 8);
-		
 	}
 }
 
@@ -399,11 +399,13 @@ void	draw_enemies(t_map_data *map, t_ray *ray)
 void	fill_floor(t_map_data *map)
 {
 	char	*target;
-	int i;
-	int end;
+	int		i;
+	int		end;
 
-	i = (map->mlx.height / 2) * map->mlx.img.size_line + map->mlx.width * (map->mlx.img.bits_per_pixel / 8);
-	end = map->mlx.height * map->mlx.img.size_line + map->mlx.width * (map->mlx.img.bits_per_pixel / 8);
+	i = (map->mlx.height / 2) * map->mlx.img.size_line + map->mlx.width
+		* (map->mlx.img.bits_per_pixel / 8);
+	end = map->mlx.height * map->mlx.img.size_line + map->mlx.width
+		* (map->mlx.img.bits_per_pixel / 8);
 	while (i <= end)
 	{
 		target = map->mlx.img.adrr + i;
@@ -510,51 +512,71 @@ void	print_on_display(t_ray *ray, t_map_data *data)
 		print_stripe(data, ray, W);
 }
 
-int is_enemy_visible(t_map_data *data, double enemy_x, double enemy_y)
+int	is_enemy_visible(t_map_data *data, double enemy_x, double enemy_y)
 {
-    double player_x = data->p_pos.r_x;
-    double player_y = data->p_pos.r_y;
-    double dir_x = enemy_x - player_x;
-    double dir_y = enemy_y - player_y;
-    double distance = sqrt(dir_x * dir_x + dir_y * dir_y);
+	double	player_x;
+	double	player_y;
+	double	dir_x;
+	double	dir_y;
+	double	distance;
+	double	current_x;
+	double	current_y;
+	int		map_x;
+	int		map_y;
 
-    dir_x /= distance;
-    dir_y /= distance;
-    double current_x = player_x;
-    double current_y = player_y;
-    while (sqrt((current_x - player_x) * (current_x - player_x) + (current_y - player_y) * (current_y - player_y)) < distance)
-    {
-        current_x += dir_x * 0.1;
-        current_y += dir_y * 0.1;
-        int map_x = (int)current_x;
-        int map_y = (int)current_y;
-        if (data->map[map_y][map_x] == '1')
-            return 0;
-    }
-    return 1;
+	player_x = data->p_pos.r_x;
+	player_y = data->p_pos.r_y;
+	dir_x = enemy_x - player_x;
+	dir_y = enemy_y - player_y;
+	distance = sqrt(dir_x * dir_x + dir_y * dir_y);
+	dir_x /= distance;
+	dir_y /= distance;
+	current_x = player_x;
+	current_y = player_y;
+	while (sqrt((current_x - player_x) * (current_x - player_x) + (current_y
+				- player_y) * (current_y - player_y)) < distance)
+	{
+		current_x += dir_x * 0.1;
+		current_y += dir_y * 0.1;
+		map_x = (int)current_x;
+		map_y = (int)current_y;
+		if (data->map[map_y][map_x] == '1')
+			return (0);
+	}
+	return (1);
 }
 
-int is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y, double angle_tolerance)
+int	is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y,
+		double angle_tolerance)
 {
-    double inv_norm_camera = 1.0 / sqrt(data->p_pos.dir_x * data->p_pos.dir_x + data->p_pos.dir_y * data->p_pos.dir_y);
-    double camera_dir_x = data->p_pos.dir_x * inv_norm_camera;
-    double camera_dir_y = data->p_pos.dir_y * inv_norm_camera;
-    double enemy_dir_x = enemy_x - data->p_pos.r_x;
-    double enemy_dir_y = enemy_y - data->p_pos.r_y;
-    double inv_norm_enemy = 1.0 / sqrt(enemy_dir_x * enemy_dir_x + enemy_dir_y * enemy_dir_y);
-    enemy_dir_x *= inv_norm_enemy;
-    enemy_dir_y *= inv_norm_enemy;
-    double dot_product = camera_dir_x * enemy_dir_x + camera_dir_y * enemy_dir_y;
-    if (dot_product > cos(angle_tolerance * M_PI / 180.0))
+	double	inv_norm_camera;
+	double	camera_dir_x;
+	double	camera_dir_y;
+	double	enemy_dir_x;
+	double	enemy_dir_y;
+	double	inv_norm_enemy;
+	double	dot_product;
+
+	inv_norm_camera = 1.0 / sqrt(data->p_pos.dir_x * data->p_pos.dir_x
+			+ data->p_pos.dir_y * data->p_pos.dir_y);
+	camera_dir_x = data->p_pos.dir_x * inv_norm_camera;
+	camera_dir_y = data->p_pos.dir_y * inv_norm_camera;
+	enemy_dir_x = enemy_x - data->p_pos.r_x;
+	enemy_dir_y = enemy_y - data->p_pos.r_y;
+	inv_norm_enemy = 1.0 / sqrt(enemy_dir_x * enemy_dir_x + enemy_dir_y
+			* enemy_dir_y);
+	enemy_dir_x *= inv_norm_enemy;
+	enemy_dir_y *= inv_norm_enemy;
+	dot_product = camera_dir_x * enemy_dir_x + camera_dir_y * enemy_dir_y;
+	if (dot_product > cos(angle_tolerance * M_PI / 180.0))
 		if (is_enemy_visible(data, enemy_x, enemy_y))
-        	return (1);
-    return (0);
+			return (1);
+	return (0);
 }
 
-
-void check_if_crosshair_on_enemy(t_map_data *data)
+int	check_if_crosshair_on_enemy(t_map_data *data)
 {
-	t_sprite *current;
+	t_sprite	*current;
 
 	current = data->sprites;
 	while (current)
@@ -562,46 +584,49 @@ void check_if_crosshair_on_enemy(t_map_data *data)
 		if (is_looking_at_enemy(data, current->pos.x, current->pos.y, 1.0) == 1)
 		{
 			del_one_sprite(&data->sprites, current);
-			return;
+			return (1);
 		}
 		current = current->next;
 	}
+	return (0);
 }
 
 void	raycasting(t_map_data *data)
 {
-	t_ray	ray;
-	int nb_sprites;
-	int *sprite_order;
-	double *sprite_distance;
-	int i;
-	t_sprite *current;
-	double inv_det;
-	double transform_x;
-	double transform_y;
-	double sprite_x;
-	double sprite_y;
-	int sprite_screen_x;
-	int sprite_height;
-	int sprite_width;
-	t_vecint draw_start;
-	t_vecint draw_end;
-	int y;
-	int tex_x;
-	int tex_y;
-	int d;
-	char *texture_color;
-	char *screen_pixel;
+	t_ray		ray;
+	int			nb_sprites;
+	int			*sprite_order;
+	double		*sprite_distance;
+	int			i;
+	t_sprite	*current;
+	double		inv_det;
+	double		transform_x;
+	double		transform_y;
+	double		sprite_x;
+	double		sprite_y;
+	int			sprite_screen_x;
+	int			sprite_height;
+	int			sprite_width;
+	t_vecint	draw_start;
+	t_vecint	draw_end;
+	int			y;
+	int			tex_x;
+	int			tex_y;
+	int			d;
+	char		*texture_color;
+	char		*screen_pixel;
+	int			j;
 
 	ray.coord.x = 0;
-	check_if_crosshair_on_enemy(data);
+	// check_if_crosshair_on_enemy(data);
 	fill_ceiling(data);
 	fill_floor(data);
 	while (ray.coord.x < data->mlx.width)
 	{
 		set_ray_variables(&ray, data);
 		dda(&ray, data);
-		ray.z_buffer[ray.coord.x] = ray.perpwalldist;  // Stock la distance perpendiculaire a la camera dans un tab
+		ray.z_buffer[ray.coord.x] = ray.perpwalldist;
+		// Stock la distance perpendiculaire a la camera dans un tab
 		ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
 		ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
 		if (ray.draw_start < 0)
@@ -634,13 +659,14 @@ void	raycasting(t_map_data *data)
 	while (i < nb_sprites)
 	{
 		sprite_order[i] = i;
-		sprite_distance[i] = (data->p_pos.r_x - current->pos.x) * (data->p_pos.r_x - current->pos.x) + (data->p_pos.r_y - current->pos.y) * (data->p_pos.r_y - current->pos.y);
+		sprite_distance[i] = (data->p_pos.r_x - current->pos.x)
+			* (data->p_pos.r_x - current->pos.x) + (data->p_pos.r_y
+				- current->pos.y) * (data->p_pos.r_y - current->pos.y);
 		++i;
 		current = current->next;
 	}
 	sort_sprites(sprite_order, sprite_distance, nb_sprites);
 	i = 0;
-	int j;
 	while (i < nb_sprites)
 	{
 		current = data->sprites;
@@ -649,10 +675,14 @@ void	raycasting(t_map_data *data)
 			current = current->next;
 		sprite_x = current->pos.x - data->p_pos.r_x;
 		sprite_y = current->pos.y - data->p_pos.r_y;
-		inv_det = 1.0 / (data->p_pos.plane_x * data->p_pos.dir_y - data->p_pos.dir_x * data->p_pos.plane_y);
-		transform_x = inv_det * (data->p_pos.dir_y * sprite_x - data->p_pos.dir_x * sprite_y);
-		transform_y = inv_det * (-data->p_pos.plane_y * sprite_x + data->p_pos.plane_x * sprite_y);
-		sprite_screen_x = (int)((data->mlx.width / 2) * (1 + transform_x / transform_y));
+		inv_det = 1.0 / (data->p_pos.plane_x * data->p_pos.dir_y
+				- data->p_pos.dir_x * data->p_pos.plane_y);
+		transform_x = inv_det * (data->p_pos.dir_y * sprite_x
+				- data->p_pos.dir_x * sprite_y);
+		transform_y = inv_det * (-data->p_pos.plane_y * sprite_x
+				+ data->p_pos.plane_x * sprite_y);
+		sprite_screen_x = (int)((data->mlx.width / 2) * (1 + transform_x
+					/ transform_y));
 		sprite_height = (int)fabs(data->mlx.height / transform_y);
 		draw_start.y = -sprite_height / 2 + data->mlx.height / 2;
 		if (draw_start.y < 0)
@@ -670,21 +700,27 @@ void	raycasting(t_map_data *data)
 		j = draw_start.x;
 		while (j < draw_end.x)
 		{
-			tex_x = (int)(256 * (j - (-sprite_width / 2 + sprite_screen_x)) * data->mlx.enemy.img.width / sprite_width) / 256;
-			if (transform_y > 0 && j > 0 && j < data->mlx.width && transform_y < ray.z_buffer[j])
+			tex_x = (int)(256 * (j - (-sprite_width / 2 + sprite_screen_x))
+					* data->mlx.enemy.img.width / sprite_width) / 256;
+			if (transform_y > 0 && j > 0 && j < data->mlx.width
+				&& transform_y < ray.z_buffer[j])
 			{
 				y = draw_start.y;
 				while (y < draw_end.y)
 				{
 					d = y * 256 - data->mlx.height * 128 + sprite_height * 128;
-					tex_y = ((d * data->mlx.enemy.img.height) / sprite_height) / 256;
-					texture_color = data->mlx.enemy.img.adrr + (tex_y * data->mlx.enemy.img.size_line + tex_x * (data->mlx.enemy.img.bits_per_pixel / 8));
-					screen_pixel = data->mlx.img.adrr + (y * data->mlx.img.size_line + j * (data->mlx.img.bits_per_pixel / 8));
+					tex_y = ((d * data->mlx.enemy.img.height) / sprite_height)
+						/ 256;
+					texture_color = data->mlx.enemy.img.adrr + (tex_y
+							* data->mlx.enemy.img.size_line + tex_x
+							* (data->mlx.enemy.img.bits_per_pixel / 8));
+					screen_pixel = data->mlx.img.adrr + (y
+							* data->mlx.img.size_line + j
+							* (data->mlx.img.bits_per_pixel / 8));
 					if (*(unsigned int *)texture_color != 0xFF000000)
 						*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 					y++;
 				}
-				
 			}
 			j++;
 		}

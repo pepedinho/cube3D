@@ -20,7 +20,7 @@
 
 # define M_PI 3.14159265358979323846 /* pi */
 # define PRECISION 50
-#define RAD_TO_DEG (180.0 / M_PI)
+# define RAD_TO_DEG (180.0 / M_PI)
 
 typedef struct s_vecint
 {
@@ -64,5 +64,8 @@ double			set_deltadist(double raydir);
 // mini map
 void			render_map(t_map_data *map_data);
 void			raycasting(t_map_data *data);
+
+// enemy
+int				check_if_crosshair_on_enemy(t_map_data *data);
 
 #endif
