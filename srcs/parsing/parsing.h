@@ -108,6 +108,7 @@ typedef struct s_mlx
 	t_img			dot;
 	t_img			blue;
 	t_img			gun;
+	t_img			shoot[2];
 	t_img			crosshair;
 }					t_mlx;
 
@@ -127,14 +128,14 @@ typedef struct s_key
 typedef enum s_sprite_type
 {
 	MONSTER,
-}t_sprite_type;
+}					t_sprite_type;
 
 typedef struct s_sprite
 {
-	t_sprite_type type;
-	t_vec	pos;
-	struct s_sprite *next;
-}t_sprite;
+	t_sprite_type	type;
+	t_vec			pos;
+	struct s_sprite	*next;
+}					t_sprite;
 
 typedef struct s_map_data
 {

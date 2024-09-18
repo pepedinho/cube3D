@@ -29,7 +29,9 @@
 # define ENEMY "assets/enemy.xpm"
 # define DOT "assets/dot.xpm"
 # define BLUE "assets/door_m_map.xpm"
-# define GUN "assets/gun_sprite.xpm"
+# define GUN "assets/animations/gun_2.xpm"
+# define SHOOT_1 "assets/animations/shoot_anime1.xpm"
+# define SHOOT_2 "assets/animations/shoot_anime2.xpm"
 # include "../../includes/cube3D.h"
 
 # ifdef CUBE3D_H
@@ -61,5 +63,8 @@ int		handle_input(int keysym, t_map_data *data);
 int		render(t_map_data *data);
 int		key_prees(int keysym, t_map_data *data);
 int		key_release(int keysym, t_map_data *data);
+
+// animations
+void	animate_gun(t_map_data *data, int an);
 
 #endif

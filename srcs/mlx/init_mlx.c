@@ -115,11 +115,15 @@ int	init_mlx(t_map_data *data)
 	mlx.dot.path = DOT;
 	mlx.blue.path = BLUE;
 	mlx.gun.path = GUN;
+	mlx.shoot[0].path = SHOOT_1;
+	mlx.shoot[1].path = SHOOT_2;
 	new_image(data, &mlx.img);
 	ft_init_img(data, &mlx.wall[N]);
 	ft_init_img(data, &mlx.wall[S]);
 	ft_init_img(data, &mlx.wall[E]);
 	ft_init_img(data, &mlx.wall[W]);
+	ft_init_img(data, &mlx.shoot[0]);
+	ft_init_img(data, &mlx.shoot[1]);
 	ft_init_img(data, &mlx.door);
 	ft_init_img(data, &mlx.white);
 	ft_init_img(data, &mlx.blue);
