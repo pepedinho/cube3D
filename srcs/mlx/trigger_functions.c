@@ -238,19 +238,16 @@ void	animate_gun(t_map_data *data, int an)
 	{
 		if (i <= 30)
 		{
-			// clear_gun(data, data->mlx.gun);
 			display_gun(data, data->mlx.shoot[0]);
 			// usleep(100000);
 		}
 		else if (i > 30 && i <= 60)
 		{
-			// clear_gun(data, data->mlx.shoot[0]);
 			display_gun(data, data->mlx.shoot[1]);
 			// usleep(100000);
 		}
 		else if (i > 60)
 		{
-			// clear_gun(data, data->mlx.shoot[1]);
 			display_gun(data, data->mlx.gun);
 			// usleep(100000);
 		}

@@ -29,7 +29,7 @@
 # define ENEMY "assets/enemy.xpm"
 # define DOT "assets/dot.xpm"
 # define BLUE "assets/door_m_map.xpm"
-# define GUN "assets/gun_sprite.xpm"
+# define GUN "assets/animations/gun_2.xpm"
 # define SHOOT_1 "assets/animations/shoot_anime1.xpm"
 # define SHOOT_2 "assets/animations/shoot_anime2.xpm"
 # include "../../includes/cube3D.h"
