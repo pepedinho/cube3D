@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/18 22:01:15 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/19 00:07:24 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ int	init_mlx(t_map_data *data)
 	mlx_loop_hook(mlx.init, render, data);
 	mlx_hook(mlx.window, KeyPress, KeyPressMask, key_prees, data);
 	mlx_hook(mlx.window, KeyRelease, KeyReleaseMask, key_release, data);
+	mlx_mouse_hook(mlx.window, mouse_click, data);
 	mlx_hook(mlx.window, 17, 0L, click_cross, data);
 	mlx_loop(mlx.init);
 	return (1);

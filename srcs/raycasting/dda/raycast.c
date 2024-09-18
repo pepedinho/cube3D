@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/18 22:13:31 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/19 00:39:41 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -513,7 +513,7 @@ int	is_enemy_visible(t_map_data *data, double enemy_x, double enemy_y)
 }
 
 int	is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y,
-		double angle_tolerance)
+		double base_tolerance)
 {
 	double	inv_norm_camera;
 	double	camera_dir_x;
@@ -522,6 +522,8 @@ int	is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y,
 	double	enemy_dir_y;
 	double	inv_norm_enemy;
 	double	dot_product;
+	double	distance;
+	double	dynamic_tolerance;
 
 	inv_norm_camera = 1.0 / sqrt(data->p_pos.dir_x * data->p_pos.dir_x
 			+ data->p_pos.dir_y * data->p_pos.dir_y);
@@ -529,16 +531,18 @@ int	is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y,
 	camera_dir_y = data->p_pos.dir_y * inv_norm_camera;
 	enemy_dir_x = enemy_x - data->p_pos.r_x;
 	enemy_dir_y = enemy_y - data->p_pos.r_y;
-	inv_norm_enemy = 1.0 / sqrt(enemy_dir_x * enemy_dir_x + enemy_dir_y
-			* enemy_dir_y);
+	distance = sqrt(enemy_dir_x * enemy_dir_x + enemy_dir_y * enemy_dir_y);
+	inv_norm_enemy = 1.0 / distance;
 	enemy_dir_x *= inv_norm_enemy;
 	enemy_dir_y *= inv_norm_enemy;
+	dynamic_tolerance = base_tolerance + (1.0 / distance); // try to change this for better precision on fire
 	dot_product = camera_dir_x * enemy_dir_x + camera_dir_y * enemy_dir_y;
-	if (dot_product > cos(angle_tolerance * M_PI / 180.0))
+	if (dot_product > cos(dynamic_tolerance * M_PI / 180.0))
 		if (is_enemy_visible(data, enemy_x, enemy_y))
 			return (1);
 	return (0);
 }
+
 
 int	check_if_crosshair_on_enemy(t_map_data *data)
 {
@@ -547,7 +551,7 @@ int	check_if_crosshair_on_enemy(t_map_data *data)
 	current = data->sprites;
 	while (current)
 	{
-		if (is_looking_at_enemy(data, current->pos.x, current->pos.y, 1.0) == 1)
+		if (is_looking_at_enemy(data, current->pos.x, current->pos.y, 2) == 1)
 		{
 			del_one_sprite(&data->sprites, current);
 			return (1);

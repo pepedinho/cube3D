@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/18 21:59:25 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/18 23:57:23 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_key
 	int				escape;
 	int				space;
 	float			speed_boost;
+	int				fire;
 }					t_key;
 
 typedef enum s_sprite_type

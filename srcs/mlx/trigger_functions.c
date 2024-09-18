@@ -6,13 +6,14 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/18 23:35:56 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/19 00:08:13 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cube3D.h"
 #include "minilibx.h"
 #include <X11/X.h>
+#include <stdbool.h>
 
 int	click_cross(t_map_data *data)
 {
@@ -261,7 +262,10 @@ void	animate_gun(t_map_data *data, int *an)
 		data->mlx.img.img, 0, 0);
 	++(*an);
 	if (*an > 20)
+	{
 		*an = 0;
+		data->key.fire = false;
+	}
 }
 
 int	is_valid_movement(t_map_data *data, double new_x, double new_y)
@@ -316,6 +320,15 @@ void	enemies_movement(t_map_data *data)
 	}
 }
 
+int mouse_click(int button, int x, int y, t_map_data *data)
+{
+	(void)x;
+	(void)y;
+	if (button == 1)
+		data->key.fire = true;
+	return (1);
+}
+
 int	render(t_map_data *data)
 {
 	static time_t		last_time;
@@ -327,7 +340,7 @@ int	render(t_map_data *data)
 
 	mouse_movement(data);
 	change_player(data);
-	enemies_movement(data);
+	// enemies_movement(data);
 	if (data->mlx.window != NULL)
 	{
 		ft_memset(data->mlx.img.adrr, 0, (data->mlx.height
@@ -336,10 +349,12 @@ int	render(t_map_data *data)
 		data->door_trigger = 0;
 		raycasting(data);
 		display_gun(data, data->mlx.gun);
-		if (!cnt && check_if_crosshair_on_enemy(data))
-			cnt++;
-		if (cnt)
+		if (data->key.fire == true)
+		{
+			if (!cnt)
+				check_if_crosshair_on_enemy(data);
 			animate_gun(data, &cnt);
+		}
 		display_crosshair(data);
 		mlx_put_image_to_window(data->mlx.init, data->mlx.window,
 			data->mlx.img.img, 0, 0);
