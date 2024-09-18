@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   fov_move.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itahri <itahri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:05:59 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/08 12:21:22 by itahri           ###   ########.fr       */
+/*   Updated: 2024/09/18 21:47:44 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cube3D.h"
 
-void	right_fov(t_map_data *data, double old_dir_x, double rot_speed,
-		double old_plane_x)
+void	right_fov(t_map_data *data, double rot_speed)
 {
+	double old_dir_x;
+	double old_plane_x;
+
 	old_dir_x = data->p_pos.dir_x;
 	data->p_pos.dir_x = data->p_pos.dir_x * cos(rot_speed) - data->p_pos.dir_y
 		* sin(rot_speed);
@@ -27,9 +29,11 @@ void	right_fov(t_map_data *data, double old_dir_x, double rot_speed,
 		* cos(rot_speed);
 }
 
-void	left_fov(t_map_data *data, double old_dir_x, double rot_speed,
-		double old_plane_x)
+void	left_fov(t_map_data *data, double rot_speed)
 {
+	double old_dir_x;
+	double old_plane_x;
+
 	old_dir_x = data->p_pos.dir_x;
 	data->p_pos.dir_x = data->p_pos.dir_x * cos(-rot_speed) - data->p_pos.dir_y
 		* sin(-rot_speed);

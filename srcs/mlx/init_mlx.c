@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/15 03:47:14 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/18 22:01:15 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ int	init_mlx(t_map_data *data)
 		mlx.width = 1920;
 	if (mlx.height > 1080)
 		mlx.height = 1080;
+	mlx.width_div2 = mlx.width / 2;
+	mlx.height_div2 = mlx.height / 2;
 	mlx.window = mlx_new_window(mlx.init, mlx.width, mlx.height, "cub3D");
 	if (!mlx.window)
 		return (destroy_mlx(data), 0);
@@ -130,7 +132,7 @@ int	init_mlx(t_map_data *data)
 	ft_init_img(data, &mlx.dot);
 	ft_init_img(data, &mlx.gun);
 	ft_init_img(data, &mlx.enemy.img);
-	mlx_mouse_move(mlx.init, mlx.window, mlx.width / 2, mlx.height / 2);
+	mlx_mouse_move(mlx.init, mlx.window, mlx.width_div2, mlx.height_div2);
 	mlx_mouse_hide(mlx.init, mlx.window);
 	data->mlx = mlx;
 	data->key.speed_boost = 0;

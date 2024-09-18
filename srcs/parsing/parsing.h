@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/16 18:48:25 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/18 21:59:25 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ typedef struct s_mlx
 {
 	int				width;
 	int				height;
+	int				width_div2;
+	int				height_div2;
 	void			*init;
 	void			*window;
 	t_img			img;

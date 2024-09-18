@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:15:47 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/13 18:21:03 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/18 22:25:04 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 # define MINILIBX_H
 
 # include <X11/keysym.h>
+#include <X11/X.h>
 
-# define WIDTH 16
-# define HEIGHT 16
-# define WIDTH_X2 64
-# define HEIGHT_X2 64
 # define SENSITIVITY 0.02
 # define MIN_MOUSE_MOVE 5
 # define WHITE_I "assets/white_tile.xpm"
@@ -52,10 +49,8 @@ void	behind(t_map_data *data, double move_speed);
 
 // fov move
 //
-void	right_fov(t_map_data *data, double old_dir_x, double rot_speed,
-			double old_plane_x);
-void	left_fov(t_map_data *data, double old_dir_x, double rot_speed,
-			double old_plane_x);
+void	right_fov(t_map_data *data, double rot_speed);
+void	left_fov(t_map_data *data, double rot_speed);
 
 // trigger functions
 int		click_cross(t_map_data *data);
@@ -65,6 +60,6 @@ int		key_prees(int keysym, t_map_data *data);
 int		key_release(int keysym, t_map_data *data);
 
 // animations
-void	animate_gun(t_map_data *data, int an);
+void	animate_gun(t_map_data *data, int *an);
 
 #endif

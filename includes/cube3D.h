@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 12:34:01 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/14 20:58:45 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/18 21:50:17 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef struct s_vecint t_vecint;
 
 # define MOVE_SPEED 0.03
 # define ROT_SPEED 0.05
-
+# define WHITE 0XFFFFFFFF
+# define TRANSPARENT 0XFF000000
 
 void	print_2d_array(char **tab);
 

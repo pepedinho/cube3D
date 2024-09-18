@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/18 02:37:41 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/18 22:13:31 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,7 +292,7 @@ void	fill_ceiling(t_map_data *map)
 	int		end;
 
 	i = 0;
-	end = (map->mlx.height / 2) * map->mlx.img.size_line + map->mlx.width
+	end = map->mlx.height_div2 * map->mlx.img.size_line + map->mlx.width
 		* (map->mlx.img.bits_per_pixel / 8);
 	while (i <= end)
 	{
@@ -364,45 +364,13 @@ void	draw_door_stripe(t_map_data *map, t_ray *ray)
 	}
 }
 
-void	draw_enemies(t_map_data *map, t_ray *ray)
-{
-	char	*texture_color;
-	char	*screen_pixel;
-	int		texture_x;
-	int		texture_y;
-	double	step;
-	double	tex_pos;
-
-	texture_x = (int)(ray->wall_x * map->mlx.enemy.img.width);
-	if ((ray->side == 0 && ray->ray_dir.x > 0) || (ray->side == 1
-			&& ray->ray_dir.y < 0))
-		texture_x = map->mlx.enemy.img.width - texture_x - 1;
-	step = 1.0 * map->mlx.enemy.img.height / ray->wallheight;
-	tex_pos = (ray->draw_start - map->mlx.height / 2 + ray->wallheight / 2)
-		* step;
-	while (ray->coord.y <= ray->draw_end)
-	{
-		texture_y = (int)tex_pos % map->mlx.enemy.img.height;
-		tex_pos += step;
-		texture_color = map->mlx.enemy.img.adrr + (texture_y
-				* map->mlx.enemy.img.size_line + texture_x
-				* (map->mlx.enemy.img.bits_per_pixel / 8));
-		screen_pixel = map->mlx.img.adrr + (ray->coord.y
-				* map->mlx.img.size_line + ray->coord.x
-				* (map->mlx.img.bits_per_pixel / 8));
-		if (*(unsigned int *)texture_color != 0xFF000000)
-			*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
-		ray->coord.y++;
-	}
-}
-
 void	fill_floor(t_map_data *map)
 {
 	char	*target;
 	int		i;
 	int		end;
-
-	i = (map->mlx.height / 2) * map->mlx.img.size_line + map->mlx.width
+	
+	i = map->mlx.height_div2 * map->mlx.img.size_line + map->mlx.width
 		* (map->mlx.img.bits_per_pixel / 8);
 	end = map->mlx.height * map->mlx.img.size_line + map->mlx.width
 		* (map->mlx.img.bits_per_pixel / 8);
@@ -419,8 +387,6 @@ void	print_stripe(t_map_data *map, t_ray *ray, int i)
 	ray->coord.y = ray->draw_start;
 	if (i == D)
 		draw_door_stripe(map, ray);
-	else if (i == M)
-		draw_enemies(map, ray);
 	else
 		draw_wall_stripe(map, ray, i);
 }
@@ -628,10 +594,10 @@ void	raycasting(t_map_data *data)
 		ray.z_buffer[ray.coord.x] = ray.perpwalldist;
 		// Stock la distance perpendiculaire a la camera dans un tab
 		ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
-		ray.draw_start = -ray.wallheight / 2 + data->mlx.height / 2;
+		ray.draw_start = -ray.wallheight / 2 + data->mlx.height_div2;
 		if (ray.draw_start < 0)
 			ray.draw_start = 0;
-		ray.draw_end = ray.wallheight / 2 + data->mlx.height / 2;
+		ray.draw_end = ray.wallheight / 2 + data->mlx.height_div2;
 		if (ray.draw_end >= data->mlx.height)
 			ray.draw_end = data->mlx.height - 1;
 		if (ray.side == 0)
@@ -681,13 +647,13 @@ void	raycasting(t_map_data *data)
 				- data->p_pos.dir_x * sprite_y);
 		transform_y = inv_det * (-data->p_pos.plane_y * sprite_x
 				+ data->p_pos.plane_x * sprite_y);
-		sprite_screen_x = (int)((data->mlx.width / 2) * (1 + transform_x
+		sprite_screen_x = (int)(data->mlx.width_div2 * (1 + transform_x
 					/ transform_y));
 		sprite_height = (int)fabs(data->mlx.height / transform_y);
-		draw_start.y = -sprite_height / 2 + data->mlx.height / 2;
+		draw_start.y = -sprite_height / 2 + data->mlx.height_div2;
 		if (draw_start.y < 0)
 			draw_start.y = 0;
-		draw_end.y = sprite_height / 2 + data->mlx.height / 2;
+		draw_end.y = sprite_height / 2 + data->mlx.height_div2;
 		if (draw_end.y >= data->mlx.height)
 			draw_end.y = data->mlx.height - 1;
 		sprite_width = (int)fabs(data->mlx.height / transform_y);
@@ -717,7 +683,7 @@ void	raycasting(t_map_data *data)
 					screen_pixel = data->mlx.img.adrr + (y
 							* data->mlx.img.size_line + j
 							* (data->mlx.img.bits_per_pixel / 8));
-					if (*(unsigned int *)texture_color != 0xFF000000)
+					if (*(unsigned int *)texture_color != TRANSPARENT)
 						*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 					y++;
 				}
