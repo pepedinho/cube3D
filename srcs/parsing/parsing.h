@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/18 23:57:23 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/19 09:11:48 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_img
 	char			*adrr;
 	int				size_line;
 	int				bits_per_pixel;
+	int				bits_per_pixel_div8;
 	int				endiant;
 	int				width;
 	int				height;

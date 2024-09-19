@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/19 00:39:41 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/19 09:16:21 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,12 +293,12 @@ void	fill_ceiling(t_map_data *map)
 
 	i = 0;
 	end = map->mlx.height_div2 * map->mlx.img.size_line + map->mlx.width
-		* (map->mlx.img.bits_per_pixel / 8);
+		* (map->mlx.img.bits_per_pixel_div8);
 	while (i <= end)
 	{
 		target = map->mlx.img.adrr + i;
 		*(unsigned int *)target = (unsigned int)map->input.ceiling_color;
-		i += (map->mlx.img.bits_per_pixel / 8);
+		i += (map->mlx.img.bits_per_pixel_div8);
 	}
 }
 
@@ -324,10 +324,10 @@ void	draw_wall_stripe(t_map_data *map, t_ray *ray, int i)
 		tex_pos += step;
 		texture_color = map->mlx.wall[i].adrr + (texture_y
 				* map->mlx.wall[i].size_line + texture_x
-				* (map->mlx.wall[i].bits_per_pixel / 8));
+				* (map->mlx.wall[i].bits_per_pixel_div8));
 		screen_pixel = map->mlx.img.adrr + (ray->coord.y
 				* map->mlx.img.size_line + ray->coord.x
-				* (map->mlx.img.bits_per_pixel / 8));
+				* (map->mlx.img.bits_per_pixel_div8));
 		*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 		ray->coord.y++;
 	}
@@ -355,10 +355,10 @@ void	draw_door_stripe(t_map_data *map, t_ray *ray)
 		tex_pos += step;
 		texture_color = map->mlx.door.adrr + (texture_y
 				* map->mlx.door.size_line + texture_x
-				* (map->mlx.door.bits_per_pixel / 8));
+				* (map->mlx.door.bits_per_pixel_div8));
 		screen_pixel = map->mlx.img.adrr + (ray->coord.y
 				* map->mlx.img.size_line + ray->coord.x
-				* (map->mlx.img.bits_per_pixel / 8));
+				* (map->mlx.img.bits_per_pixel_div8));
 		*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 		ray->coord.y++;
 	}
@@ -371,14 +371,14 @@ void	fill_floor(t_map_data *map)
 	int		end;
 	
 	i = map->mlx.height_div2 * map->mlx.img.size_line + map->mlx.width
-		* (map->mlx.img.bits_per_pixel / 8);
+		* (map->mlx.img.bits_per_pixel_div8);
 	end = map->mlx.height * map->mlx.img.size_line + map->mlx.width
-		* (map->mlx.img.bits_per_pixel / 8);
+		* (map->mlx.img.bits_per_pixel_div8);
 	while (i <= end)
 	{
 		target = map->mlx.img.adrr + i;
 		*(unsigned int *)target = (unsigned int)map->input.floor_color;
-		i += (map->mlx.img.bits_per_pixel / 8);
+		i += (map->mlx.img.bits_per_pixel_div8);
 	}
 }
 
@@ -683,10 +683,10 @@ void	raycasting(t_map_data *data)
 						/ 256;
 					texture_color = data->mlx.enemy.img.adrr + (tex_y
 							* data->mlx.enemy.img.size_line + tex_x
-							* (data->mlx.enemy.img.bits_per_pixel / 8));
+							* (data->mlx.enemy.img.bits_per_pixel_div8));
 					screen_pixel = data->mlx.img.adrr + (y
 							* data->mlx.img.size_line + j
-							* (data->mlx.img.bits_per_pixel / 8));
+							* (data->mlx.img.bits_per_pixel_div8));
 					if (*(unsigned int *)texture_color != TRANSPARENT)
 						*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 					y++;

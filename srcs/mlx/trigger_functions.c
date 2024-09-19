@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/19 00:08:13 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/19 09:17:35 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ void	display_gun(t_map_data *data, t_img img_sprite)
 		while (gun.x < img_sprite.width)
 		{
 			gun_color = img_sprite.adrr + (gun.y * img_sprite.size_line + gun.x
-					* (data->mlx.gun.bits_per_pixel / 8));
+					* (data->mlx.gun.bits_per_pixel_div8));
 			if (*(unsigned int *)gun_color != TRANSPARENT)
 			{
 				img_scale.y = 0;
@@ -174,7 +174,7 @@ void	display_gun(t_map_data *data, t_img img_sprite)
 						{
 							img_color = (data->mlx.img.adrr + img.y
 									* data->mlx.img.size_line + img.x
-									* (data->mlx.img.bits_per_pixel / 8));
+									* (data->mlx.img.bits_per_pixel_div8));
 							*(unsigned int *)img_color = *(unsigned int *)gun_color;
 						}
 						img_scale.x++;
@@ -201,7 +201,7 @@ void	draw_crosshair_x(t_map_data *data, int center_x, int center_y, int size)
 		{
 			target = data->mlx.img.adrr + (center_y
 					* data->mlx.img.size_line + x
-					* (data->mlx.img.bits_per_pixel / 8));
+					* (data->mlx.img.bits_per_pixel_div8));
 			*(unsigned int *)target = WHITE;
 		}
 		x++;
@@ -220,7 +220,7 @@ void	draw_crosshair_y(t_map_data *data, int center_x, int center_y, int size)
 			&& (y < center_y - 3 || y > center_y + 3))
 		{
 			target = data->mlx.img.adrr + (y * data->mlx.img.size_line
-					+ center_x * (data->mlx.img.bits_per_pixel / 8));
+					+ center_x * (data->mlx.img.bits_per_pixel_div8));
 			*(unsigned int *)target = WHITE;
 		}
 		y++;
@@ -345,7 +345,7 @@ int	render(t_map_data *data)
 	{
 		ft_memset(data->mlx.img.adrr, 0, (data->mlx.height
 				* data->mlx.img.size_line + data->mlx.width
-				* (data->mlx.img.bits_per_pixel / 8)));
+				* (data->mlx.img.bits_per_pixel_div8)));
 		data->door_trigger = 0;
 		raycasting(data);
 		display_gun(data, data->mlx.gun);

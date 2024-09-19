@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/19 00:07:24 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/19 09:13:03 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	ft_init_img(t_map_data *data, t_img *img)
 	printf("Image properties(%s): width=%d, height=%d, bpp=%d, size_line=%d\n",
 		img->path, img->width, img->height, img->bits_per_pixel,
 		img->size_line);
+	img->bits_per_pixel_div8 = img->bits_per_pixel / 8;	
 }
 
 void	new_image(t_map_data *data, t_img *img)
@@ -80,6 +81,7 @@ void	new_image(t_map_data *data, t_img *img)
 		ft_printf("Error when trying to get image data\n");
 		destroy_mlx(data);
 	}
+	img->bits_per_pixel_div8 = img->bits_per_pixel / 8;
 }
 
 void	path_to_mlx_img(t_map_data *data, t_mlx *mlx)
