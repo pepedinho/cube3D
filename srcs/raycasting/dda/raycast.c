@@ -6,12 +6,13 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/19 09:16:21 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 20:28:21 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../raycatsing.h"
 #include <X11/X.h>
+#include <cstdio>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -297,7 +298,8 @@ void	fill_ceiling(t_map_data *map)
 	while (i <= end)
 	{
 		target = map->mlx.img.adrr + i;
-		*(unsigned int *)target = (unsigned int)map->input.ceiling_color;
+		if (*(unsigned int *)target != (unsigned int)map->input.ceiling_color)
+			*(unsigned int *)target = (unsigned int)map->input.ceiling_color;
 		i += (map->mlx.img.bits_per_pixel_div8);
 	}
 }
@@ -328,7 +330,8 @@ void	draw_wall_stripe(t_map_data *map, t_ray *ray, int i)
 		screen_pixel = map->mlx.img.adrr + (ray->coord.y
 				* map->mlx.img.size_line + ray->coord.x
 				* (map->mlx.img.bits_per_pixel_div8));
-		*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
+		if (*(unsigned int *)screen_pixel != *(unsigned int *)texture_color)
+			*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 		ray->coord.y++;
 	}
 }
@@ -359,7 +362,8 @@ void	draw_door_stripe(t_map_data *map, t_ray *ray)
 		screen_pixel = map->mlx.img.adrr + (ray->coord.y
 				* map->mlx.img.size_line + ray->coord.x
 				* (map->mlx.img.bits_per_pixel_div8));
-		*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
+		if (*(unsigned int *)screen_pixel != *(unsigned int *)texture_color)
+			*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 		ray->coord.y++;
 	}
 }
@@ -377,7 +381,8 @@ void	fill_floor(t_map_data *map)
 	while (i <= end)
 	{
 		target = map->mlx.img.adrr + i;
-		*(unsigned int *)target = (unsigned int)map->input.floor_color;
+		if (*(unsigned int *)target != (unsigned int)map->input.floor_color)
+			*(unsigned int *)target = (unsigned int)map->input.floor_color;
 		i += (map->mlx.img.bits_per_pixel_div8);
 	}
 }
@@ -561,72 +566,49 @@ int	check_if_crosshair_on_enemy(t_map_data *data)
 	return (0);
 }
 
-void	raycasting(t_map_data *data)
+void raycasting_wall_door(t_map_data *data, t_ray *ray)
 {
-	t_ray		ray;
-	int			nb_sprites;
-	int			*sprite_order;
-	double		*sprite_distance;
-	int			i;
-	t_sprite	*current;
-	double		inv_det;
-	double		transform_x;
-	double		transform_y;
-	double		sprite_x;
-	double		sprite_y;
-	int			sprite_screen_x;
-	int			sprite_height;
-	int			sprite_width;
-	t_vecint	draw_start;
-	t_vecint	draw_end;
-	int			y;
-	int			tex_x;
-	int			tex_y;
-	int			d;
-	char		*texture_color;
-	char		*screen_pixel;
-	int			j;
-
-	ray.coord.x = 0;
-	// check_if_crosshair_on_enemy(data);
+	ray->coord.x = 0;
 	fill_ceiling(data);
 	fill_floor(data);
-	while (ray.coord.x < data->mlx.width)
+	while (ray->coord.x < data->mlx.width)
 	{
-		set_ray_variables(&ray, data);
-		dda(&ray, data);
-		ray.z_buffer[ray.coord.x] = ray.perpwalldist;
-		// Stock la distance perpendiculaire a la camera dans un tab
-		ray.wallheight = (int)(data->mlx.height / ray.perpwalldist);
-		ray.draw_start = -ray.wallheight / 2 + data->mlx.height_div2;
-		if (ray.draw_start < 0)
-			ray.draw_start = 0;
-		ray.draw_end = ray.wallheight / 2 + data->mlx.height_div2;
-		if (ray.draw_end >= data->mlx.height)
-			ray.draw_end = data->mlx.height - 1;
-		if (ray.side == 0)
-			ray.wall_x = data->p_pos.r_y + ray.perpwalldist * ray.ray_dir.y;
+		set_ray_variables(ray, data);
+		dda(ray, data);
+		ray->z_buffer[ray->coord.x] = ray->perpwalldist;
+		ray->wallheight = (int)(data->mlx.height / ray->perpwalldist);
+		ray->draw_start = -ray->wallheight / 2 + data->mlx.height_div2;
+		if (ray->draw_start < 0)
+			ray->draw_start = 0;
+		ray->draw_end = ray->wallheight / 2 + data->mlx.height_div2;
+		if (ray->draw_end >= data->mlx.height)
+			ray->draw_end = data->mlx.height - 1;
+		if (ray->side == 0)
+			ray->wall_x = data->p_pos.r_y + ray->perpwalldist * ray->ray_dir.y;
 		else
-			ray.wall_x = data->p_pos.r_x + ray.perpwalldist * ray.ray_dir.x;
-		ray.wall_x -= floor(ray.wall_x);
-		print_on_display(&ray, data);
-		ray.coord.x++;
-	}
-	nb_sprites = len_sprites(data->sprites);
-	if (nb_sprites == 0)
-		return ;
-	sprite_order = malloc(sizeof(int) * nb_sprites);
+			ray->wall_x = data->p_pos.r_x + ray->perpwalldist * ray->ray_dir.x;
+		ray->wall_x -= floor(ray->wall_x);
+		print_on_display(ray, data);
+		ray->coord.x++;
+	}	
+}
+
+int *order_sprite_with_distance(t_map_data *data)
+{
+	int *sprite_order;
+	double *sprite_distance;
+	int i;
+	t_sprite *current;
+	
+	sprite_order = malloc(sizeof(int) * data->nb_sprites);
 	if (!sprite_order)
 		destroy_mlx(data);
-	sprite_distance = malloc(sizeof(double) * nb_sprites);
+	sprite_distance = malloc(sizeof(double) * data->nb_sprites);
 	if (!sprite_distance)
-	{
-		free(sprite_order);
-		destroy_mlx(data);
-	}
+		(free(sprite_order), destroy_mlx(data));
 	i = 0;
 	current = data->sprites;
-	while (i < nb_sprites)
+	while (i < data->nb_sprites)
 	{
 		sprite_order[i] = i;
 		sprite_distance[i] = (data->p_pos.r_x - current->pos.x)
@@ -635,65 +617,96 @@ void	raycasting(t_map_data *data)
 		++i;
 		current = current->next;
 	}
-	sort_sprites(sprite_order, sprite_distance, nb_sprites);
+	sort_sprites(sprite_order, sprite_distance, data->nb_sprites);
+	free(sprite_distance);
+	return (sprite_order);
+}
+
+void	raycasting(t_map_data *data)
+{
+	t_ray		ray;
+	int			*sprite_order;
+	int			i;
+	t_sprite	*current;
+	double		inv_det;
+	t_vec		transform;
+	t_vec		sprite;
+	int			sprite_screen_x;
+	int			sprite_height;
+	int			sprite_width;
+	t_vecint	draw_start;
+	t_vecint	draw_end;
+	int			y;
+	t_vecint tex;
+	int			d;
+	char		*texture_color;
+	char		*screen_pixel;
+	int			x;
+
+
+	raycasting_wall_door(data, &ray);
+	if (data->nb_sprites == 0)
+		return ;
+	sprite_order = order_sprite_with_distance(data);
 	i = 0;
-	while (i < nb_sprites)
+	while (i < data->nb_sprites)
 	{
 		current = data->sprites;
-		j = 0;
-		while (j++ < sprite_order[i])
+		x = 0;
+		while (x++ < sprite_order[i])
 			current = current->next;
-		sprite_x = current->pos.x - data->p_pos.r_x;
-		sprite_y = current->pos.y - data->p_pos.r_y;
+		sprite.x = current->pos.x - data->p_pos.r_x;
+		sprite.y = current->pos.y - data->p_pos.r_y;
 		inv_det = 1.0 / (data->p_pos.plane_x * data->p_pos.dir_y
 				- data->p_pos.dir_x * data->p_pos.plane_y);
-		transform_x = inv_det * (data->p_pos.dir_y * sprite_x
-				- data->p_pos.dir_x * sprite_y);
-		transform_y = inv_det * (-data->p_pos.plane_y * sprite_x
-				+ data->p_pos.plane_x * sprite_y);
-		sprite_screen_x = (int)(data->mlx.width_div2 * (1 + transform_x
-					/ transform_y));
-		sprite_height = (int)fabs(data->mlx.height / transform_y);
+		transform.x = inv_det * (data->p_pos.dir_y * sprite.x
+				- data->p_pos.dir_x * sprite.y);
+		transform.y = inv_det * (-data->p_pos.plane_y * sprite.x
+				+ data->p_pos.plane_x * sprite.y);
+		sprite_screen_x = (int)(data->mlx.width_div2 * (1 + transform.x
+					/ transform.y));
+		sprite_height = (int)fabs(data->mlx.height / transform.y);
 		draw_start.y = -sprite_height / 2 + data->mlx.height_div2;
 		if (draw_start.y < 0)
 			draw_start.y = 0;
 		draw_end.y = sprite_height / 2 + data->mlx.height_div2;
 		if (draw_end.y >= data->mlx.height)
 			draw_end.y = data->mlx.height - 1;
-		sprite_width = (int)fabs(data->mlx.height / transform_y);
+		sprite_width = (int)fabs(data->mlx.height / transform.y);
 		draw_start.x = -sprite_width / 2 + sprite_screen_x;
 		if (draw_start.x < 0)
 			draw_start.x = 0;
 		draw_end.x = sprite_width / 2 + sprite_screen_x;
 		if (draw_end.x >= data->mlx.width)
 			draw_end.x = data->mlx.width - 1;
-		j = draw_start.x;
-		while (j < draw_end.x)
+		x = draw_start.x;
+		while (x < draw_end.x)
 		{
-			tex_x = (int)(256 * (j - (-sprite_width / 2 + sprite_screen_x))
+			tex.x = (int)(256 * (x - (-sprite_width / 2 + sprite_screen_x))
 					* data->mlx.enemy.img.width / sprite_width) / 256;
-			if (transform_y > 0 && j > 0 && j < data->mlx.width
-				&& transform_y < ray.z_buffer[j])
+			if (transform.y > 0 && x > 0 && x < data->mlx.width
+				&& transform.y < ray.z_buffer[x])
 			{
 				y = draw_start.y;
 				while (y < draw_end.y)
 				{
 					d = y * 256 - data->mlx.height * 128 + sprite_height * 128;
-					tex_y = ((d * data->mlx.enemy.img.height) / sprite_height)
+					tex.y = ((d * data->mlx.enemy.img.height) / sprite_height)
 						/ 256;
-					texture_color = data->mlx.enemy.img.adrr + (tex_y
-							* data->mlx.enemy.img.size_line + tex_x
+					texture_color = data->mlx.enemy.img.adrr + (tex.y
+							* data->mlx.enemy.img.size_line + tex.x
 							* (data->mlx.enemy.img.bits_per_pixel_div8));
 					screen_pixel = data->mlx.img.adrr + (y
-							* data->mlx.img.size_line + j
+							* data->mlx.img.size_line + x
 							* (data->mlx.img.bits_per_pixel_div8));
 					if (*(unsigned int *)texture_color != TRANSPARENT)
 						*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
 					y++;
 				}
 			}
-			j++;
+			x++;
 		}
 		i++;
 	}
+	free(sprite_order);
 }

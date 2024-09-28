@@ -6,12 +6,13 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/19 09:13:03 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 19:54:29 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cube3D.h"
 #include "minilibx.h"
+#include "sprites/sprites.h"
 #include <X11/X.h>
 #include <stdio.h>
 
@@ -41,6 +42,7 @@ void	destroy_mlx(t_map_data *data)
 	free(data->input.tx_west);
 	free(data->input.tx_ceiling);
 	free(data->input.tx_floor);
+	free_all_sprite(data->sprites);
 	exit(EXIT_SUCCESS);
 }
 

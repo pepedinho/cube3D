@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 20:52:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/28 18:28:15 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 20:12:33 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,17 @@ void del_one_sprite(t_sprite **sprites, t_sprite *to_del)
 	else
 		*sprites = current->next;
 	free(to_del);
+}
+
+void free_all_sprite(t_sprite *sprite)
+{
+	t_sprite *next;
+	
+	if (!sprite)
+		return;
+	next = sprite->next;
+	free(sprite);
+	free_all_sprite(next);
 }
 
 t_sprite *new_sprite(double x, double y, t_sprite_type type)
@@ -151,6 +162,7 @@ void	random_enemies(t_map_data *data)
 	if (!new)
 		return ;
 	add_back_sprite(&data->sprites, new);
+	data->nb_sprites = len_sprites(data->sprites);
 }
 
 

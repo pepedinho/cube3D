@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:04:46 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/19 09:11:48 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 20:12:03 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ typedef struct s_map_data
 	t_key			key;
 	double			delta_time;
 	t_sprite		*sprites;
+	int nb_sprites;
 }					t_map_data;
 
 // parsing

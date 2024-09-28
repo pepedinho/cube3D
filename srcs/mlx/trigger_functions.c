@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/28 18:29:32 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 19:44:49 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,20 +244,11 @@ void	display_crosshair(t_map_data *data)
 void	animate_gun(t_map_data *data, int *an)
 {
 	if (*an <= 5)
-	{
 		display_gun(data, data->mlx.shoot[0]);
-		// usleep(100000);
-	}
 	else if (*an > 5 && *an <= 10)
-	{
 		display_gun(data, data->mlx.shoot[1]);
-		// usleep(100000);
-	}
 	else if (*an > 15)
-	{
 		display_gun(data, data->mlx.gun);
-		// usleep(100000);
-	}
 	mlx_put_image_to_window(data->mlx.init, data->mlx.window,
 		data->mlx.img.img, 0, 0);
 	++(*an);
@@ -343,9 +334,6 @@ int	render(t_map_data *data)
 	// enemies_movement(data);
 	if (data->mlx.window != NULL)
 	{
-		// ft_memset(data->mlx.img.adrr, 0, (data->mlx.height
-		// 		* data->mlx.img.size_line + data->mlx.width
-		// 		* (data->mlx.img.bits_per_pixel_div8)));
 		data->door_trigger = 0;
 		raycasting(data);
 		display_gun(data, data->mlx.gun);
