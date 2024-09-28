@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:56:24 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/17 11:33:47 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 22:33:01 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,21 @@ typedef struct s_ray
 	double		wall_x;
 	double		z_buffer[1920];
 }				t_ray;
+
+typedef struct s_render_sprite
+{
+	int			sprite_screen_x;
+	int			sprite_height;
+	int			sprite_width;
+	t_vecint	draw_start;
+	t_vecint	draw_end;
+	int			d;
+	char		*texture_color;
+	char		*screen_pixel;
+	int			x;
+	int			y;
+	t_vec		transform;
+}t_render_sprite;
 
 // raycast
 int				trace_perimeter(t_map_data *map_data, int r);

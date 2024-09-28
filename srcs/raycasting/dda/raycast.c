@@ -6,13 +6,12 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/28 20:28:21 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 22:48:04 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../raycatsing.h"
 #include <X11/X.h>
-#include <cstdio>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -622,26 +621,107 @@ int *order_sprite_with_distance(t_map_data *data)
 	return (sprite_order);
 }
 
+t_vec set_current_sprite_position(t_map_data *data, int index)
+{
+	t_vec sprite;
+	int i;
+	t_sprite *current_sprite;
+
+	i = 0;
+	current_sprite = data->sprites;
+	while (i++ < index)
+		current_sprite = current_sprite->next;
+	sprite.x = current_sprite->pos.x - data->p_pos.r_x;
+	sprite.y = current_sprite->pos.y - data->p_pos.r_y;
+	return (sprite);
+}
+
+inline t_vec set_transform(t_map_data *data, t_vec sprite)
+{
+	t_vec transform;
+	double inv_det;
+
+	inv_det = 1.0 / (data->p_pos.plane_x * data->p_pos.dir_y
+			- data->p_pos.dir_x * data->p_pos.plane_y);
+	transform.x = inv_det * (data->p_pos.dir_y * sprite.x
+			- data->p_pos.dir_x * sprite.y);
+	transform.y = inv_det * (-data->p_pos.plane_y * sprite.x
+			+ data->p_pos.plane_x * sprite.y);
+	return (transform);
+}
+
+void set_draw_start_end_sprite(t_map_data *data, t_render_sprite *render_s)
+{
+	render_s->draw_start.y = -render_s->sprite_height / 2 + data->mlx.height_div2;
+	if (render_s->draw_start.y < 0)
+		render_s->draw_start.y = 0;
+	render_s->draw_end.y = render_s->sprite_height / 2 + data->mlx.height_div2;
+	if (render_s->draw_end.y >= data->mlx.height)
+		render_s->draw_end.y = data->mlx.height - 1;
+	render_s->draw_start.x = -render_s->sprite_width / 2 + render_s->sprite_screen_x;
+	if (render_s->draw_start.x < 0)
+		render_s->draw_start.x = 0;
+	render_s->draw_end.x = render_s->sprite_width / 2 + render_s->sprite_screen_x;
+	if (render_s->draw_end.x >= data->mlx.width)
+		render_s->draw_end.x = data->mlx.width - 1;
+}
+
+void set_sprite_data(t_map_data *data, int index, t_render_sprite *render_s)
+{
+	
+	t_vec		sprite;
+
+	sprite = set_current_sprite_position(data, index);
+	render_s->transform = set_transform(data, sprite);
+	render_s->sprite_screen_x = (int)(data->mlx.width_div2 * (1 + render_s->transform.x
+				/ render_s->transform.y));
+	render_s->sprite_height = (int)fabs(data->mlx.height / render_s->transform.y);
+	render_s->sprite_width = (int)fabs(data->mlx.height / render_s->transform.y);
+	set_draw_start_end_sprite(data, render_s);
+	render_s->x = render_s->draw_start.x;	
+}
+
+void draw_stripe_sprite(t_map_data *data, t_render_sprite *render_s, t_vecint *tex)
+{
+	render_s->y = render_s->draw_start.y;
+	while (render_s->y < render_s->draw_end.y)
+	{
+		render_s->d = render_s->y * 256 - data->mlx.height * 128 + render_s->sprite_height * 128;
+		tex->y = ((render_s->d * data->mlx.enemy.img.height) / render_s->sprite_height)
+			/ 256;
+		render_s->texture_color = data->mlx.enemy.img.adrr + (tex->y
+				* data->mlx.enemy.img.size_line + tex->x
+				* (data->mlx.enemy.img.bits_per_pixel_div8));
+		render_s->screen_pixel = data->mlx.img.adrr + (render_s->y
+				* data->mlx.img.size_line + render_s->x
+				* (data->mlx.img.bits_per_pixel_div8));
+		if (*(unsigned int *)render_s->texture_color != TRANSPARENT)
+			*(unsigned int *)render_s->screen_pixel = *(unsigned int *)render_s->texture_color;
+		render_s->y++;
+	}	
+}
+
+void sprite_render(t_map_data *data, t_render_sprite *render_s, t_ray *ray)
+{
+	t_vecint tex;
+	
+	while (render_s->x < render_s->draw_end.x)
+	{
+		tex.x = (int)(256 * (render_s->x - (-render_s->sprite_width / 2 + render_s->sprite_screen_x))
+				* data->mlx.enemy.img.width / render_s->sprite_width) / 256;
+		if (render_s->transform.y > 0 && render_s->x > 0 && render_s->x < data->mlx.width
+			&& render_s->transform.y < ray->z_buffer[render_s->x])
+			draw_stripe_sprite(data, render_s,  &tex);
+		render_s->x++;
+	}
+}
+
 void	raycasting(t_map_data *data)
 {
 	t_ray		ray;
 	int			*sprite_order;
 	int			i;
-	t_sprite	*current;
-	double		inv_det;
-	t_vec		transform;
-	t_vec		sprite;
-	int			sprite_screen_x;
-	int			sprite_height;
-	int			sprite_width;
-	t_vecint	draw_start;
-	t_vecint	draw_end;
-	int			y;
-	t_vecint tex;
-	int			d;
-	char		*texture_color;
-	char		*screen_pixel;
-	int			x;
+	t_render_sprite render_s;
 
 
 	raycasting_wall_door(data, &ray);
@@ -651,61 +731,8 @@ void	raycasting(t_map_data *data)
 	i = 0;
 	while (i < data->nb_sprites)
 	{
-		current = data->sprites;
-		x = 0;
-		while (x++ < sprite_order[i])
-			current = current->next;
-		sprite.x = current->pos.x - data->p_pos.r_x;
-		sprite.y = current->pos.y - data->p_pos.r_y;
-		inv_det = 1.0 / (data->p_pos.plane_x * data->p_pos.dir_y
-				- data->p_pos.dir_x * data->p_pos.plane_y);
-		transform.x = inv_det * (data->p_pos.dir_y * sprite.x
-				- data->p_pos.dir_x * sprite.y);
-		transform.y = inv_det * (-data->p_pos.plane_y * sprite.x
-				+ data->p_pos.plane_x * sprite.y);
-		sprite_screen_x = (int)(data->mlx.width_div2 * (1 + transform.x
-					/ transform.y));
-		sprite_height = (int)fabs(data->mlx.height / transform.y);
-		draw_start.y = -sprite_height / 2 + data->mlx.height_div2;
-		if (draw_start.y < 0)
-			draw_start.y = 0;
-		draw_end.y = sprite_height / 2 + data->mlx.height_div2;
-		if (draw_end.y >= data->mlx.height)
-			draw_end.y = data->mlx.height - 1;
-		sprite_width = (int)fabs(data->mlx.height / transform.y);
-		draw_start.x = -sprite_width / 2 + sprite_screen_x;
-		if (draw_start.x < 0)
-			draw_start.x = 0;
-		draw_end.x = sprite_width / 2 + sprite_screen_x;
-		if (draw_end.x >= data->mlx.width)
-			draw_end.x = data->mlx.width - 1;
-		x = draw_start.x;
-		while (x < draw_end.x)
-		{
-			tex.x = (int)(256 * (x - (-sprite_width / 2 + sprite_screen_x))
-					* data->mlx.enemy.img.width / sprite_width) / 256;
-			if (transform.y > 0 && x > 0 && x < data->mlx.width
-				&& transform.y < ray.z_buffer[x])
-			{
-				y = draw_start.y;
-				while (y < draw_end.y)
-				{
-					d = y * 256 - data->mlx.height * 128 + sprite_height * 128;
-					tex.y = ((d * data->mlx.enemy.img.height) / sprite_height)
-						/ 256;
-					texture_color = data->mlx.enemy.img.adrr + (tex.y
-							* data->mlx.enemy.img.size_line + tex.x
-							* (data->mlx.enemy.img.bits_per_pixel_div8));
-					screen_pixel = data->mlx.img.adrr + (y
-							* data->mlx.img.size_line + x
-							* (data->mlx.img.bits_per_pixel_div8));
-					if (*(unsigned int *)texture_color != TRANSPARENT)
-						*(unsigned int *)screen_pixel = *(unsigned int *)texture_color;
-					y++;
-				}
-			}
-			x++;
-		}
+		set_sprite_data(data, sprite_order[i], &render_s);
+		sprite_render(data, &render_s, &ray);
 		i++;
 	}
 	free(sprite_order);
