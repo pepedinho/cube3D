@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 20:52:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/18 23:34:32 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 18:28:15 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,11 +139,10 @@ void	random_enemies(t_map_data *data)
 	double	margin;
 
 	map_height = get_map_height(data->map);
-	margin = 1; 
+	margin = 1;
 	x = 0;
 	y = 0;
-	while (!ft_is_in_charset(data->map[(int)floor(y)][(int)floor(x)], "0O") ||
-		is_near_wall_or_door(data, x, y, margin))
+	while (is_near_wall_or_door(data, x, y, margin))
 	{
 		y = rand_value(0, map_height);
 		x = rand_value(0, ft_strlen(data->map[(int)floor(y)]));
