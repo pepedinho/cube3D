@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/29 04:32:25 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 05:34:32 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,24 +54,24 @@ int	check_rgb_floor_ceiling(t_map_data *data)
 
 	rgb[0] = ft_split(data->input.tx_floor, ",");
 	rgb[1] = ft_split(data->input.tx_ceiling, ",");
-	if (!rgb[0] || !rgb[1])
+	if (!rgb[0] || !rgb[1] || ft_strlen_2d(rgb[0]) != 3
+		|| ft_strlen_2d(rgb[0]) != 3)
 		return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 0);
-	if (ft_strlen_2d(rgb[0]) != 3 || ft_strlen_2d(rgb[0]) != 3)
-		return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 0);
-	i = 0;
-	while (i <= 1)
+	i = -1;
+	while (++i <= 1)
 	{
-		if (!is_full_digit(rgb[i][0]) || !is_full_digit(rgb[i][1]) || !is_full_digit(rgb[i][2]))
+		if (!is_full_digit(rgb[i][0]) || !is_full_digit(rgb[i][1])
+			|| !is_full_digit(rgb[i][2]))
 			return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 0);
-		if (ft_atouc(rgb[i][0]) == -1 || ft_atouc(rgb[i][1]) == -1 || ft_atouc(rgb[i][2]) == -1)
+		if (ft_atouc(rgb[i][0]) == -1 || ft_atouc(rgb[i][1]) == -1
+			|| ft_atouc(rgb[i][2]) == -1)
 			return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 0);
 		if (i == 0)
 			data->input.floor_color = encode_rgb(ft_atouc(rgb[i][0]),
-			ft_atouc(rgb[i][1]), ft_atouc(rgb[i][2]));
+					ft_atouc(rgb[i][1]), ft_atouc(rgb[i][2]));
 		else
 			data->input.ceiling_color = encode_rgb(ft_atouc(rgb[i][0]),
-		ft_atouc(rgb[i][1]), ft_atouc(rgb[i][2]));
-		i++;
+					ft_atouc(rgb[i][1]), ft_atouc(rgb[i][2]));
 	}
 	return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 1);
 }

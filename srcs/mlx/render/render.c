@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 03:21:13 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 03:26:31 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 05:41:31 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	string_put(t_map_data *data, size_t fps)
 	free(str);
 }
 
-static void	update_fps_and_enemies(t_map_data *data, size_t *frame_count, size_t *fps, long long *frame_enemies)
+static void	update_fps_and_enemies(t_map_data *data, size_t *frame_count,
+		size_t *fps, long long *frame_enemies)
 {
 	*fps = *frame_count;
 	*frame_count = 0;
@@ -45,16 +46,15 @@ static void	render_to_screen(t_map_data *data)
 {
 	(raycasting(data), display_gun(data, data->mlx.gun));
 	display_crosshair(data);
-	mlx_put_image_to_window(data->mlx.init, data->mlx.window,
-		data->mlx.img.img, 0, 0);
+	mlx_put_image_to_window(data->mlx.init, data->mlx.window, data->mlx.img.img,
+		0, 0);
 }
 
 int	render(t_map_data *data)
 {
 	static time_t		last_time;
 	struct timeval		current_time;
-	static size_t		frame_count;
-	static size_t		fps;
+	static size_t		frame_fps[2];
 	static long long	frame_enemies;
 	static int			cnt;
 
@@ -67,11 +67,12 @@ int	render(t_map_data *data)
 		gettimeofday(&current_time, NULL);
 		if (current_time.tv_sec > last_time)
 		{
-			update_fps_and_enemies(data, &frame_count, &fps, &frame_enemies);
+			update_fps_and_enemies(data, &frame_fps[0], &frame_fps[1],
+				&frame_enemies);
 			last_time = current_time.tv_sec;
 		}
-		(string_put(data, fps), trace_perimeter(data, 5));
+		(string_put(data, frame_fps[1]), trace_perimeter(data, 5));
 	}
-	frame_count++;
+	frame_fps[0]++;
 	return (1);
 }

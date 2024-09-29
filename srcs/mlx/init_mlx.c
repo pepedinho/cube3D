@@ -16,7 +16,7 @@
 #include <X11/X.h>
 #include <stdio.h>
 
-void ft_mlx_destroy_image(void *mlx_ptr, void *img)
+void	ft_mlx_destroy_image(void *mlx_ptr, void *img)
 {
 	if (img)
 		mlx_destroy_image(mlx_ptr, img);
@@ -51,7 +51,7 @@ void	destroy_mlx(t_map_data *data)
 	exit(EXIT_SUCCESS);
 }
 
-void mlx_hook_setup(t_map_data *data, t_mlx mlx)
+void	mlx_hook_setup(t_map_data *data, t_mlx mlx)
 {
 	mlx_mouse_move(mlx.init, mlx.window, mlx.width_div2, mlx.height_div2);
 	mlx_mouse_hide(mlx.init, mlx.window);
@@ -60,10 +60,10 @@ void mlx_hook_setup(t_map_data *data, t_mlx mlx)
 	mlx_hook(mlx.window, KeyRelease, KeyReleaseMask, key_release, data);
 	mlx_mouse_hook(mlx.window, mouse_click, data);
 	mlx_hook(mlx.window, 17, 0L, click_cross, data);
-	mlx_loop(mlx.init);	
+	mlx_loop(mlx.init);
 }
 
-void open_all_images(t_map_data *data, t_mlx *mlx)
+void	open_all_images(t_map_data *data, t_mlx *mlx)
 {
 	new_image(data, &mlx->img);
 	ft_init_img(data, &mlx->wall[N]);
@@ -77,7 +77,7 @@ void open_all_images(t_map_data *data, t_mlx *mlx)
 	ft_init_img(data, &mlx->blue);
 	ft_init_img(data, &mlx->dot);
 	ft_init_img(data, &mlx->gun);
-	ft_init_img(data, &mlx->enemy.img);	
+	ft_init_img(data, &mlx->enemy.img);
 }
 
 int	init_mlx(t_map_data *data)

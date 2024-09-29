@@ -87,7 +87,7 @@ void	fill_floor(t_map_data *map)
 	char	*target;
 	int		i;
 	int		end;
-	
+
 	i = map->mlx.height_div2 * map->mlx.img.size_line + map->mlx.width
 		* (map->mlx.img.bits_per_pixel_div8);
 	end = map->mlx.height * map->mlx.img.size_line + map->mlx.width
@@ -103,7 +103,7 @@ void	fill_floor(t_map_data *map)
 
 void	print_stripe(t_map_data *map, t_ray *ray, int i)
 {
-	t_vecint texture;
+	t_vecint	texture;
 
 	ray->coord.y = ray->draw_start;
 	if (i == D)
@@ -111,7 +111,7 @@ void	print_stripe(t_map_data *map, t_ray *ray, int i)
 		texture.x = (int)(ray->wall_x * map->mlx.door.width);
 		if ((ray->side == 0 && ray->ray_dir.x > 0) || (ray->side == 1
 				&& ray->ray_dir.y < 0))
-			texture.x = map->mlx.door.width - texture.x - 1;		
+			texture.x = map->mlx.door.width - texture.x - 1;
 		draw_door_stripe(map, ray, texture);
 	}
 	else

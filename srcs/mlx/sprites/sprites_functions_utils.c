@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 03:56:31 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 03:58:06 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 05:36:47 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ void	normalize_vector(double *x, double *y)
 
 void	enemies_movement(t_map_data *data)
 {
-	t_vec	dir;
-	t_vec	new;
-	double	speed;
-	t_sprite *current;
+	t_vec		dir;
+	t_vec		new;
+	double		speed;
+	t_sprite	*current;
 
 	speed = 0.05;
 	current = data->sprites;
@@ -89,10 +89,10 @@ void	sort_sprites(int *order, double *dist, int amount)
 
 int	is_near_wall_or_door(t_map_data *data, double x, double y, double margin)
 {
-	int		i;
-	int		j;
-	int		map_width;
-	int		map_height;
+	int	i;
+	int	j;
+	int	map_width;
+	int	map_height;
 
 	map_height = get_map_height(data->map);
 	i = 0;

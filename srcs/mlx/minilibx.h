@@ -6,15 +6,15 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:15:47 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 04:03:01 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 06:08:28 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINILIBX_H
 # define MINILIBX_H
 
+# include <X11/X.h>
 # include <X11/keysym.h>
-#include <X11/X.h>
 
 # define SENSITIVITY 0.02
 # define MIN_MOUSE_MOVE 5
@@ -35,6 +35,8 @@
 #  undef CUBE3D_H
 # endif
 
+typedef struct s_vec	t_vec;
+typedef struct s_vecint	t_vecint;
 // typedef struct s_map_data	t_map_data;
 
 int		init_mlx(t_map_data *data);
@@ -73,10 +75,10 @@ void	display_crosshair(t_map_data *data);
 void	handle_gun_fire(t_map_data *data, int *cnt);
 void	change_player(t_map_data *data);
 
-// draw 
+// draw
 void	draw_single_pixel(t_map_data *data, int x, int y, char *gun_color);
 void	draw_scaled_pixel(t_map_data *data, t_vecint img, t_vecint gun,
-	t_img *img_sprite);
+			t_img *img_sprite);
 
 // animations
 void	animate_gun(t_map_data *data, int *an);

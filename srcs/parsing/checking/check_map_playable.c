@@ -59,11 +59,11 @@ int	check_the_map(t_map_data *map_data)
 
 int	check_next_cases_doors(char **map_cpy, int y, int x)
 {
-	if (map_cpy[y - 1][x] == '1' && map_cpy[y + 1][x] == '1'
-		&& !(map_cpy[y][x - 1] == '1' || map_cpy[y][x + 1] == '1'))
+	if (map_cpy[y - 1][x] == '1' && map_cpy[y + 1][x] == '1' && !(map_cpy[y][x
+			- 1] == '1' || map_cpy[y][x + 1] == '1'))
 		return (1);
-	if (map_cpy[y][x - 1] == '1' && map_cpy[y][x + 1] == '1'
-		&& !(map_cpy[y - 1][x] == '1' || map_cpy[y + 1][x] == '1'))
+	if (map_cpy[y][x - 1] == '1' && map_cpy[y][x + 1] == '1' && !(map_cpy[y
+			- 1][x] == '1' || map_cpy[y + 1][x] == '1'))
 		return (1);
 	return (0);
 }
@@ -99,7 +99,7 @@ int	check_map_playable(t_map_data *data)
 	if (check_doors(data) == 0)
 	{
 		ft_fprintf(2, "Error\nIncorrect map: Doors are not good\n");
-		return (0);		
+		return (0);
 	}
 	return (1);
 }

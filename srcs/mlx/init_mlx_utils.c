@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 04:01:02 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 04:01:54 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 05:36:04 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_init_img(t_map_data *data, t_img *img)
 	printf("Image properties(%s): width=%d, height=%d, bpp=%d, size_line=%d\n",
 		img->path, img->width, img->height, img->bits_per_pixel,
 		img->size_line);
-	img->bits_per_pixel_div8 = img->bits_per_pixel / 8;	
+	img->bits_per_pixel_div8 = img->bits_per_pixel / 8;
 }
 
 void	new_image(t_map_data *data, t_img *img)

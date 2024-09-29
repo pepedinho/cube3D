@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_if_enemy.c                                   :+:      :+:    :+:   */
+/*   check_enemy.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 04:56:35 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 04:56:59 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 05:45:23 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	is_enemy_visible(t_map_data *data, double enemy_x, double enemy_y)
 {
-	t_vec player;
-	t_vec dir;
-	double	distance;
-	t_vec current;
-	t_vecint map;
+	t_vec		player;
+	t_vec		dir;
+	double		distance;
+	t_vec		current;
+	t_vecint	map;
 
 	player.x = data->p_pos.r_x;
 	player.y = data->p_pos.r_y;
@@ -40,35 +40,47 @@ int	is_enemy_visible(t_map_data *data, double enemy_x, double enemy_y)
 	return (1);
 }
 
-int	is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y,
-		double base_tolerance)
+t_vec	normalize_vector_enemy(double x, double y)
 {
-	double	inv_norm_camera;
-	t_vec camera_dir;
-	t_vec enemy_dir;
-	double	inv_norm_enemy;
-	double	dot_product;
+	t_vec	normalized;
+	double	inv_norm;
+
+	inv_norm = 1.0 / sqrt(x * x + y * y);
+	normalized.x = x * inv_norm;
+	normalized.y = y * inv_norm;
+	return (normalized);
+}
+
+double	calculate_distance(t_map_data *data, double enemy_x, double enemy_y)
+{
+	double	dx;
+	double	dy;
+
+	dx = enemy_x - data->p_pos.r_x;
+	dy = enemy_y - data->p_pos.r_y;
+	return (sqrt(dx * dx + dy * dy));
+}
+
+int	is_looking_at_enemy(t_map_data *data, double enemy_x, double enemy_y,
+	double base_tolerance)
+{
+	t_vec	camera_dir;
+	t_vec	enemy_dir;
 	double	distance;
 	double	dynamic_tolerance;
+	double	dot_product;
 
-	inv_norm_camera = 1.0 / sqrt(data->p_pos.dir_x * data->p_pos.dir_x
-			+ data->p_pos.dir_y * data->p_pos.dir_y);
-	camera_dir.x = data->p_pos.dir_x * inv_norm_camera;
-	camera_dir.y = data->p_pos.dir_y * inv_norm_camera;
-	enemy_dir.x = enemy_x - data->p_pos.r_x;
-	enemy_dir.y = enemy_y - data->p_pos.r_y;
-	distance = sqrt(enemy_dir.x * enemy_dir.x + enemy_dir.y * enemy_dir.y);
-	inv_norm_enemy = 1.0 / distance;
-	enemy_dir.x *= inv_norm_enemy;
-	enemy_dir.y *= inv_norm_enemy;
-	dynamic_tolerance = base_tolerance + (1.0 / distance); // try to change this for better precision on fire
+	camera_dir = normalize_vector_enemy(data->p_pos.dir_x, data->p_pos.dir_y);
+	distance = calculate_distance(data, enemy_x, enemy_y);
+	enemy_dir = normalize_vector_enemy(enemy_x - data->p_pos.r_x,
+			enemy_y - data->p_pos.r_y);
+	dynamic_tolerance = base_tolerance + (1.0 / distance);
 	dot_product = camera_dir.x * enemy_dir.x + camera_dir.y * enemy_dir.y;
 	if (dot_product > cos(dynamic_tolerance * M_PI / 180.0))
 		if (is_enemy_visible(data, enemy_x, enemy_y))
 			return (1);
 	return (0);
 }
-
 
 int	check_if_crosshair_on_enemy(t_map_data *data)
 {

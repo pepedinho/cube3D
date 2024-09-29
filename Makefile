@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/29 05:03:06 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/29 05:20:30 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ RENDER = $(addprefix render/, crosshair.c gun.c render.c)
 
 DRAW = $(addprefix draw/, draw.c)
 
-SPRITE = $(addprefix sprites/, sprites_functions.c sprites_functions_utils.c)
+SPRITE = $(addprefix sprites/, sprites_functions.c sprites_functions_utils.c sprites_functions_utils2.c)
 
 CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
 
@@ -112,6 +112,9 @@ $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
 	@echo -n " "
 	@printf "%s" $(notdir $<)
 	@printf "\e[0K\r"
+
+form :
+	@python3 -m c_formatter_42 $(SRCS)
 
 message :
 	@echo

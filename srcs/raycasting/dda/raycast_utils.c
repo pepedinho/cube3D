@@ -6,11 +6,11 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:20:19 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/08 17:21:30 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 05:25:14 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../raycatsing.h"
+#include "../raycasting.h"
 
 int	sign(double nb)
 {

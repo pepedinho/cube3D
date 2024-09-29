@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../../includes/cube3D.h"
 
 void	mouse_movement(t_map_data *data)
@@ -34,7 +33,7 @@ void	mouse_movement(t_map_data *data)
 	}
 }
 
-int mouse_click(int button, int x, int y, t_map_data *data)
+int	mouse_click(int button, int x, int y, t_map_data *data)
 {
 	(void)x;
 	(void)y;
@@ -42,7 +41,6 @@ int mouse_click(int button, int x, int y, t_map_data *data)
 		data->key.fire = true;
 	return (1);
 }
-
 
 void	handle_camera_movement(t_map_data *data)
 {

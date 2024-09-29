@@ -6,11 +6,11 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:54:14 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/29 05:00:23 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 05:25:02 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../raycatsing.h"
+#include "../raycasting.h"
 #include <X11/X.h>
 #include <math.h>
 #include <stdbool.h>
@@ -285,8 +285,6 @@
 // 	return (1);
 // }
 
-
-
 void	set_ray_variables(t_ray *ray, t_map_data *data)
 {
 	ray->hit = 0;
@@ -320,7 +318,7 @@ void	print_on_display(t_ray *ray, t_map_data *data)
 		print_stripe(data, ray, W);
 }
 
-void raycasting_wall_door(t_map_data *data, t_ray *ray)
+void	raycasting_wall_door(t_map_data *data, t_ray *ray)
 {
 	ray->coord.x = 0;
 	fill_ceiling(data);
@@ -344,16 +342,15 @@ void raycasting_wall_door(t_map_data *data, t_ray *ray)
 		ray->wall_x -= floor(ray->wall_x);
 		print_on_display(ray, data);
 		ray->coord.x++;
-	}	
+	}
 }
 
 void	raycasting(t_map_data *data)
 {
-	t_ray		ray;
-	int			*sprite_order;
-	int			i;
-	t_render_sprite render_s;
-
+	t_ray			ray;
+	int				*sprite_order;
+	int				i;
+	t_render_sprite	render_s;
 
 	raycasting_wall_door(data, &ray);
 	if (data->nb_sprites == 0)

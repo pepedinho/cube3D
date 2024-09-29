@@ -153,7 +153,7 @@ typedef struct s_map_data
 	t_key			key;
 	double			delta_time;
 	t_sprite		*sprites;
-	int nb_sprites;
+	int				nb_sprites;
 }					t_map_data;
 
 // parsing

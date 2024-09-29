@@ -14,8 +14,8 @@
 
 void	right_fov(t_map_data *data, double rot_speed)
 {
-	double old_dir_x;
-	double old_plane_x;
+	double	old_dir_x;
+	double	old_plane_x;
 
 	old_dir_x = data->p_pos.dir_x;
 	data->p_pos.dir_x = data->p_pos.dir_x * cos(rot_speed) - data->p_pos.dir_y
@@ -31,8 +31,8 @@ void	right_fov(t_map_data *data, double rot_speed)
 
 void	left_fov(t_map_data *data, double rot_speed)
 {
-	double old_dir_x;
-	double old_plane_x;
+	double	old_dir_x;
+	double	old_plane_x;
 
 	old_dir_x = data->p_pos.dir_x;
 	data->p_pos.dir_x = data->p_pos.dir_x * cos(-rot_speed) - data->p_pos.dir_y

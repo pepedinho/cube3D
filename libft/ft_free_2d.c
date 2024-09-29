@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 15:04:52 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 04:12:04 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 06:09:13 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_free_2d(char **split)
 	int	index;
 
 	if (!split)
-		return;
+		return ;
 	index = 0;
 	while (split[index])
 	{

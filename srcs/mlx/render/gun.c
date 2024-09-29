@@ -34,8 +34,8 @@ void	draw_gun(t_map_data *data, t_img img_sprite, t_vecint center, int scale)
 
 void	display_gun(t_map_data *data, t_img img_sprite)
 {
-	t_vecint center;
-	int	scale;
+	t_vecint	center;
+	int			scale;
 
 	center.x = data->mlx.width_div2;
 	center.y = data->mlx.height_div2;
@@ -51,8 +51,8 @@ void	animate_gun(t_map_data *data, int *an)
 		display_gun(data, data->mlx.shoot[1]);
 	else if (*an > 15)
 		display_gun(data, data->mlx.gun);
-	mlx_put_image_to_window(data->mlx.init, data->mlx.window,
-		data->mlx.img.img, 0, 0);
+	mlx_put_image_to_window(data->mlx.init, data->mlx.window, data->mlx.img.img,
+		0, 0);
 	++(*an);
 	if (*an > 20)
 	{

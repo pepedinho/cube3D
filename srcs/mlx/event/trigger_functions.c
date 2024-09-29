@@ -64,7 +64,6 @@ int	key_release(int keysym, t_map_data *data)
 	return (1);
 }
 
-
 void	change_player(t_map_data *data)
 {
 	static bool	is_press;
@@ -75,4 +74,3 @@ void	change_player(t_map_data *data)
 	handle_player_movement(data);
 	handle_door_interaction(data, &is_press);
 }
-
