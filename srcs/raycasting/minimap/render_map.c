@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 20:00:33 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 16:48:24 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 06:20:22 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,13 @@ int	trace_perimeter(t_map_data *map_data, int r)
 	double	k;
 	double	radiant;
 	int		i;
-	int		x;
-	int		y;
 
 	i = 0;
-	x = 5;
-	y = 5;
 	while (i < 5000)
 	{
 		radiant = 2 * M_PI * i / 5000;
-		h = x + r * cos(radiant);
-		k = y + r * sin(radiant);
+		h = 5 + r * cos(radiant);
+		k = 5 + r * sin(radiant);
 		mlx_pixel_put(map_data->mlx.init, map_data->mlx.window, h
 			* CIRCLE_SCALE, k * CIRCLE_SCALE, 0XFFFFFF);
 		i++;
@@ -51,16 +47,15 @@ int	map_ylen(char **map)
 
 void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 {
-	double	x_start;
-	double	y_start;
+	t_vec	start;
 	double	x_step;
 	double	y_step;
 	int		steps;
 	int		i;
 
-	x_start = 10.5;
-	y_start = 10.5;
-	steps = fmax(fabs(to_x - x_start), fabs(to_y - y_start)) * PRECISION;
+	start.x = 10.5;
+	start.y = 10.5;
+	steps = fmax(fabs(to_x - start.x), fabs(to_y - start.y)) * PRECISION;
 	x_step = to_x * map_data->p_pos.dir_length;
 	y_step = to_y * map_data->p_pos.dir_length;
 	x_step /= steps;
@@ -68,48 +63,46 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 	i = 0;
 	while (i <= steps)
 	{
-		mlx_pixel_put(map_data->mlx.init, map_data->mlx.window, x_start
-			* MAP_SCALE, y_start * MAP_SCALE, color);
-		x_start += x_step;
-		y_start += y_step;
+		mlx_pixel_put(map_data->mlx.init, map_data->mlx.window, start.x
+			* MAP_SCALE, start.y * MAP_SCALE, color);
+		start.x += x_step;
+		start.y += y_step;
 		i++;
 	}
 }
 
 void	render_map(t_map_data *map_data)
 {
-	int		x;
-	int		y;
-	char	**map;
-	int		radius;
-	int		px;
-	int		py;
-	int		draw_x;
-	int		draw_y;
+	int			x;
+	int			y;
+	char		**map;
+	int			radius;
+	t_vecint	p;
+	t_vecint	draw;
 
 	radius = 8;
-	py = map_data->p_pos.r_y;
-	px = map_data->p_pos.r_x;
-	y = py - radius;
+	p.y = map_data->p_pos.r_y;
+	p.x = map_data->p_pos.r_x;
+	y = p.y - radius;
 	map = map_data->map;
-	while (y <= py + radius)
+	while (y <= p.y + radius)
 	{
 		if (y >= 0 && y < map_ylen(map))
 		{
-			x = px - radius;
-			while (x <= px + radius)
+			x = p.x - radius;
+			while (x <= p.x + radius)
 			{
 				if (x >= 0 && x <= ft_strlen(map[y]))
 				{
-					if ((x - px) * (x - px) + (y - py) * (y - py) <= radius
+					if ((x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= radius
 						* radius)
 					{
-						draw_x = 10 + (x - px);
-						draw_y = 10 + (y - py);
+						draw.x = 10 + (x - p.x);
+						draw.y = 10 + (y - p.y);
 						if (map[y][x] == '1')
 						{
 							// mlx_pixel_put(map_data->mlx.init,
-							// 	map_data->mlx.window, draw_x * MAP_SCALE, draw_y
+							// 	map_data->mlx.window, draw.x * MAP_SCALE, draw.y
 							// 	* MAP_SCALE, 0XFFFFFF);
 							mlx_put_image_to_window(map_data->mlx.init,
 								map_data->mlx.window, map_data->mlx.dot.img, 10
@@ -118,13 +111,13 @@ void	render_map(t_map_data *map_data)
 								map_data->p_pos.direction.y, 0X0000FF);
 							mlx_put_image_to_window(map_data->mlx.init,
 								map_data->mlx.window, map_data->mlx.white.img,
-								draw_x * MAP_SCALE, draw_y * MAP_SCALE);
+								draw.x * MAP_SCALE, draw.y * MAP_SCALE);
 						}
 						else if (map[y][x] == 'D')
 						{
 							mlx_put_image_to_window(map_data->mlx.init,
 								map_data->mlx.window, map_data->mlx.blue.img,
-								draw_x * MAP_SCALE, draw_y * MAP_SCALE);
+								draw.x * MAP_SCALE, draw.y * MAP_SCALE);
 						}
 					}
 				}
