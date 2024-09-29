@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/28 19:44:49 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 02:45:43 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,56 +136,76 @@ void	mouse_movement(t_map_data *data)
 			data->mlx.height_div2);
 	}
 }
-
-void	display_gun(t_map_data *data, t_img img_sprite)
+static void	draw_single_pixel(t_map_data *data, int x, int y, char *gun_color)
 {
-	int				center_x;
-	int				center_y;
-	char			*gun_color;
-	char			*img_color;
-	t_vecint		gun;
-	t_vecint		img;
-	int				scale;
-	t_vecint		img_scale;
+	char	*img_color;
+
+	if (x >= 0 && x < data->mlx.width && y >= 0 && y < data->mlx.height)
+	{
+		img_color = (data->mlx.img.adrr + y
+				* data->mlx.img.size_line + x
+				* (data->mlx.img.bits_per_pixel_div8));
+		*(unsigned int *)img_color = *(unsigned int *)gun_color;
+	}
+}
+
+static void	draw_scaled_pixel(t_map_data *data, t_vecint img, t_vecint gun,
+	t_img *img_sprite)
+{
+	int			scale;
+	t_vecint	img_scale;
+	char		*gun_color;
 
 	scale = 3;
+	gun_color = img_sprite->adrr + (gun.y * img_sprite->size_line + gun.x
+			* (img_sprite->bits_per_pixel_div8));
+	if (*(unsigned int *)gun_color != TRANSPARENT)
+	{
+		img_scale.y = 0;
+		while (img_scale.y < scale)
+		{
+			img_scale.x = 0;
+			while (img_scale.x < scale)
+			{
+				int x = img.x + img_scale.x;
+				int y = img.y + img_scale.y;
+				draw_single_pixel(data, x, y, gun_color);
+				img_scale.x++;
+			}
+			img_scale.y++;
+		}
+	}
+}
+
+void	draw_gun(t_map_data *data, t_img img_sprite, t_vecint center, int scale)
+{
+	t_vecint	gun;
+	t_vecint	img;
+
 	gun.y = 0;
-	center_x = data->mlx.width_div2;
-	center_y = data->mlx.height_div2;
 	while (gun.y < img_sprite.height)
 	{
 		gun.x = 0;
 		while (gun.x < img_sprite.width)
 		{
-			gun_color = img_sprite.adrr + (gun.y * img_sprite.size_line + gun.x
-					* (data->mlx.gun.bits_per_pixel_div8));
-			if (*(unsigned int *)gun_color != TRANSPARENT)
-			{
-				img_scale.y = 0;
-				while (img_scale.y < scale)
-				{
-					img_scale.x = 0;
-					while (img_scale.x < scale)
-					{
-						img.x = center_x + gun.x * scale + img_scale.x;
-						img.y = center_y + gun.y * scale + img_scale.y;
-						if (img.x >= 0 && img.x < data->mlx.width && img.y >= 0
-							&& img.y < data->mlx.height)
-						{
-							img_color = (data->mlx.img.adrr + img.y
-									* data->mlx.img.size_line + img.x
-									* (data->mlx.img.bits_per_pixel_div8));
-							*(unsigned int *)img_color = *(unsigned int *)gun_color;
-						}
-						img_scale.x++;
-					}
-					img_scale.y++;
-				}
-			}
+			img.x = center.x + gun.x * scale;
+			img.y = center.y + gun.y * scale;
+			draw_scaled_pixel(data, img, gun, &img_sprite);
 			gun.x++;
 		}
 		gun.y++;
 	}
+}
+
+void	display_gun(t_map_data *data, t_img img_sprite)
+{
+	t_vecint center;
+	int	scale;
+
+	center.x = data->mlx.width_div2;
+	center.y = data->mlx.height_div2;
+	scale = 3;
+	draw_gun(data, img_sprite, center, scale);
 }
 
 void	draw_crosshair_x(t_map_data *data, int center_x, int center_y, int size)
@@ -320,6 +340,37 @@ int mouse_click(int button, int x, int y, t_map_data *data)
 	return (1);
 }
 
+
+static void	handle_gun_fire(t_map_data *data, int *cnt)
+{
+	if (data->key.fire == true)
+	{
+		if (!*cnt)
+			check_if_crosshair_on_enemy(data);
+		animate_gun(data, cnt);
+	}
+}
+
+static void	update_fps_and_enemies(t_map_data *data, size_t *frame_count, size_t *fps, long long *frame_enemies)
+{
+	*fps = *frame_count;
+	*frame_count = 0;
+	(*frame_enemies)++;
+	if (*frame_enemies >= data->mlx.enemy.spawn)
+	{
+		*frame_enemies = 0;
+		random_enemies(data);
+	}
+}
+
+static void	render_frame(t_map_data *data)
+{
+	(raycasting(data), display_gun(data, data->mlx.gun));
+	display_crosshair(data);
+	mlx_put_image_to_window(data->mlx.init, data->mlx.window,
+		data->mlx.img.img, 0, 0);
+}
+
 int	render(t_map_data *data)
 {
 	static time_t		last_time;
@@ -329,41 +380,21 @@ int	render(t_map_data *data)
 	static long long	frame_enemies;
 	static int			cnt;
 
-	mouse_movement(data);
-	change_player(data);
-	// enemies_movement(data);
+	(mouse_movement(data), change_player(data));
 	if (data->mlx.window != NULL)
 	{
 		data->door_trigger = 0;
-		raycasting(data);
-		display_gun(data, data->mlx.gun);
-		if (data->key.fire == true)
-		{
-			if (!cnt)
-				check_if_crosshair_on_enemy(data);
-			animate_gun(data, &cnt);
-		}
-		display_crosshair(data);
-		mlx_put_image_to_window(data->mlx.init, data->mlx.window,
-			data->mlx.img.img, 0, 0);
+		render_frame(data);
+		handle_gun_fire(data, &cnt);
 		gettimeofday(&current_time, NULL);
 		if (current_time.tv_sec > last_time)
 		{
-			fps = frame_count;
-			frame_count = 0;
+			update_fps_and_enemies(data, &frame_count, &fps, &frame_enemies);
 			last_time = current_time.tv_sec;
-			frame_enemies++;
-			if (frame_enemies >= data->mlx.enemy.spawn)
-			{
-				frame_enemies = 0;
-				// if (data->mlx.enemy.spawn != 0)
-				// 	data->mlx.enemy.spawn--;
-				random_enemies(data);
-			}
 		}
-		string_put(data, fps);
-		trace_perimeter(data, 5);
+		(string_put(data, fps), trace_perimeter(data, 5));
 	}
 	frame_count++;
 	return (1);
 }
+

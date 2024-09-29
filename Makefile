@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/19 09:33:53 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/29 02:40:35 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ END= 	$(shell tput -Txterm sgr0)
 
 CC = cc
 
-C_FLAGS = -Wall -Werror -Wextra -MMD -MP -O3 -Ofast -ffast-math -g3
+C_FLAGS = -Wall -Werror -Wextra -g3 #-MMD -MP -O3 -Ofast -ffast-math 
 
 SRCS_DIR = srcs/
 

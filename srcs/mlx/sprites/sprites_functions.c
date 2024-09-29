@@ -6,12 +6,13 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 20:52:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/28 20:12:33 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/28 23:49:33 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cube3D.h"
 #include <X11/X.h>
+#include <math.h>
 
 int len_sprites(t_sprite *sprites)
 {
@@ -101,17 +102,12 @@ void	sort_sprites(int *order, double *dist, int amount)
 		{
 			if (dist[j] > dist[max])
 				max = j;
-			j++;
+			++j;
 		}
 		swap(&order[i], &order[max]);
 		swap_double(&dist[i], &dist[max]);
-		i++;
+		++i;
 	}
-}
-
-double	distance(double x1, double y1, double x2, double y2)
-{
-	return (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
 int	is_near_wall_or_door(t_map_data *data, double x, double y, double margin)
@@ -131,12 +127,12 @@ int	is_near_wall_or_door(t_map_data *data, double x, double y, double margin)
 		{
 			if (ft_is_in_charset(data->map[i][j], "1D"))
 			{
-				if (distance(x, y, (double)j, (double)i) < margin)
+				if (distance_euclid(x, y, (double)j, (double)i) < margin)
 					return (1);
 			}
-			j++;
+			++j;
 		}
-		i++;
+		++i;
 	}
 	return (0);
 }
@@ -153,7 +149,7 @@ void	random_enemies(t_map_data *data)
 	margin = 1;
 	x = 0;
 	y = 0;
-	while (is_near_wall_or_door(data, x, y, margin))
+	while (!ft_is_in_charset(data->map[(int)floor(y)][(int)floor(x)], "0O")|| is_near_wall_or_door(data, x, y, margin))
 	{
 		y = rand_value(0, map_height);
 		x = rand_value(0, ft_strlen(data->map[(int)floor(y)]));
