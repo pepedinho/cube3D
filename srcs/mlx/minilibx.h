@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 13:15:47 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/19 00:04:35 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 04:03:01 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@
 
 int		init_mlx(t_map_data *data);
 void	destroy_mlx(t_map_data *data);
+void	new_image(t_map_data *data, t_img *img);
+void	path_to_mlx_img(t_map_data *data, t_mlx *mlx);
+void	ft_init_img(t_map_data *data, t_img *img);
 
 // player move
 
@@ -46,11 +49,14 @@ void	right(t_map_data *data, double move_speed);
 void	left(t_map_data *data, double move_speed);
 void	forward(t_map_data *data, double move_speed);
 void	behind(t_map_data *data, double move_speed);
+void	handle_player_movement(t_map_data *data);
+void	handle_door_interaction(t_map_data *data, bool *is_press);
 
 // fov move
 //
 void	right_fov(t_map_data *data, double rot_speed);
 void	left_fov(t_map_data *data, double rot_speed);
+void	handle_camera_movement(t_map_data *data);
 
 // trigger functions
 int		mouse_click(int button, int x, int y, t_map_data *data);
@@ -59,6 +65,18 @@ int		handle_input(int keysym, t_map_data *data);
 int		render(t_map_data *data);
 int		key_prees(int keysym, t_map_data *data);
 int		key_release(int keysym, t_map_data *data);
+void	mouse_movement(t_map_data *data);
+
+// display
+void	display_gun(t_map_data *data, t_img img_sprite);
+void	display_crosshair(t_map_data *data);
+void	handle_gun_fire(t_map_data *data, int *cnt);
+void	change_player(t_map_data *data);
+
+// draw 
+void	draw_single_pixel(t_map_data *data, int x, int y, char *gun_color);
+void	draw_scaled_pixel(t_map_data *data, t_vecint img, t_vecint gun,
+	t_img *img_sprite);
 
 // animations
 void	animate_gun(t_map_data *data, int *an);

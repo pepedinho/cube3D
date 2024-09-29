@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/29 02:40:35 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/29 04:03:15 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,13 @@ SRCS_DIR = srcs/
 
 UTILS = $(addprefix utils/, utils.c)
 
-SPRITE = $(addprefix sprites/, sprites_functions.c)
+EVENT = $(addprefix event/, trigger_functions.c  trigger_functions_utils.c)
+
+RENDER = $(addprefix render/, crosshair.c gun.c render.c)
+
+DRAW = $(addprefix draw/, draw.c)
+
+SPRITE = $(addprefix sprites/, sprites_functions.c sprites_functions_utils.c)
 
 CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
 
@@ -41,7 +47,7 @@ RAYCASTING = $(addprefix raycasting/, $(DDA) $(MINI_MAP))
 
 PARSING = $(addprefix parsing/, parser.c map_parsing.c utils.c $(CHECKING))
 
-MLX = $(addprefix mlx/, init_mlx.c trigger_functions.c $(MOVE) $(SPRITE))
+MLX = $(addprefix mlx/, init_mlx.c init_mlx_utils.c $(MOVE) $(SPRITE) $(EVENT) $(RENDER) $(DRAW))
 
 OBJS_DIR = .objets/
 
