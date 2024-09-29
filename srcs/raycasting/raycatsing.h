@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:56:24 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/28 22:33:01 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 05:02:28 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,26 @@ typedef struct s_render_sprite
 	t_vec		transform;
 }t_render_sprite;
 
+// Draw stripe
+void	print_stripe(t_map_data *map, t_ray *ray, int i);
+void	fill_floor(t_map_data *map);
+void	fill_ceiling(t_map_data *map);
+
+
 // raycast
 int				trace_perimeter(t_map_data *map_data, int r);
 int				find_r(t_map_data *map_data);
 double			abs_value(double nb);
+void	open_door_gesture(t_ray *ray, t_map_data *data);
+void	dda(t_ray *ray, t_map_data *data);
+
+// raycast_sprite
+t_vec set_current_sprite_position(t_map_data *data, int index);
+t_vec set_transform(t_map_data *data, t_vec sprite);
+void sprite_render(t_map_data *data, t_render_sprite *render_s, t_ray *ray);
+void set_sprite_data(t_map_data *data, int index, t_render_sprite *render_s);
+int *order_sprite_with_distance(t_map_data *data);
+
 
 // utils
 int				encode_rgb(uint8_t red, uint8_t green, uint8_t blue);

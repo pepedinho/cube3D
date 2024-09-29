@@ -6,11 +6,12 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:12:58 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/07 19:06:03 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/29 04:32:25 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cube3D.h"
+#include <stdio.h>
 
 // TODO check if no space between type and path
 
@@ -48,43 +49,31 @@ int	ft_atouc(const char *str)
 
 int	check_rgb_floor_ceiling(t_map_data *data)
 {
-	char	**rgb;
+	char	**rgb[2];
 	int		i;
-	int		tab[3];
 
-	rgb = ft_split(data->input.tx_floor, ",");
-	if (!rgb)
-		return (0);
+	rgb[0] = ft_split(data->input.tx_floor, ",");
+	rgb[1] = ft_split(data->input.tx_ceiling, ",");
+	if (!rgb[0] || !rgb[1])
+		return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 0);
+	if (ft_strlen_2d(rgb[0]) != 3 || ft_strlen_2d(rgb[0]) != 3)
+		return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 0);
 	i = 0;
-	while (rgb[i])
+	while (i <= 1)
 	{
-		if (i == 3)
-			return (ft_free_2d(rgb), 0);
-		if (is_full_digit(rgb[i]) == 0)
-			return (ft_free_2d(rgb), 0);
-		tab[i] = ft_atouc(rgb[i]);
-		if (tab[i++] == -1)
-			return (ft_free_2d(rgb), 0);
+		if (!is_full_digit(rgb[i][0]) || !is_full_digit(rgb[i][1]) || !is_full_digit(rgb[i][2]))
+			return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 0);
+		if (ft_atouc(rgb[i][0]) == -1 || ft_atouc(rgb[i][1]) == -1 || ft_atouc(rgb[i][2]) == -1)
+			return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 0);
+		if (i == 0)
+			data->input.floor_color = encode_rgb(ft_atouc(rgb[i][0]),
+			ft_atouc(rgb[i][1]), ft_atouc(rgb[i][2]));
+		else
+			data->input.ceiling_color = encode_rgb(ft_atouc(rgb[i][0]),
+		ft_atouc(rgb[i][1]), ft_atouc(rgb[i][2]));
+		i++;
 	}
-	data->input.floor_color = encode_rgb(tab[0], tab[1], tab[2]);
-	ft_free_2d(rgb);
-	rgb = ft_split(data->input.tx_ceiling, ",");
-	if (!rgb)
-		return (0);
-	i = 0;
-	while (rgb[i])
-	{
-		if (i == 3)
-			return (ft_free_2d(rgb), 0);
-		if (is_full_digit(rgb[i]) == 0)
-			return (ft_free_2d(rgb), 0);
-		tab[i] = ft_atouc(rgb[i]);
-		if (tab[i++] == -1)
-			return (ft_free_2d(rgb), 0);
-	}
-	data->input.ceiling_color = encode_rgb(tab[0], tab[1], tab[2]);
-	ft_free_2d(rgb);
-	return (1);
+	return (ft_free_2d(rgb[0]), ft_free_2d(rgb[1]), 1);
 }
 
 t_map_data	*get_map_data(char *filename, t_map_data *map_data)
@@ -102,6 +91,16 @@ t_map_data	*get_map_data(char *filename, t_map_data *map_data)
 		line = get_next_line(fd);
 	}
 	close(fd);
-	check_rgb_floor_ceiling(map_data);
+	if (check_rgb_floor_ceiling(map_data) == 0)
+	{
+		ft_free_2d(map_data->map);
+		free(map_data->input.tx_ceiling);
+		free(map_data->input.tx_floor);
+		free(map_data->input.tx_north);
+		free(map_data->input.tx_south);
+		(free(map_data->input.tx_east), free(map_data->input.tx_west));
+		printf("Erreur\n RGB not good\n");
+		exit(EXIT_FAILURE);
+	}
 	return (map_data);
 }

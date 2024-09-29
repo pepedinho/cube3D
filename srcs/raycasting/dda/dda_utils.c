@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_2d.c                                       :+:      :+:    :+:   */
+/*   dda_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/20 15:04:52 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 04:12:04 by madamou          ###   ########.fr       */
+/*   Created: 2024/09/29 04:46:21 by madamou           #+#    #+#             */
+/*   Updated: 2024/09/29 04:47:48 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../includes/cube3D.h"
 
-void	ft_free_2d(char **split)
+void	open_door_gesture(t_ray *ray, t_map_data *data)
 {
-	int	index;
-
-	if (!split)
-		return;
-	index = 0;
-	while (split[index])
+	if (ray->side == 0)
+		ray->perpwalldist = (ray->side_dist.x - ray->delta_dist.x);
+	else
+		ray->perpwalldist = (ray->side_dist.y - ray->delta_dist.y);
+	if (data->map[ray->map.y][ray->map.x] == 'O' && ray->perpwalldist <= 2)
 	{
-		free(split[index]);
-		index++;
+		data->door_trigger = 1;
+		data->door_x = ray->map.x;
+		data->door_y = ray->map.y;
 	}
-	free(split);
 }

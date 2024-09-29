@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/29 04:03:15 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/29 05:03:06 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,8 @@ UTILS = $(addprefix utils/, utils.c)
 
 EVENT = $(addprefix event/, trigger_functions.c  trigger_functions_utils.c)
 
+CHECK_ENEMY = $(addprefix check_enemy/, check_enemy.c)
+
 RENDER = $(addprefix render/, crosshair.c gun.c render.c)
 
 DRAW = $(addprefix draw/, draw.c)
@@ -37,11 +39,14 @@ SPRITE = $(addprefix sprites/, sprites_functions.c sprites_functions_utils.c)
 
 CHECKING = $(addprefix checking/, checking_map.c check_map_playable.c)
 
-DDA = $(addprefix dda/, raycast.c raycast_utils.c)
+RAYCAST_SPRITE =  $(addprefix raycast_sprite/, raycast_sprite.c raycast_sprites_utils.c)
+
+DDA = $(addprefix dda/, raycast.c raycast_utils.c dda.c dda_utils.c draw_stripe.c $(RAYCAST_SPRITE) $(CHECK_ENEMY))
 
 MINI_MAP = $(addprefix minimap/, render_map.c)
 
 MOVE = $(addprefix move/, fov_move.c player_move.c)
+
 
 RAYCASTING = $(addprefix raycasting/, $(DDA) $(MINI_MAP))
 
