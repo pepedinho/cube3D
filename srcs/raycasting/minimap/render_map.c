@@ -6,13 +6,11 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 20:00:33 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/29 06:20:22 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/30 14:18:16 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cube3D.h"
-#define CIRCLE_SCALE 32
-#define MAP_SCALE 16
 
 int	trace_perimeter(t_map_data *map_data, int r)
 {
@@ -33,16 +31,6 @@ int	trace_perimeter(t_map_data *map_data, int r)
 	}
 	render_map(map_data);
 	return (1);
-}
-
-int	map_ylen(char **map)
-{
-	int	i;
-
-	i = 0;
-	while (map[i])
-		i++;
-	return (i);
 }
 
 void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
@@ -71,59 +59,66 @@ void	trace_trait(t_map_data *map_data, double to_x, double to_y, int color)
 	}
 }
 
+void	put_elment(t_map_data *map_data, t_vecint draw, int cas)
+{
+	if (cas == 0)
+	{
+		mlx_put_image_to_window(map_data->mlx.init, map_data->mlx.window,
+			map_data->mlx.dot.img, 10 * MAP_SCALE, 10 * MAP_SCALE);
+		trace_trait(map_data, map_data->p_pos.direction.x,
+			map_data->p_pos.direction.y, 0X0000FF);
+		mlx_put_image_to_window(map_data->mlx.init, map_data->mlx.window,
+			map_data->mlx.white.img, draw.x * MAP_SCALE, draw.y * MAP_SCALE);
+	}
+	else
+	{
+		mlx_put_image_to_window(map_data->mlx.init, map_data->mlx.window,
+			map_data->mlx.blue.img, draw.x * MAP_SCALE, draw.y * MAP_SCALE);
+	}
+}
+
+void	brain(t_map_data *map_data, t_vecint *p, t_vecint *base, t_vecint *draw)
+{
+	char	**map;
+
+	map = map_data->map;
+	if (base->x >= 0 && base->x <= ft_strlen(map[base->y]))
+	{
+		if ((base->x - p->x) * (base->x - p->x) + (base->y - p->y) * (base->y
+				- p->y) <= RADIUS * RADIUS)
+		{
+			draw->x = 10 + (base->x - p->x);
+			draw->y = 10 + (base->y - p->y);
+			if (map[base->y][base->x] == '1')
+				put_elment(map_data, *draw, 0);
+			else if (map[base->y][base->x] == 'D')
+				put_elment(map_data, *draw, 1);
+		}
+	}
+}
+
 void	render_map(t_map_data *map_data)
 {
-	int			x;
-	int			y;
 	char		**map;
-	int			radius;
 	t_vecint	p;
+	t_vecint	base;
 	t_vecint	draw;
 
-	radius = 8;
 	p.y = map_data->p_pos.r_y;
 	p.x = map_data->p_pos.r_x;
-	y = p.y - radius;
+	base.y = p.y - RADIUS;
 	map = map_data->map;
-	while (y <= p.y + radius)
+	while (base.y <= p.y + RADIUS)
 	{
-		if (y >= 0 && y < map_ylen(map))
+		if (base.y >= 0 && base.y < map_ylen(map))
 		{
-			x = p.x - radius;
-			while (x <= p.x + radius)
+			base.x = p.x - RADIUS;
+			while (base.x <= p.x + RADIUS)
 			{
-				if (x >= 0 && x <= ft_strlen(map[y]))
-				{
-					if ((x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= radius
-						* radius)
-					{
-						draw.x = 10 + (x - p.x);
-						draw.y = 10 + (y - p.y);
-						if (map[y][x] == '1')
-						{
-							// mlx_pixel_put(map_data->mlx.init,
-							// 	map_data->mlx.window, draw.x * MAP_SCALE, draw.y
-							// 	* MAP_SCALE, 0XFFFFFF);
-							mlx_put_image_to_window(map_data->mlx.init,
-								map_data->mlx.window, map_data->mlx.dot.img, 10
-								* MAP_SCALE, 10 * MAP_SCALE);
-							trace_trait(map_data, map_data->p_pos.direction.x,
-								map_data->p_pos.direction.y, 0X0000FF);
-							mlx_put_image_to_window(map_data->mlx.init,
-								map_data->mlx.window, map_data->mlx.white.img,
-								draw.x * MAP_SCALE, draw.y * MAP_SCALE);
-						}
-						else if (map[y][x] == 'D')
-						{
-							mlx_put_image_to_window(map_data->mlx.init,
-								map_data->mlx.window, map_data->mlx.blue.img,
-								draw.x * MAP_SCALE, draw.y * MAP_SCALE);
-						}
-					}
-				}
-				x++;
+				brain(map_data, &p, &base, &draw);
+				base.x++;
 			}
 		}
-		y++;
+		base.y++;
 	}
 }

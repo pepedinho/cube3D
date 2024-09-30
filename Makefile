@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/09/29 05:20:30 by madamou          ###   ########.fr        #
+#    Updated: 2024/09/30 14:18:27 by itahri           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ RAYCAST_SPRITE =  $(addprefix raycast_sprite/, raycast_sprite.c raycast_sprites_
 
 DDA = $(addprefix dda/, raycast.c raycast_utils.c dda.c dda_utils.c draw_stripe.c $(RAYCAST_SPRITE) $(CHECK_ENEMY))
 
-MINI_MAP = $(addprefix minimap/, render_map.c)
+MINI_MAP = $(addprefix minimap/, render_map.c render_map_utils.c)
 
 MOVE = $(addprefix move/, fov_move.c player_move.c)
 

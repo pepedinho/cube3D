@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:56:24 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/29 05:26:21 by madamou          ###   ########.fr       */
+/*   Updated: 2024/09/30 14:17:22 by itahri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 
 # define M_PI 3.14159265358979323846
 # define PRECISION 50
+# define CIRCLE_SCALE 32
+# define MAP_SCALE 16
+# define RADIUS 8
 
 typedef struct s_vecint
 {
@@ -93,6 +96,9 @@ double			set_deltadist(double raydir);
 // mini map
 void			render_map(t_map_data *map_data);
 void			raycasting(t_map_data *data);
+
+// mini map utils
+int				map_ylen(char **map);
 
 // enemy
 int				check_if_crosshair_on_enemy(t_map_data *data);
