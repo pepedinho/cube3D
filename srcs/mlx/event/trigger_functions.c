@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 12:30:52 by itahri            #+#    #+#             */
-/*   Updated: 2024/09/29 03:47:52 by madamou          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:16:39 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ int	click_cross(t_map_data *data)
 
 int	key_prees(int keysym, t_map_data *data)
 {
+	if (keysym == XK_p && data->key.mouse_hide == true)
+		data->key.mouse_hide = false;
+	else if (keysym == XK_p && data->key.mouse_hide == false)
+		data->key.mouse_hide = true;
+	if (keysym == XK_n)
+		data->key.del_sprite = true;
 	if (keysym == XK_Right)
 		data->key.cam_right = true;
 	if (keysym == XK_Left)

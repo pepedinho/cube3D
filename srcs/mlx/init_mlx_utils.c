@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 04:01:02 by madamou           #+#    #+#             */
-/*   Updated: 2024/10/01 14:21:08 by madamou          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:12:41 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ void	ft_init_img(t_map_data *data, t_img *img)
 		ft_printf("Error when trying to get image data\n");
 		destroy_mlx(data);
 	}
-	printf("Image properties(%s): width=%d, height=%d, bpp=%d, size_line=%d\n",
-		img->path, img->width, img->height, img->bits_per_pixel,
-		img->size_line);
 	img->bits_per_pixel_div8 = img->bits_per_pixel / 8;
 }
 

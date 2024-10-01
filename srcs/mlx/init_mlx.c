@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/10/01 14:37:40 by madamou          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:23:56 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int	init_mlx(t_map_data *data)
 	if (!mlx.window)
 		return (destroy_mlx(data), 0);
 	data->mlx = mlx;
+	data->key.mouse_hide = true;
 	mlx.enemy.spawn = 1;
 	open_all_images(data, &data->mlx);
 	data->key.speed_boost = 0;

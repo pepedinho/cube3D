@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 03:31:31 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 03:48:01 by madamou          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:29:22 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,21 @@ void	mouse_movement(t_map_data *data)
 	int		rest;
 	float	rot_speed;
 
-	mlx_mouse_get_pos(data->mlx.init, data->mlx.window, &x, &y);
-	rest = data->mlx.width_div2 - x;
-	rot_speed = ROT_SPEED * SENSITIVITY * abs(rest);
-	if (abs(rest) > MIN_MOUSE_MOVE)
+	if (data->key.mouse_hide == true)
 	{
-		if (rest > 0)
-			left_fov(data, rot_speed);
-		if (rest < 0)
-			right_fov(data, rot_speed);
-		mlx_mouse_move(data->mlx.init, data->mlx.window, data->mlx.width_div2,
-			data->mlx.height_div2);
+		mlx_mouse_get_pos(data->mlx.init, data->mlx.window, &x, &y);
+		rest = data->mlx.width_div2 - x;
+		rot_speed = ROT_SPEED * SENSITIVITY * abs(rest);
+		if (abs(rest) > MIN_MOUSE_MOVE)
+		{
+			if (rest > 0)
+				left_fov(data, rot_speed);
+			if (rest < 0)
+				right_fov(data, rot_speed);
+			mlx_mouse_move(data->mlx.init, data->mlx.window,
+				data->mlx.width_div2,
+				data->mlx.height_div2);
+		}
 	}
 }
 
@@ -37,7 +41,7 @@ int	mouse_click(int button, int x, int y, t_map_data *data)
 {
 	(void)x;
 	(void)y;
-	if (button == 1)
+	if (button == 1 && data->key.mouse_hide == true)
 		data->key.fire = true;
 	return (1);
 }

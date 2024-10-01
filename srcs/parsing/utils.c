@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 13:35:54 by itahri            #+#    #+#             */
-/*   Updated: 2024/10/01 14:29:42 by madamou          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:26:49 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,15 @@ void	parse_line(char *line, int fd, t_map_data *map_data)
 	{
 		if (check_type(line) == 1)
 		{
+			if (!(map_data->input.tx_south && map_data->input.tx_north
+					&& map_data->input.tx_east && map_data->input.tx_east
+					&& map_data->input.tx_west && map_data->input.tx_ceiling
+					&& map_data->input.tx_floor))
+			{
+				ft_putstr_fd("Error\nMap before every argument\n", 2);
+				free(line);
+				destroy_mlx(map_data);
+			}
 			get_map(map_data, line, fd);
 			return ;
 		}
