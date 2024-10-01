@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 21:18:28 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/12 20:07:27 by madamou          ###   ########.fr       */
+/*   Updated: 2024/10/01 14:45:45 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ int	check_the_map(t_map_data *map_data)
 int	check_next_cases_doors(char **map_cpy, int y, int x)
 {
 	if (map_cpy[y - 1][x] == '1' && map_cpy[y + 1][x] == '1' && !(map_cpy[y][x
-			- 1] == '1' || map_cpy[y][x + 1] == '1'))
+			- 1] == '1' || map_cpy[y][x + 1] == '1') && !(map_cpy[y][x
+			- 1] == 'D' || map_cpy[y][x + 1] == 'D'))
 		return (1);
 	if (map_cpy[y][x - 1] == '1' && map_cpy[y][x + 1] == '1' && !(map_cpy[y
-			- 1][x] == '1' || map_cpy[y + 1][x] == '1'))
+			- 1][x] == '1' || map_cpy[y + 1][x] == '1') && !(map_cpy[y
+			- 1][x] == 'D' || map_cpy[y + 1][x] == 'D'))
 		return (1);
 	return (0);
 }
@@ -93,12 +95,14 @@ int	check_map_playable(t_map_data *data)
 {
 	if (check_the_map(data) == 0)
 	{
-		ft_fprintf(2, "Error\nIncorrect map: Not close by wall\n");
+		ft_putstr_fd("Error\nIncorrect map: Not close by wall\n", 2);
+		destroy_mlx(data);
 		return (0);
 	}
 	if (check_doors(data) == 0)
 	{
-		ft_fprintf(2, "Error\nIncorrect map: Doors are not good\n");
+		ft_putstr_fd("Error\nIncorrect map: Doors are not good\n", 2);
+		destroy_mlx(data);
 		return (0);
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:27:22 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/12 11:28:12 by madamou          ###   ########.fr       */
+/*   Updated: 2024/10/01 14:42:58 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,16 @@ int	check_map(t_map_data *data)
 		player += check_only_one_player(data->map[i]);
 		if (!check_map_char_line(data->map[i++]))
 		{
-			ft_fprintf(2, "Error\nChar not good at line %d\n", i);
+			ft_putstr_fd("Error\nChar not good at line \n", 2);
+			destroy_mlx(data);
 			return (0);
 		}
 	}
 	if (player == 0)
-		ft_fprintf(2, "Error\nNo player\n");
+		ft_putstr_fd("Error\nNo player\n", 2);
 	if (player > 1)
-		ft_fprintf(2, "Error\nToo many players (%d players)\n", player);
+		ft_putstr_fd("Error\nToo many players\n", 2);
 	if (player != 1)
-		return (0);
+		return (destroy_mlx(data), 0);
 	return (check_map_playable(data));
 }

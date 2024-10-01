@@ -6,7 +6,7 @@
 /*   By: madamou <madamou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:58:27 by madamou           #+#    #+#             */
-/*   Updated: 2024/09/29 04:01:51 by madamou          ###   ########.fr       */
+/*   Updated: 2024/10/01 14:37:40 by madamou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ void	destroy_mlx(t_map_data *data)
 	ft_mlx_destroy_image(mlx.init, mlx.white.img);
 	ft_mlx_destroy_image(mlx.init, mlx.door.img);
 	ft_mlx_destroy_image(mlx.init, mlx.img.img);
-	(mlx_destroy_display(mlx.init), free(mlx.init));
+	if (mlx.init)
+		(mlx_destroy_display(mlx.init), free(mlx.init));
 	(free(data->input.tx_north), free(data->input.tx_south));
 	(free(data->input.tx_east), free(data->input.tx_west));
 	(free(data->input.tx_ceiling), free(data->input.tx_floor));
-	free_all_sprite(data->sprites);
-	exit(EXIT_SUCCESS);
+	(free_all_sprite(data->sprites), exit(EXIT_SUCCESS));
 }
 
 void	mlx_hook_setup(t_map_data *data, t_mlx mlx)
@@ -102,8 +102,7 @@ int	init_mlx(t_map_data *data)
 		return (destroy_mlx(data), 0);
 	data->mlx = mlx;
 	mlx.enemy.spawn = 1;
-	open_all_images(data, &mlx);
-	data->mlx = mlx;
+	open_all_images(data, &data->mlx);
 	data->key.speed_boost = 0;
 	mlx_hook_setup(data, mlx);
 	return (1);
