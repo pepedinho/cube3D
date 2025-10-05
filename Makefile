@@ -6,7 +6,7 @@
 #    By: madamou <madamou@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 12:57:50 by madamou           #+#    #+#              #
-#    Updated: 2024/10/01 13:35:47 by madamou          ###   ########.fr        #
+#    Updated: 2025/10/05 21:21:38 by madamou          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -135,11 +135,6 @@ push:
 
 debug : all
 	@lldb $(NAME) ./maps/test.cub
-
-random : all
-	@make -C map_generator
-	@./map_generator/map_generator 50x50 maps/random.cub
-	@./cub3D maps/random.cub
 
 docker:
 	@if [ -z $$(docker images -q cube3d-app_x11) ]; then \
