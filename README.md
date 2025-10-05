@@ -144,16 +144,12 @@ Follow 42's norminette for code style (`make form` to auto-format).
 
 ## Credits
 
-- **Author**: madamou (42 Paris student)
+- **Author**:  pepedinho and judananaa (42 Paris student)
 - **Inspiration**: 42 School's Cub3D project
 - **Libraries**: MiniLibX (by 42), custom libft
 - **Assets**: Custom textures in `assets/` (replace with your own for originality)
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ---
 
 *Last updated: October 2025*  
-Questions? Open an issue or contact madamou@42.fr! 🚀
+Questions? Open an issue or contact itahri@student.42.fr/ madamou@student.42.fr  🚀
